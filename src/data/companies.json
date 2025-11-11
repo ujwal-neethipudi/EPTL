@@ -1,0 +1,488 @@
+{
+  "Data Analytics & Modeling": [
+    {
+      "name": "eXplain",
+      "domain": "https://www.explain.fr/",
+      "description": "AI-startup focused on public-sector data and automating administrative/document workflows; founders previously created a campaign-tool used in European elections"
+    },
+    {
+      "name": "Polit - X",
+      "domain": "https://polit-x.de/en/",
+      "description": "Political monitoring & data platform: tracks federal/state/EU legislation, stakeholders, municipal data; provides alerts, analytics, search of public political documents"
+    },
+    {
+      "name": "Eulytix",
+      "domain": "https://eulytix.eu/",
+      "description": "Big-data platform for European legislative amendments; tracks EU parliamentary activity, provides analytics for NGOs, researchers and lobbyists"
+    },
+    {
+      "name": "Data Sciences Inc.",
+      "domain": "https://datasciences.ca/",
+      "description": "Marketing, data-analytics & predictive modelling for clients including political campaigns"
+    }
+  ],
+  "Engagement & Mobilisation": [
+    {
+      "name": "Movement",
+      "domain": "https://www.yourmovement.org/",
+      "description": "Digital campaigning platform: CRM + email, SMS, WhatsApp, peer-to-peer, phone-banking for unions, NGOs and political groups"
+    },
+    {
+      "name": "eKairos",
+      "domain": "https://ekairos.net/",
+      "description": "Civic-tech / digital participation platform enabling large-scale, hybrid/asynchronous citizen engagement and bottom-up processes; uses AI to surface patterns and insights"
+    },
+    {
+      "name": "Change.org",
+      "domain": "https://www.change.org/",
+      "description": "Online petition platform enabling citizens to launch campaigns, mobilise support, and influence decision-makers globally"
+    },
+    {
+      "name": "Datack",
+      "domain": "https://datack.com/",
+      "description": "Campaign & mobilisation consultancy (digital/PR agency for advocacy, electoral campaigns)"
+    },
+    {
+      "name": "Estratos",
+      "domain": "https://www.estratos.eu/",
+      "description": "Tools and services (messaging, data, micro-fundraising, CRM) for political parties, NGOs and advocacy groups"
+    },
+    {
+      "name": "deliberAIde",
+      "domain": "https://www.deliberaide.com/",
+      "description": "AI-powered platform for facilitating deliberative dialogue (in-person, online, hybrid); includes transcription, anonymisation, clustering of ideas, insight reporting"
+    },
+    {
+      "name": "Decision 21",
+      "domain": "https://www.decision21.com/",
+      "description": "Online civic participation platform: supports participatory budgeting, surveys, polls, contests & voting modules for cities, schools & organisations"
+    },
+    {
+      "name": "NationBuilder",
+      "domain": "https://nationbuilder.com/",
+      "description": "CRM + campaign-platform for political campaigns, advocacy, nonprofits - includes supporter database, websites, outreach, fundraising, volunteer management"
+    },
+    {
+      "name": "Citipo",
+      "domain": "https://citipo.com/fr",
+      "description": "All-in-one digital platform for activist organisations & campaigns: website builder, CRM for contacts, email/SMS outreach, online surveys/consultations, mobilization & measurement"
+    },
+    {
+      "name": "mySociety",
+      "domain": "https://www.mysociety.org/",
+      "description": "A civic-tech nonprofit building open-source platforms for citizen engagement, transparency, participatory democracy"
+    },
+    {
+      "name": "Zelos",
+      "domain": "https://getzelos.com/",
+      "description": "Volunteer management/mobile app for quick signup, team chat, task coordination, ideal for campaigns, non-profits, grassroots mobilisation"
+    },
+    {
+      "name": "CallHub",
+      "domain": "https://callhub.io/",
+      "description": "All-in-one campaign outreach & canvassing platform: phone banking, peer-to-peer texting, voice broadcasts, campaign workflows, SMS/voice/email, volunteer mobilisation & CRM integrations"
+    },
+    {
+      "name": "Go Vocal",
+      "domain": "https://www.govocal.com/",
+      "description": "Digital community engagement & participation platform (surveys, voting, participatory budgeting) for governments/municipalities"
+    },
+    {
+      "name": "Make.org",
+      "domain": "https://make.org/MD",
+      "description": "Civic-tech platform enabling large-scale citizen consultation & deliberation; supports public institutions and NGOs to generate ideas & actions"
+    },
+    {
+      "name": "Delib Ltd",
+      "domain": "https://www.delib.net/",
+      "description": "Provides digital platforms for citizen engagement, consultations, budget simulations and public participation"
+    },
+    {
+      "name": "Dembrane",
+      "domain": "https://www.dembrane.com/en-US",
+      "description": "AI-driven stakeholder-engagement platform capturing live & async dialogue, turning unstructured input into structured insights"
+    },
+    {
+      "name": "Aristotle Inc.",
+      "domain": "https://www.aristotle.com/",
+      "description": "Political-campaign software & data: voter files, fundraising, compliance, analytics"
+    },
+    {
+      "name": "Ecanvasser",
+      "domain": "https://www.ecanvasser.com/",
+      "description": "Field-canvassing & volunteer mobilisation platform: dashboards, mobile apps, walk lists, territory planning for campaigns"
+    },
+    {
+      "name": "Qomon",
+      "domain": "https://qomon.com/",
+      "description": "Volunteer & supporter mobilization platform with field-canvassing, CRM, territory analysis"
+    },
+    {
+      "name": "openPetition",
+      "domain": "https://www.openpetition.eu/",
+      "description": "Online platform for citizens’ initiatives, petitions, signatures and debates aimed at increasing civic participation"
+    },
+    {
+      "name": "CrowdInsights GmbH",
+      "domain": "https://crowdinsights.de/",
+      "description": "SaaS platform for structured citizen participation: surveys, idea-collections, participatory budgets"
+    },
+    {
+      "name": "Qela",
+      "domain": "https://www.qela.app/",
+      "description": "Gamified community-builder SaaS for movements & campaigns: tasks, volunteer engagement, voting, leaderboards"
+    },
+    {
+      "name": "Civocracy",
+      "domain": "https://www.civocracy.com/",
+      "description": "SaaS platform for citizen engagement: surveys, idea collection, collaborative decision-making & stakeholder dialogue for governments/organisations"
+    },
+    {
+      "name": "Digitale Box",
+      "domain": "https://digitalebox.com/",
+      "description": "All-in-one political campaign CRM and Citizen Request Management systems"
+    },
+    {
+      "name": "CamBuildr",
+      "domain": "https://cambuildr.com/",
+      "description": "All-in-one campaigning SaaS: landing pages, emails, outreach, supporter DB, behaviour segmentation & automation"
+    },
+    {
+      "name": "Commonplace",
+      "domain": "https://www.commonplace.is/",
+      "description": "Digital citizen engagement & consultation SaaS: collects ideas, feedback, analytics for local governments & infrastructure."
+    },
+    {
+      "name": "Nexus Politics",
+      "domain": "https://www.nexuspolitics.org/",
+      "description": "AI-driven platform linking citizens & politicians: citizen concerns, polling, legislative tracking, political CRM"
+    },
+    {
+      "name": "Conversation Starter BV",
+      "domain": "https://www.conversationstarter.net/",
+      "description": "Platform for event networking: scheduling meetings, community building, agendas for participants"
+    }
+  ],
+  "Fundraising": [
+    {
+      "name": "SmartRaise",
+      "domain": "https://www.smartraise.net/",
+      "description": "Fundraising software platform: recurring donations, donor retention, automated upgrade workflows, campaign/NGO focused"
+    },
+    {
+      "name": "Lunda",
+      "domain": "https://www.lundadonate.org/",
+      "description": "Online donation-form & micro-fundraising software built for progressive movements; optimized for EU jurisdictions"
+    },
+    {
+      "name": "Fundraise Up",
+      "domain": "https://fundraiseup.com/",
+      "description": "Online fundraising platform with AI-powered conversion, modern payment, donor engagement tools"
+    },
+    {
+      "name": "Engaging Networks",
+      "domain": "https://www.engagingnetworks.net/",
+      "description": "Digital engagement platform: fundraising, advocacy, email/SMS, supporter databases & political-targeted tools"
+    }
+  ],
+  "GovTech / Civic Infrastructure": [
+    {
+      "name": "Pakflatt",
+      "domain": "https://www.pakflatt.com/",
+      "description": "Manufacturer of polling booths and election-equipment solutions (including accessible voting devices)"
+    },
+    {
+      "name": "Political Watch",
+      "domain": "https://politicalwatch.es/",
+      "description": "Civic-tech and advocacy organisation: developing tech for citizen oversight, open data, transparency & democratic participation"
+    },
+    {
+      "name": "IDnow GmbH",
+      "domain": "https://www.idnow.io",
+      "description": "Provides digital identity-verification (KYC/AML), e-signatures, document and biometric checks for enterprises"
+    }
+  ],
+  "Messaging & Media": [
+    {
+      "name": "Panterra Global",
+      "domain": "https://www.panterra.global/",
+      "description": "Strategic advisory to governments/corporations, communications campaigns, elections & policy-engagement work"
+    },
+    {
+      "name": "influencethe.com",
+      "domain": "https://influencethe.com/",
+      "description": "Disinformation detection & “community intelligence” platform; narrative creation/distribution and counter-messaging; political campaigning services (NationBuilder partner)"
+    },
+    {
+      "name": "Genaios GmbH",
+      "domain": "https://genaios.ai/",
+      "description": "AI-powered fact-checking, content originality & AI-text detection (detect fake news, AI-generated text)"
+    },
+    {
+      "name": "Pelidum Trust & Safety",
+      "domain": "https://www.pelidum.com/",
+      "description": "Online safety / trust & safety solutions: content moderation, compliance, regulation advisory; public-sector / NGO focus"
+    },
+    {
+      "name": "DSPolitical",
+      "domain": "https://www.dspolitical.com/",
+      "description": "Voter-targeted digital/ad tech for campaigns (connected TV, digital audio, programmatic political ads)"
+    },
+    {
+      "name": "Mailchimp",
+      "domain": "https://mailchimp.com/",
+      "description": "Email marketing platform; email automation, audience segmentation, landing pages, SMS integrations, analytics for nonprofits, small businesses, advocacy groups"
+    },
+    {
+      "name": "TikTok",
+      "domain": "https://www.tiktok.com/about?lang=en",
+      "description": "Short-form video social media platform; user-generated content; influencer & content ecosystem; digital advertising & audience reach"
+    },
+    {
+      "name": "Say No To Disinfo",
+      "domain": "https://www.saynotodisinfo.com/",
+      "description": "Evidence-informed counter-disinformation consultancy & tool-support: mining research studies + AI for narrative threat detection & response"
+    },
+    {
+      "name": "Trollrensics",
+      "domain": "https://www.trollrensics.com/",
+      "description": "Disinformation-forensics: software to track troll/fake-account networks on social media + research into coordinated campaigns"
+    },
+    {
+      "name": "Digiknall GmbH",
+      "domain": "https://www.digiknall.eu/",
+      "description": "Social media campaigning agency"
+    },
+    {
+      "name": "HubSpot",
+      "domain": "https://www.hubspot.com/",
+      "description": "All-in-one inbound marketing, sales and service CRM platform; includes marketing automation, social media management, data hub, content hub and AI enhancements"
+    },
+    {
+      "name": "Battleground AI",
+      "domain": "https://www.battlegroundai.com/",
+      "description": "AI-generated political advertising (copy, creative workflow) for campaigns/agencies"
+    },
+    {
+      "name": "Electica",
+      "domain": "https://electica.io/",
+      "description": "Digital targeting & advertising platform for progressive campaigns; self-serve tool “Advocate” for campaigners; multi-channel ad buy, audience targeting, compliance in Europe"
+    },
+    {
+      "name": "PREVENCY",
+      "domain": "https://prevency.com/",
+      "description": "Offers “simulation and training software” for crisis scenarios, disinformation, cyberattacks, hybrid threats, etc."
+    },
+    {
+      "name": "Meta",
+      "domain": "https://www.meta.com/",
+      "description": "Social-media platforms + advertising network (Facebook, Instagram, WhatsApp) & digital advertising infrastructure"
+    },
+    {
+      "name": "Magic LEMP",
+      "domain": "https://magic-lemp.com/en",
+      "description": "AI solutions focused on multimodal data (text, audio, image), including tools for monitoring political speech, disinformation and narratives (via its subsidiary “Pluralisme”)"
+    },
+    {
+      "name": "Facelift Brand Building Technologies GmbH",
+      "domain": "https://facelift-bbt.com/en/",
+      "description": "A SaaS platform for enterprise social-media management, content planning & publishing, community management, multi-network campaigns, analytics - all within one workspace"
+    },
+    {
+      "name": "Who Targets Me",
+      "domain": "https://whotargets.me/en/",
+      "description": "A browser extension + research platform that tracks political ads, targeting and spending by parties/advertisers in online platforms; supports transparency, analysis of digital campaign advertising"
+    },
+    {
+      "name": "SoundShape",
+      "domain": "https://www.soundshape.eu/",
+      "description": "Provides AI-powered real-time subtitling, translation & captioning for events and video content in multilingual contexts."
+    },
+    {
+      "name": "Reset Tech",
+      "domain": "https://www.reset.tech/",
+      "description": "Research & advocacy on digital media threats to democracy; builds tools for media/tech oversight"
+    },
+    {
+      "name": "TrollWall AI",
+      "domain": "https://www.trollwall.ai/",
+      "description": "AI-powered platform for comment/moderation on social media; automated removal of hate speech & toxic comments"
+    },
+    {
+      "name": "Valent Projects Ltd",
+      "domain": "https://valent-projects.com/",
+      "description": "AI-powered narrative monitoring, bot & disinformation detection for communications teams"
+    },
+    {
+      "name": "NapoleonCat",
+      "domain": "https://napoleoncat.com/",
+      "description": "All-in-one social-media management platform: publish, schedule, auto-moderate comments, analyze across many channels"
+    },
+    {
+      "name": "Bodyguard",
+      "domain": "https://www.bodyguard.ai/en",
+      "description": "AI-powered real-time content moderation (text, image, video) & audience intelligence for online communities and platforms"
+    },
+    {
+      "name": "ElevenLabs",
+      "domain": "https://elevenlabs.io/",
+      "description": "AI-powered voice synthesis and audio generation (text-to-speech, voice cloning, dubbing)"
+    },
+    {
+      "name": "Stenomatic",
+      "domain": "https://www.stenomatic.ai/",
+      "description": "AI-powered real-time translation and interpretation platform supporting 70+ languages and video calls"
+    }
+  ],
+  "Organisational Infrastructure": [
+    {
+      "name": "Salesforce Inc.",
+      "domain": "https://www.salesforce.com/",
+      "description": "Cloud-based CRM and enterprise software: marketing automation, customer service platforms, data & analytics, AI-driven customer engagement"
+    },
+    {
+      "name": "Acquia",
+      "domain": "https://www.acquia.com/",
+      "description": "Digital experience platform: cloud-hosting, CMS/Drupal, content/data management, campaign/marketing automation, personalization for large institutions"
+    },
+    {
+      "name": "Atlassian Corporation",
+      "domain": "https://www.atlassian.com/",
+      "description": "Collaboration & productivity software (Jira, Confluence, Trello) for teams globally"
+    },
+    {
+      "name": "C6 Digital Ltd",
+      "domain": "https://c6digital.io/",
+      "description": "Advocacy-tech & digital mobilisation consultancy - builds bespoke apps, websites, data integrations for campaigns/NGOs"
+    }
+  ],
+  "Research & Insights": [
+    {
+      "name": "FiscalNote",
+      "domain": "https://fiscalnote.com/",
+      "description": "AI-driven policy and regulatory intelligence, global legislative tracking, stakeholder management and advocacy tools"
+    },
+    {
+      "name": "Future Shift Labs",
+      "domain": "https://futureshiftlabs.com/",
+      "description": "Advisory & research on emerging technologies, AI policy, governance in tech–politics interface"
+    },
+    {
+      "name": "EuroSense",
+      "domain": "https://www.eurosense.eu/",
+      "description": "Europe-wide citizen science network using a tool called SenseMaker® to collect and analyse lived citizen experiences (stories) for policy makers, activists and governments — enabling more inclusive democratic engagement"
+    },
+    {
+      "name": "Appinio",
+      "domain": "https://www.appinio.com/en/",
+      "description": "AI-powered market-research platform: real-time surveys, insights from millions of respondents across many markets"
+    },
+    {
+      "name": "Policy Insider AI",
+      "domain": "https://policy-insider.ai/",
+      "description": "AI-powered real-time policy monitoring & public affairs intelligence platform"
+    },
+    {
+      "name": "Prismos",
+      "domain": "https://prismos.ai/",
+      "description": "AI-driven regulatory & public-policy monitoring platform: tracks reports, debates and agendas across jurisdictions, provides personalised policy intelligence"
+    },
+    {
+      "name": "Cygnal",
+      "domain": "https://www.cygn.al/",
+      "description": "Political polling, public-opinion research, voter modelling & campaign-analytics"
+    },
+    {
+      "name": "PoliMonitor",
+      "domain": "https://www.polimonitor.com/",
+      "description": "Real-time political monitoring & media/lobby-intelligence platform: tracks parliamentarians, debates, social & traditional media across multiple countries"
+    },
+    {
+      "name": "OpSci.ai",
+      "domain": "https://www.opsci.ai/fr",
+      "description": "AI-driven narrative & public-opinion analysis: collecting open/social data, mapping narratives, detecting informational risks and advising organisations"
+    },
+    {
+      "name": "YouGov",
+      "domain": "https://yougov.com/",
+      "description": "Online panel research, public-opinion polling, data & analytics"
+    },
+    {
+      "name": "SAVOIRR",
+      "domain": "https://www.savoirr.com/",
+      "description": "A legislative-&-stakeholder-monitoring SaaS platform providing real-time EU policy tracking and stakeholder mapping"
+    },
+    {
+      "name": "Demosquare",
+      "domain": "https://demosquare.com/en/",
+      "description": "AI-powered SaaS platform for monitoring legislation, stakeholder signals & public affairs in Europe"
+    },
+    {
+      "name": "Polpo BV",
+      "domain": "https://polpo.com/",
+      "description": "AI-powered political monitoring platform: parliament tracking, stakeholder mapping, newsletters"
+    },
+    {
+      "name": "Spaak Technologies",
+      "domain": "https://spaak.ai/",
+      "description": "AI-native “operating system” for public affairs: policy monitoring, stakeholder tracking, automated brief drafting"
+    },
+    {
+      "name": "Psi Tech",
+      "domain": "https://psi.tech/",
+      "description": "AI-based collective intelligence platform for stakeholder conversations and opinion research"
+    },
+    {
+      "name": "Ipsos",
+      "domain": "https://www.ipsos.com/en-us",
+      "description": "Global market-research & public-opinion polling firm; provides data and insights across society, markets and politics"
+    },
+    {
+      "name": "Logically",
+      "domain": "https://logically.ai/",
+      "description": "AI‐driven narrative intelligence and disinformation monitoring: predictive modelling, network detection, multi-language monitoring across 50+ languages"
+    }
+  ],
+  "Voting Tech": [
+    {
+      "name": "Electify",
+      "domain": "",
+      "description": "Secure online election software; customizable, verifiable voting for orgs & public bodies"
+    },
+    {
+      "name": "Voatz",
+      "domain": "https://voatz.com/",
+      "description": "Mobile/blockchain voting platform for elections, remote/overseas voting, ballots via smartphone/web"
+    },
+    {
+      "name": "LogiVote",
+      "domain": "https://www.logivote.com/",
+      "description": "Campaign-management & digital voting platform: includes VRM (Voter Relationship Management), digital e-voting apps"
+    },
+    {
+      "name": "Stateless",
+      "domain": "https://www.statelessworks.com/",
+      "description": "Provides technology frameworks for parallel vote tabulation (PVT) and election-incident reporting for democratic monitoring"
+    },
+    {
+      "name": "Comitia",
+      "domain": "https://www.scytl.com/",
+      "description": "Electronic voting, election modernization and results-consolidation systems"
+    },
+    {
+      "name": "POLYAS GmbH",
+      "domain": "https://www.polyas.com/",
+      "description": "Secure online-voting platform for legally-binding elections, nominations & live-voting"
+    },
+    {
+      "name": "Suffrago",
+      "domain": "https://www.suffrago.org/",
+      "description": "Civic-tech platform enabling anonymous citizen input, constituency data dashboards & legislative tracking for elected officials"
+    },
+    {
+      "name": "NemoVote",
+      "domain": "https://nemovote.com/",
+      "description": "Secure online voting software for associations, unions, NGOs and political parties"
+    }
+  ]
+}
