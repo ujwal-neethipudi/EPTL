@@ -1,17 +1,25 @@
 import React from 'react';
 
+type Company = {
+  name: string;
+  domain?: string;
+  description?: string;
+};
+
 interface Logo {
   url: string;
   name: string;
+  company?: Company;
 }
 
 interface CategoryCardProps {
   name: string;
   bgColor: string;
   logos?: Logo[];
+  onLogoClick?: (company: Company) => void;
 }
 
-export function CategoryCard({ name, bgColor, logos = [] }: CategoryCardProps) {
+export function CategoryCard({ name, bgColor, logos = [], onLogoClick }: CategoryCardProps) {
   // Show placeholders if no logos provided, otherwise show actual logos
   const items = logos.length > 0 ? logos : Array(8).fill({ url: '', name: 'LOGO' });
 
@@ -34,7 +42,8 @@ export function CategoryCard({ name, bgColor, logos = [] }: CategoryCardProps) {
           fontWeight: 600,
           fontSize: '24px',
           color: '#7E22CE',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
+          textAlign: 'center'
         }}
       >
         {name}
@@ -60,6 +69,11 @@ export function CategoryCard({ name, bgColor, logos = [] }: CategoryCardProps) {
           {items.map((item, index) => (
             <div
               key={index}
+              onClick={() => {
+                if (item.company && onLogoClick) {
+                  onLogoClick(item.company);
+                }
+              }}
               className="flex items-center justify-center"
               style={{
                 width: '128px',
@@ -68,7 +82,27 @@ export function CategoryCard({ name, bgColor, logos = [] }: CategoryCardProps) {
                 border: '1px solid #E5E7EB',
                 borderRadius: '12px',
                 overflow: 'hidden',
-                padding: '8px'
+                padding: '8px',
+                cursor: item.company && onLogoClick ? 'pointer' : 'default',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                ...(item.company && onLogoClick ? {
+                  ':hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+                  }
+                } : {})
+              }}
+              onMouseEnter={(e) => {
+                if (item.company && onLogoClick) {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (item.company && onLogoClick) {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }
               }}
             >
               {item.url ? (
@@ -79,6 +113,14 @@ export function CategoryCard({ name, bgColor, logos = [] }: CategoryCardProps) {
                     maxWidth: '100%',
                     maxHeight: '100%',
                     objectFit: 'contain'
+                  }}
+                  onError={(e) => {
+                    // Hide broken images
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `<div style="width: 80px; height: 40px; background-color: #E9D5FF; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: Inter, sans-serif; font-size: 10px; font-weight: 500; color: #7E22CE;">${item.name}</div>`;
+                    }
                   }}
                 />
               ) : (

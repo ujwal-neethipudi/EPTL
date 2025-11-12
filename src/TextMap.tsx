@@ -207,7 +207,8 @@ export default function TextMap() {
                   fontWeight: 600,
                   fontSize: '24px',
                   color: '#7E22CE',
-                  lineHeight: '1.2'
+                  lineHeight: '1.2',
+                  textAlign: 'center'
                 }}
               >
                 {category.name}
