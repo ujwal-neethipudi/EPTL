@@ -17,7 +17,6 @@ type CategoryId =
   | 'Fundraising'
   | 'Research & Insights'
   | 'Data Analytics & Modeling'
-  | 'GovTech / Civic Infrastructure'
   | 'Voting Tech'
   | 'Organisational Infrastructure';
 
@@ -61,7 +60,6 @@ export default function TextMap() {
       { id: 'fundraising', name: 'Fundraising', bgColor: '#EBD6FF', items: companiesByCategory['Fundraising'] ?? [] },
       { id: 'research', name: 'Research & Insights', bgColor: '#EFE3FF', items: companiesByCategory['Research & Insights'] ?? [] },
       { id: 'analytics', name: 'Data Analytics & Modeling', bgColor: '#EAD6FF', items: companiesByCategory['Data Analytics & Modeling'] ?? [] },
-      { id: 'govtech', name: 'GovTech / Civic Infrastructure', bgColor: '#E9D5FF', items: companiesByCategory['GovTech / Civic Infrastructure'] ?? [] },
       { id: 'voting', name: 'Voting Tech', bgColor: '#E7D0FF', items: companiesByCategory['Voting Tech'] ?? [] },
       { id: 'infrastructure', name: 'Organisational Infrastructure', bgColor: '#F6ECFF', items: companiesByCategory['Organisational Infrastructure'] ?? [] },
     ];

@@ -6,7 +6,6 @@ type CategoryKey =
   | 'fundraising'
   | 'research'
   | 'analytics'
-  | 'govtech'
   | 'voting'
   | 'infrastructure';
 
@@ -31,23 +30,32 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
   const actualCardHeight = cardHeight - (gap / 2);
 
   // Helper to get card center position
-  const getCardCenter = (row: number, col: number) => {
-    return {
-      x: gridLeft + col * cardWidth + actualCardWidth / 2,
-      y: gridTop + row * cardHeight + actualCardHeight / 2
-    };
+  const getCardCenter = (row: number, col: number, fractionalCol?: number) => {
+    if (fractionalCol !== undefined) {
+      // For row 1 with fractional positioning (centered items)
+      const left = gridLeft + fractionalCol * cardWidth + fractionalCol * gap;
+      return {
+        x: left + actualCardWidth / 2,
+        y: gridTop + row * cardHeight + actualCardHeight / 2
+      };
+    } else {
+      // For row 0 with standard grid positioning
+      return {
+        x: gridLeft + col * cardWidth + actualCardWidth / 2,
+        y: gridTop + row * cardHeight + actualCardHeight / 2
+      };
+    }
   };
 
-  // Category positions (row, col)
-  const gridLayout = {
+  // Category positions (row, col) - row 1 uses fractional columns for centering
+  const gridLayout: Record<CategoryKey, { row: number; col?: number; fractionalCol?: number }> = {
     messaging: { row: 0, col: 0 },
     engagement: { row: 0, col: 1 },
     fundraising: { row: 0, col: 2 },
     research: { row: 0, col: 3 },
-    analytics: { row: 1, col: 0 },
-    govtech: { row: 1, col: 1 },
-    voting: { row: 1, col: 2 },
-    infrastructure: { row: 1, col: 3 },
+    analytics: { row: 1, fractionalCol: 0.5 }, // Centered between col 0 and 1
+    voting: { row: 1, fractionalCol: 1.5 }, // Centered between col 1 and 2
+    infrastructure: { row: 1, fractionalCol: 2.5 }, // Centered between col 2 and 3
   };
 
   const connections: Array<{
@@ -57,17 +65,32 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     bidirectional?: boolean;
     thin?: boolean;
   }> = [
-    { from: 'research', to: 'messaging', thick: false },
+    // [0,1] Research & Insights → Data Analytics & Modeling
     { from: 'research', to: 'analytics', thick: false },
+    // [0,2] Research & Insights → Messaging & Media
+    { from: 'research', to: 'messaging', thick: false },
+    // [1,2] Data Analytics & Modeling → Messaging & Media
     { from: 'analytics', to: 'messaging', thick: false },
+    // [1,3] Data Analytics & Modeling → Engagement & Mobilisation
     { from: 'analytics', to: 'engagement', thick: false },
+    // [1,5] Data Analytics & Modeling → Fundraising
     { from: 'analytics', to: 'fundraising', thick: false },
+    // [1,6] Data Analytics & Modeling → Voting Tech
+    { from: 'analytics', to: 'voting', thick: false },
+    // [2,3] Messaging & Media → Engagement & Mobilisation
     { from: 'messaging', to: 'engagement', thick: false },
+    // [3,5] Engagement & Mobilisation → Fundraising
     { from: 'engagement', to: 'fundraising', thick: false },
-    { from: 'govtech', to: 'voting', thick: false, bidirectional: true },
+    // [3,6] Engagement & Mobilisation → Voting Tech
+    { from: 'engagement', to: 'voting', thick: false },
+    // [4,2] Organisational Infrastructure → Messaging & Media
     { from: 'infrastructure', to: 'messaging', thick: false, thin: true },
+    // [4,3] Organisational Infrastructure → Engagement & Mobilisation
     { from: 'infrastructure', to: 'engagement', thick: false, thin: true },
+    // [4,5] Organisational Infrastructure → Fundraising
     { from: 'infrastructure', to: 'fundraising', thick: false, thin: true },
+    // [6,0] Voting Tech → Research & Insights (feedback loop - bidirectional)
+    { from: 'voting', to: 'research', thick: false, bidirectional: true },
   ];
 
   const getCenterForCategory = (key: CategoryKey) => {
@@ -75,8 +98,12 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     if (dynamic) {
       return dynamic;
     }
-    const { row, col } = gridLayout[key];
-    return getCardCenter(row, col);
+    const layout = gridLayout[key];
+    if ('fractionalCol' in layout) {
+      return getCardCenter(layout.row, 0, layout.fractionalCol);
+    } else {
+      return getCardCenter(layout.row, layout.col);
+    }
   };
 
   const createCurvedPath = (from: CategoryKey, to: CategoryKey) => {
