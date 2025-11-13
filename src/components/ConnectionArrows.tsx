@@ -16,35 +16,53 @@ interface ConnectionArrowsProps {
 }
 
 export function ConnectionArrows({ positions: dynamicPositions = {} }: ConnectionArrowsProps = {}) {
-  // Calculate positions based on the grid layout
-  // Grid starts at top: 200px, left: 60px
-  // Card dimensions: (1920 - 120 - 144) / 4 = 414px width per card (including gaps)
-  // Card dimensions: (1080 - 200 - 120 - 48) / 2 = 356px height per card (including gaps)
+  // Calculate positions based on viewport units
+  // Match the layout calculations from App.tsx
+  // Grid container: left/right = clamp(30px, 3.1vw, 60px), top = clamp(120px, 18.5vh, 200px), bottom = clamp(60px, 5.5vh, 120px)
+  // For SVG, we'll use a viewBox of 0 0 100 100 representing viewport percentages
   
-  const gridLeft = 60;
-  const gridTop = 200;
-  const cardWidth = 414;
-  const cardHeight = 356;
-  const gap = 48;
-  const actualCardWidth = cardWidth - (gap * 3 / 4);
-  const actualCardHeight = cardHeight - (gap / 2);
-
-  // Helper to get card center position
   const getCardCenter = (row: number, col: number, fractionalCol?: number) => {
+    // Calculate positions as percentages of viewport (0-100)
+    // Matching the CSS calc() logic from App.tsx:
+    // - Grid container: left/right = clamp(30px, 3.1vw, 60px), so ~3.1% margin each side
+    // - Grid top: clamp(120px, 18.5vh, 200px), so ~18.5% from top
+    // - Grid bottom: clamp(60px, 5.5vh, 120px), so ~5.5% from bottom
+    // - Card width: calc((100% - (3 * gap)) / 4) where gap = clamp(24px, 2.5vw, 48px)
+    // - Row height: calc((100% - gap) / 2) where gap = clamp(24px, 2.5vw, 48px)
+    
+    // Use approximate values based on 1920x1080 baseline
+    // These will scale proportionally with viewport
+    const gridLeft = 3.125; // 60/1920 = 3.125% of viewport width
+    const gridTop = 18.52;  // 200/1080 = 18.52% of viewport height  
+    const gridBottom = 5.56; // 60/1080 = 5.56% of viewport height (using lower clamp value)
+    
+    // Available grid dimensions (as % of viewport)
+    const availableWidth = 100 - (gridLeft * 2); // ~93.75%
+    const availableHeight = 100 - gridTop - gridBottom; // ~75.92%
+    
+    // Gap as percentage (using 2.5vw approximation: 48/1920 ≈ 2.5% width, 48/1080 ≈ 4.4% height)
+    const gapWidthPercent = 2.5;
+    const gapHeightPercent = 4.44;
+    
+    // Card dimensions
+    const numGaps = 3; // 3 gaps between 4 cards horizontally
+    const cardWidthPercent = (availableWidth - (numGaps * gapWidthPercent)) / 4;
+    const cardHeightPercent = (availableHeight - gapHeightPercent) / 2;
+    
+    let x: number;
+    let y: number;
+    
     if (fractionalCol !== undefined) {
-      // For row 1 with fractional positioning (centered items)
-      const left = gridLeft + fractionalCol * cardWidth + fractionalCol * gap;
-      return {
-        x: left + actualCardWidth / 2,
-        y: gridTop + row * cardHeight + actualCardHeight / 2
-      };
+      // Row 1: fractional columns (0.5, 1.5, 2.5)
+      x = gridLeft + (fractionalCol * (cardWidthPercent + gapWidthPercent)) + (cardWidthPercent / 2);
+      y = gridTop + row * (cardHeightPercent + gapHeightPercent) + (cardHeightPercent / 2);
     } else {
-      // For row 0 with standard grid positioning
-      return {
-        x: gridLeft + col * cardWidth + actualCardWidth / 2,
-        y: gridTop + row * cardHeight + actualCardHeight / 2
-      };
+      // Row 0: standard columns
+      x = gridLeft + col * (cardWidthPercent + gapWidthPercent) + (cardWidthPercent / 2);
+      y = gridTop + row * (cardHeightPercent + gapHeightPercent) + (cardHeightPercent / 2);
     }
+    
+    return { x, y };
   };
 
   // Category positions (row, col) - row 1 uses fractional columns for centering
@@ -114,8 +132,10 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     const dy = toPos.y - fromPos.y;
     
     // Create a curved path using quadratic bezier
+    // Control point offset as percentage of viewport (scaled down from ~30px)
+    const controlOffset = dx > 0 ? -2 : 2; // Adjusted for percentage coordinates
     const controlPointX = fromPos.x + dx * 0.5;
-    const controlPointY = fromPos.y + dy * 0.5 + (dx > 0 ? -30 : 30);
+    const controlPointY = fromPos.y + dy * 0.5 + controlOffset;
 
     const path = `M ${fromPos.x} ${fromPos.y} Q ${controlPointX} ${controlPointY} ${toPos.x} ${toPos.y}`;
     
@@ -126,38 +146,40 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     <svg 
       className="absolute inset-0 pointer-events-none"
       style={{ 
-        width: '1920px', 
-        height: '1080px',
+        width: '100vw', 
+        height: '100vh',
         zIndex: 0
       }}
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
     >
       <defs>
         <marker
           id="arrowhead"
-          markerWidth="10"
-          markerHeight="10"
-          refX="9"
-          refY="3"
+          markerWidth="0.6"
+          markerHeight="0.6"
+          refX="0.55"
+          refY="0.3"
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M0,0 L0,6 L9,3 z"
+            d="M0,0 L0,0.4 L0.55,0.2 z"
             fill="#A855F7"
             opacity="0.25"
           />
         </marker>
         <marker
           id="arrowhead-thin"
-          markerWidth="8"
-          markerHeight="8"
-          refX="7"
-          refY="2.5"
+          markerWidth="0.5"
+          markerHeight="0.5"
+          refX="0.45"
+          refY="0.25"
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M0,0 L0,5 L7,2.5 z"
+            d="M0,0 L0,0.35 L0.45,0.175 z"
             fill="#A855F7"
             opacity="0.15"
           />
@@ -173,7 +195,7 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
             <path
               d={path}
               stroke="#A855F7"
-              strokeWidth={isThin ? "2" : "3.5"}
+              strokeWidth={isThin ? "0.1" : "0.18"}
               fill="none"
               opacity={isThin ? "0.15" : "0.25"}
               strokeLinecap="round"
@@ -183,7 +205,7 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
               <path
                 d={createCurvedPath(conn.to, conn.from)}
                 stroke="#A855F7"
-                strokeWidth="3.5"
+                strokeWidth="0.18"
                 fill="none"
                 opacity="0.25"
                 strokeLinecap="round"

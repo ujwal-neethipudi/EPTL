@@ -260,17 +260,30 @@ export default function App() {
   }, [data, categoryAssignments]);
 
   return (
-    <div className="w-[1920px] h-[1080px] relative" style={{ backgroundColor: '#FAF8FF' }}>
+    <div 
+      className="relative" 
+      style={{ 
+        backgroundColor: '#FAF8FF',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden'
+      }}
+    >
       {/* Header */}
-      <div className="absolute top-[40px] left-0 right-0 text-center">
+      <div 
+        className="absolute left-0 right-0 text-center"
+        style={{
+          top: 'clamp(20px, 3.7vh, 40px)'
+        }}
+      >
         <h1 
           className="tracking-tight" 
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 800,
-            fontSize: '56px',
+            fontSize: 'clamp(28px, 2.9vw, 56px)',
             color: '#7E22CE',
-            letterSpacing: '-0.56px'
+            letterSpacing: '-0.02em'
           }}
         >
           European Political Tech Landscape
@@ -280,7 +293,7 @@ export default function App() {
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 400,
-            fontSize: '20px',
+            fontSize: 'clamp(14px, 1.04vw, 20px)',
             color: '#6B7280'
           }}
         >
@@ -290,16 +303,18 @@ export default function App() {
 
       {/* Version Label */}
       <div 
-        className="absolute top-[40px] left-[60px]"
+        className="absolute"
         style={{ 
           fontFamily: 'Inter, sans-serif',
           fontWeight: 600,
-          fontSize: '14px',
+          fontSize: 'clamp(11px, 0.73vw, 14px)',
           color: '#7E22CE',
           backgroundColor: '#F3E8FF',
-          padding: '8px 16px',
+          padding: 'clamp(6px, 0.74vh, 8px) clamp(12px, 1.56vw, 16px)',
           borderRadius: '8px',
-          border: '1.5px solid #E9D5FF'
+          border: '1.5px solid #E9D5FF',
+          top: 'clamp(20px, 3.7vh, 40px)',
+          left: 'clamp(30px, 3.1vw, 60px)'
         }}
       >
         v1 Prototype
@@ -312,35 +327,39 @@ export default function App() {
       <div 
         className="absolute"
         style={{
-          top: '200px',
-          left: '60px',
-          right: '60px',
-          bottom: '120px',
+          top: 'clamp(120px, 18.5vh, 200px)',
+          left: 'clamp(30px, 3.1vw, 60px)',
+          right: 'clamp(30px, 3.1vw, 60px)',
+          bottom: 'clamp(60px, 5.5vh, 120px)',
         }}
       >
         {/* Row 0: 4 categories using absolute positioning */}
-        <div style={{ position: 'relative', height: '356px', marginBottom: '48px' }}>
+        <div 
+          style={{ 
+            position: 'relative', 
+            height: 'calc((100% - clamp(24px, 2.5vw, 48px)) / 2)',
+            marginBottom: 'clamp(24px, 2.5vw, 48px)'
+          }}
+        >
           {categories
             .filter(cat => cat.position.row === 0)
             .sort((a, b) => a.position.col - b.position.col)
             .map((category) => {
               // Calculate positions for 4 items in 4-column space
-              // Container width: 1920 - 120 = 1800px
-              // Column width: 414px, Gap: 48px
-              const gridLeft = 0; // Relative to container
-              const columnWidth = 414;
-              const gap = 48;
+              // Use calc to distribute available width across 4 columns with 3 gaps
               const col = category.position.col;
-              const left = gridLeft + col * columnWidth + col * gap;
+              const cardWidth = 'calc((100% - (3 * clamp(24px, 2.5vw, 48px))) / 4)';
+              const gap = 'clamp(24px, 2.5vw, 48px)';
+              const left = `calc(${col} * (${cardWidth} + ${gap}))`;
               
               return (
                 <div
                   key={category.id}
                   style={{
                     position: 'absolute',
-                    left: `${left}px`,
+                    left: left,
                     top: 0,
-                    width: `${columnWidth}px`,
+                    width: cardWidth,
                     height: '100%'
                   }}
                 >
@@ -368,29 +387,32 @@ export default function App() {
         </div>
 
         {/* Row 1: 3 categories using absolute positioning for perfect centering */}
-        <div style={{ position: 'relative', height: '356px' }}>
+        <div 
+          style={{ 
+            position: 'relative', 
+            height: 'calc((100% - clamp(24px, 2.5vw, 48px)) / 2)'
+          }}
+        >
           {categories
             .filter(cat => cat.position.row === 1)
             .sort((a, b) => a.position.col - b.position.col)
             .map((category, index) => {
               // Calculate positions to center 3 items in 4-column space
-              // Container width: 1920 - 120 = 1800px
-              // Column width: 414px, Gap: 48px
               // To center 3 items: start at column 0.5, 1.5, 2.5
-              const gridLeft = 0; // Relative to container
-              const columnWidth = 414;
-              const gap = 48;
               const fractionalCol = 0.5 + index; // 0.5, 1.5, 2.5
-              const left = gridLeft + fractionalCol * columnWidth + fractionalCol * gap;
+              const cardWidth = 'calc((100% - (3 * clamp(24px, 2.5vw, 48px))) / 4)';
+              const gap = 'clamp(24px, 2.5vw, 48px)';
+              // Calculate left position: (fractionalCol * cardWidth) + (fractionalCol * gap)
+              const left = `calc(${fractionalCol} * (${cardWidth} + ${gap}))`;
               
               return (
                 <div
                   key={category.id}
                   style={{
                     position: 'absolute',
-                    left: `${left}px`,
+                    left: left,
                     top: 0,
-                    width: `${columnWidth}px`,
+                    width: cardWidth,
                     height: '100%'
                   }}
                 >

@@ -29,19 +29,19 @@ function LogoImage({ url, name }: { url: string; name: string }) {
     return (
       <div 
         style={{
-          width: '80px',
-          height: '40px',
+          width: 'clamp(60px, 4.17vw, 80px)',
+          height: 'clamp(30px, 2.8vh, 40px)',
           backgroundColor: '#E9D5FF',
           borderRadius: '4px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'Inter, sans-serif',
-          fontSize: '10px',
+          fontSize: 'clamp(8px, 0.52vw, 10px)',
           fontWeight: 500,
           color: '#7E22CE',
           textAlign: 'center',
-          padding: '4px'
+          padding: 'clamp(3px, 0.21vw, 4px)'
         }}
       >
         {name.substring(0, 8)}
@@ -75,8 +75,8 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
         backgroundColor: bgColor,
         border: '2px solid #E9D5FF',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-        padding: '24px',
-        gap: '16px',
+        padding: 'clamp(12px, 1.25vw, 24px)',
+        gap: 'clamp(8px, 0.83vw, 16px)',
         height: '100%'
       }}
     >
@@ -86,7 +86,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
-            fontSize: '24px',
+            fontSize: 'clamp(16px, 1.25vw, 24px)',
             color: '#7E22CE',
             lineHeight: '1.2',
             textAlign: 'center',
@@ -115,32 +115,32 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
           {name}
         </h2>
         {tooltip && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '100%',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              marginBottom: '8px',
-              padding: '8px 12px',
-              backgroundColor: '#1F2937',
-              color: '#FFFFFF',
-              fontSize: '13px',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
-              lineHeight: '1.4',
-              borderRadius: '6px',
-              maxWidth: '280px',
-              textAlign: 'center',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              opacity: showTooltip ? 1 : 0,
-              visibility: showTooltip ? 'visible' : 'hidden',
-              transition: 'opacity 0.2s, visibility 0.2s',
-              pointerEvents: 'none',
-              zIndex: 1000,
-              wordWrap: 'break-word'
-            }}
-          >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '100%',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      marginBottom: 'clamp(4px, 0.42vw, 8px)',
+                      padding: 'clamp(6px, 0.625vw, 8px) clamp(8px, 0.625vw, 12px)',
+                      backgroundColor: '#1F2937',
+                      color: '#FFFFFF',
+                      fontSize: 'clamp(11px, 0.68vw, 13px)',
+                      fontFamily: 'Inter, sans-serif',
+                      fontWeight: 400,
+                      lineHeight: '1.4',
+                      borderRadius: '6px',
+                      maxWidth: 'clamp(200px, 14.6vw, 280px)',
+                      textAlign: 'center',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                      opacity: showTooltip ? 1 : 0,
+                      visibility: showTooltip ? 'visible' : 'hidden',
+                      transition: 'opacity 0.2s, visibility 0.2s',
+                      pointerEvents: 'none',
+                      zIndex: 1000,
+                      wordWrap: 'break-word'
+                    }}
+                  >
             {tooltip}
             {/* Tooltip arrow */}
             <div
@@ -166,44 +166,44 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
           flex: 1,
           minHeight: 0,
           overflowY: 'auto',
-          paddingRight: '8px'
+          paddingRight: 'clamp(4px, 0.42vw, 8px)'
         }}
       >
         <div 
           className="flex flex-wrap"
           style={{
-            gap: '16px',
+            gap: 'clamp(8px, 0.83vw, 16px)',
             justifyContent: 'center',
             alignItems: 'center'
           }}
         >
           {items.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => {
-                if (item.company && onLogoClick) {
-                  onLogoClick(item.company);
-                }
-              }}
-              className="flex flex-col items-center justify-start"
-              style={{
-                width: '128px',
-                minHeight: '90px',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #E5E7EB',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                padding: '8px',
-                gap: '6px',
-                cursor: item.company && onLogoClick ? 'pointer' : 'default',
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                ...(item.company && onLogoClick ? {
-                  ':hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-                  }
-                } : {})
-              }}
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (item.company && onLogoClick) {
+                          onLogoClick(item.company);
+                        }
+                      }}
+                      className="flex flex-col items-center justify-start"
+                      style={{
+                        width: 'clamp(80px, 6.67vw, 128px)',
+                        minHeight: 'clamp(60px, 5.6vh, 90px)',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        padding: 'clamp(6px, 0.42vw, 8px)',
+                        gap: 'clamp(4px, 0.31vw, 6px)',
+                        cursor: item.company && onLogoClick ? 'pointer' : 'default',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                        ...(item.company && onLogoClick ? {
+                          ':hover': {
+                            transform: 'scale(1.05)',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+                          }
+                        } : {})
+                      }}
               onMouseEnter={(e) => {
                 if (item.company && onLogoClick) {
                   e.currentTarget.style.transform = 'scale(1.05)';
@@ -217,63 +217,63 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
                 }
               }}
             >
-              {/* Logo Container */}
-              <div
-                style={{
-                  width: '100%',
-                  height: '48px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}
-              >
-                {item.url ? (
-                  <LogoImage url={item.url} name={item.name} />
-                ) : (
-                  <div 
-                    style={{
-                      width: '80px',
-                      height: '40px',
-                      backgroundColor: '#E9D5FF',
-                      borderRadius: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '10px',
-                      fontWeight: 500,
-                      color: '#7E22CE',
-                      textAlign: 'center',
-                      padding: '4px'
-                    }}
-                  >
-                    {item.name.substring(0, 8)}
-                  </div>
-                )}
-              </div>
-              
-              {/* Company Name */}
-              <div
-                style={{
-                  width: '100%',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  color: '#374151',
-                  textAlign: 'center',
-                  lineHeight: '1.3',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  wordBreak: 'break-word'
-                }}
-                title={item.name}
-              >
-                {item.name}
-              </div>
+                      {/* Logo Container */}
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 'clamp(32px, 3.3vh, 48px)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}
+                      >
+                        {item.url ? (
+                          <LogoImage url={item.url} name={item.name} />
+                        ) : (
+                          <div 
+                            style={{
+                              width: 'clamp(60px, 4.17vw, 80px)',
+                              height: 'clamp(30px, 2.8vh, 40px)',
+                              backgroundColor: '#E9D5FF',
+                              borderRadius: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontFamily: 'Inter, sans-serif',
+                              fontSize: 'clamp(8px, 0.52vw, 10px)',
+                              fontWeight: 500,
+                              color: '#7E22CE',
+                              textAlign: 'center',
+                              padding: 'clamp(3px, 0.21vw, 4px)'
+                            }}
+                          >
+                            {item.name.substring(0, 8)}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Company Name */}
+                      <div
+                        style={{
+                          width: '100%',
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(9px, 0.57vw, 11px)',
+                          fontWeight: 500,
+                          color: '#374151',
+                          textAlign: 'center',
+                          lineHeight: '1.3',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          wordBreak: 'break-word'
+                        }}
+                        title={item.name}
+                      >
+                        {item.name}
+                      </div>
             </div>
           ))}
         </div>
