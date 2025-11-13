@@ -56,7 +56,10 @@ function LogoImage({ url, name }: { url: string; name: string }) {
       style={{
         maxWidth: '100%',
         maxHeight: '100%',
-        objectFit: 'contain'
+        width: 'auto',
+        height: 'auto',
+        objectFit: 'contain',
+        transform: 'scale(1.2)'
       }}
       onError={() => setHasError(true)}
     />
