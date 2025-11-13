@@ -441,6 +441,11 @@
       "name": "Logically",
       "domain": "https://logically.ai/",
       "description": "AI‐driven narrative intelligence and disinformation monitoring: predictive modelling, network detection, multi-language monitoring across 50+ languages"
+    },
+    {
+      "name": "Common Consultancy",
+      "domain": "https://www.commonconsultancy.com/",
+      "description": "Social-media monitoring & strategic communications for organisations, political parties and public authorities; mapping influence operations and digital conversations."
     }
   ],
   "Voting Tech": [

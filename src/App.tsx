@@ -111,7 +111,6 @@ export default function App() {
   const [data, setData] = useState<CompaniesByCategory | null>(null);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Company | null>(null);
-  const [selectedCurrentCategory, setSelectedCurrentCategory] = useState<string | null>(null);
   const [categoryAssignments, setCategoryAssignments] = useState<CompanyCategoryMap>({});
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState<{ name: string; detailed?: string; subcategories?: string } | null>(null);
@@ -360,11 +359,6 @@ export default function App() {
                     } : undefined}
                     onLogoClick={(company) => {
                       setSelected(company);
-                      // Find current category for this company
-                      if (data) {
-                        const currentCategory = getCompanyCategory(company.name, data);
-                        setSelectedCurrentCategory(currentCategory);
-                      }
                       setOpen(true);
                     }}
                   />
@@ -415,11 +409,6 @@ export default function App() {
                     } : undefined}
                     onLogoClick={(company) => {
                       setSelected(company);
-                      // Find current category for this company
-                      if (data) {
-                        const currentCategory = getCompanyCategory(company.name, data);
-                        setSelectedCurrentCategory(currentCategory);
-                      }
                       setOpen(true);
                     }}
                   />
@@ -599,54 +588,6 @@ export default function App() {
             
             <div style={{ fontSize: '14px', color: '#374151', lineHeight: '1.6', marginBottom: '20px' }}>
               {selected.description || 'No description available.'}
-            </div>
-            
-            {/* Category Selector */}
-            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #E5E7EB' }}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: '13px', 
-                fontWeight: 600, 
-                color: '#374151', 
-                marginBottom: '8px' 
-              }}>
-                Category
-              </label>
-              <select
-                value={selectedCurrentCategory || ''}
-                onChange={(e) => {
-                  const newCategory = e.target.value;
-                  if (selected && newCategory) {
-                    moveCompanyToCategory(selected.name, newCategory);
-                    setSelectedCurrentCategory(newCategory);
-                  }
-                }}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  fontSize: '14px',
-                  fontFamily: 'Inter, sans-serif',
-                  border: '1px solid #D1D5DB',
-                  borderRadius: '6px',
-                  backgroundColor: '#FFFFFF',
-                  color: '#111827',
-                  cursor: 'pointer'
-                }}
-              >
-                {Object.entries(categoryMap).map(([id, config]) => (
-                  <option key={id} value={config.key}>
-                    {config.name}
-                  </option>
-                ))}
-              </select>
-              <p style={{ 
-                fontSize: '12px', 
-                color: '#6B7280', 
-                marginTop: '6px',
-                fontStyle: 'italic'
-              }}>
-                Changes are saved automatically and persist across page refreshes.
-              </p>
             </div>
           </div>
         </div>
