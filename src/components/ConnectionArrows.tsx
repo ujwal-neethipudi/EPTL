@@ -22,34 +22,19 @@ export function ConnectionArrows({ positions: dynamicPositions = {}, variant = '
   // Grid container: left/right = clamp(30px, 3.1vw, 60px), top = clamp(120px, 18.5vh, 200px), bottom = clamp(60px, 5.5vh, 120px)
   // For SVG, we'll use a viewBox of 0 0 100 100 representing viewport percentages
   
+  // Approximate layout constants based on desktop grid (percentage of viewport)
+  const gridLeft = 3.125;
+  const gridTop = 18.52;
+  const gridBottom = 5.56;
+  const availableWidth = 100 - (gridLeft * 2);
+  const availableHeight = 100 - gridTop - gridBottom;
+  const gapWidthPercent = 2.5;
+  const gapHeightPercent = 4.44;
+  const numGaps = 3;
+  const cardWidthPercent = (availableWidth - (numGaps * gapWidthPercent)) / 4;
+  const cardHeightPercent = (availableHeight - gapHeightPercent) / 2;
+
   const getCardCenter = (row: number, col: number, fractionalCol?: number) => {
-    // Calculate positions as percentages of viewport (0-100)
-    // Matching the CSS calc() logic from App.tsx:
-    // - Grid container: left/right = clamp(30px, 3.1vw, 60px), so ~3.1% margin each side
-    // - Grid top: clamp(120px, 18.5vh, 200px), so ~18.5% from top
-    // - Grid bottom: clamp(60px, 5.5vh, 120px), so ~5.5% from bottom
-    // - Card width: calc((100% - (3 * gap)) / 4) where gap = clamp(24px, 2.5vw, 48px)
-    // - Row height: calc((100% - gap) / 2) where gap = clamp(24px, 2.5vw, 48px)
-    
-    // Use approximate values based on 1920x1080 baseline
-    // These will scale proportionally with viewport
-    const gridLeft = 3.125; // 60/1920 = 3.125% of viewport width
-    const gridTop = 18.52;  // 200/1080 = 18.52% of viewport height  
-    const gridBottom = 5.56; // 60/1080 = 5.56% of viewport height (using lower clamp value)
-    
-    // Available grid dimensions (as % of viewport)
-    const availableWidth = 100 - (gridLeft * 2); // ~93.75%
-    const availableHeight = 100 - gridTop - gridBottom; // ~75.92%
-    
-    // Gap as percentage (using 2.5vw approximation: 48/1920 ≈ 2.5% width, 48/1080 ≈ 4.4% height)
-    const gapWidthPercent = 2.5;
-    const gapHeightPercent = 4.44;
-    
-    // Card dimensions
-    const numGaps = 3; // 3 gaps between 4 cards horizontally
-    const cardWidthPercent = (availableWidth - (numGaps * gapWidthPercent)) / 4;
-    const cardHeightPercent = (availableHeight - gapHeightPercent) / 2;
-    
     let x: number;
     let y: number;
     
@@ -112,27 +97,14 @@ export function ConnectionArrows({ positions: dynamicPositions = {}, variant = '
     { from: 'voting', to: 'research', thick: false, bidirectional: true },
   ];
 
-  const connections = baseConnections.filter((conn) => {
-    if (variant === 'mobile') {
-      // Only keep cross-row connections and a few key intra-row ones
-      const crossRowPairs: Array<[CategoryKey, CategoryKey]> = [
-        ['research', 'analytics'],
-        ['research', 'messaging'],
-        ['analytics', 'messaging'],
-        ['analytics', 'fundraising'],
-        ['analytics', 'voting'],
-        ['messaging', 'engagement'],
-        ['engagement', 'fundraising'],
-        ['infrastructure', 'fundraising'],
-      ];
-      return crossRowPairs.some(
-        ([from, to]) =>
-          (conn.from === from && conn.to === to) ||
-          (conn.from === to && conn.to === from)
-      );
-    }
-    return true;
-  });
+  const connections = variant === 'mobile'
+    ? [
+        { from: 'research', to: 'analytics' },
+        { from: 'analytics', to: 'voting' },
+        { from: 'analytics', to: 'fundraising' },
+        { from: 'infrastructure', to: 'fundraising' }
+      ]
+    : baseConnections;
 
   const getCenterForCategory = (key: CategoryKey) => {
     const dynamic = dynamicPositions[key];
@@ -163,6 +135,26 @@ export function ConnectionArrows({ positions: dynamicPositions = {}, variant = '
     const path = `M ${fromPos.x} ${fromPos.y} Q ${controlPointX} ${controlPointY} ${toPos.x} ${toPos.y}`;
     
     return path;
+  };
+
+  const getEdgePoint = (key: CategoryKey, edge: 'top' | 'bottom') => {
+    const center = getCenterForCategory(key);
+    const offset = (cardHeightPercent / 2) - 1; // subtract 1% to avoid overshooting rounded corners
+    return {
+      x: center.x,
+      y: edge === 'top' ? center.y - offset : center.y + offset,
+    };
+  };
+
+  const createMobilePath = (from: CategoryKey, to: CategoryKey) => {
+    const fromLayout = gridLayout[from];
+    const toLayout = gridLayout[to];
+    const fromEdge = (fromLayout.row === 0) ? 'bottom' : 'top';
+    const toEdge = (toLayout.row === 0) ? 'bottom' : 'top';
+    const start = getEdgePoint(from, fromEdge);
+    const end = getEdgePoint(to, toEdge);
+
+    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
   };
 
   return (
@@ -211,7 +203,9 @@ export function ConnectionArrows({ positions: dynamicPositions = {}, variant = '
 
       {connections.map((conn, index) => {
         const isThin = conn.thin || false;
-        const path = createCurvedPath(conn.from, conn.to);
+        const path = variant === 'mobile'
+          ? createMobilePath(conn.from, conn.to)
+          : createCurvedPath(conn.from, conn.to);
         
         return (
           <g key={index}>
