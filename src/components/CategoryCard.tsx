@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 type Company = {
   name: string;
@@ -22,8 +22,14 @@ interface CategoryCardProps {
 }
 
 // Component to handle logo image with fallback
-function LogoImage({ url, name }: { url: string; name: string }) {
+function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: () => void }) {
   const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    if (hasError) {
+      onLoad?.();
+    }
+  }, [hasError, onLoad]);
 
   if (hasError) {
     return (
@@ -60,15 +66,73 @@ function LogoImage({ url, name }: { url: string; name: string }) {
         height: 'auto',
         objectFit: 'contain'
       }}
-      onError={() => setHasError(true)}
+      onError={() => {
+        setHasError(true);
+        onLoad?.();
+      }}
+      onLoad={() => onLoad?.()}
     />
   );
 }
 
 export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick, onLogoClick }: CategoryCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [maxLogoWidth, setMaxLogoWidth] = useState<number | null>(null);
+  const logoGridRef = useRef<HTMLDivElement>(null);
   // Show placeholders if no logos provided, otherwise show actual logos
   const items = logos.length > 0 ? logos : Array(8).fill({ url: '', name: 'LOGO' });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const listener = (event: MediaQueryListEvent) => setIsMobile(event.matches);
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+
+  const measureLogoWidths = useCallback(() => {
+    if (!logoGridRef.current || !isMobile) {
+      setMaxLogoWidth(null);
+      return;
+    }
+
+    const wrappers = Array.from(
+      logoGridRef.current.querySelectorAll<HTMLElement>('.category-card-logo-wrapper')
+    );
+
+    let largest = 0;
+    wrappers.forEach((wrapper) => {
+      const img = wrapper.querySelector('img');
+      const width = img?.getBoundingClientRect().width || wrapper.getBoundingClientRect().width;
+      if (width > largest) {
+        largest = width;
+      }
+    });
+
+    setMaxLogoWidth(largest ? Math.ceil(largest) : null);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setMaxLogoWidth(null);
+      return;
+    }
+    const frame = requestAnimationFrame(measureLogoWidths);
+    return () => cancelAnimationFrame(frame);
+  }, [isMobile, logos, measureLogoWidths]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const handleResize = () => measureLogoWidths();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile, measureLogoWidths]);
+
+  const handleLogoLoad = useCallback(() => {
+    requestAnimationFrame(measureLogoWidths);
+  }, [measureLogoWidths]);
 
   return (
     <div 
@@ -174,6 +238,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
       >
         <div 
           className="category-card-logo-grid flex flex-wrap"
+          ref={logoGridRef}
           style={{
             width: '100%',
             gap: 'clamp(5px, 0.6vw, 8px)',
@@ -211,7 +276,8 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
               <div
                 className="category-card-logo-wrapper"
                 style={{
-                  width: 'clamp(70px, 6vw, 100px)',
+                  width: isMobile && maxLogoWidth ? `${maxLogoWidth}px` : 'clamp(70px, 6vw, 100px)',
+                  maxWidth: '100%',
                   height: 'clamp(45px, 4.5vh, 65px)',
                   display: 'flex',
                   alignItems: 'center',
@@ -221,7 +287,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
                 }}
               >
                 {item.url ? (
-                  <LogoImage url={item.url} name={item.name} />
+                  <LogoImage url={item.url} name={item.name} onLoad={handleLogoLoad} />
                 ) : (
                   <div 
                     style={{
