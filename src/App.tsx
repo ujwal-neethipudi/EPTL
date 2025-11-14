@@ -260,10 +260,14 @@ export default function App() {
       const messagingKey = categoryMap.messaging.key;
       const infrastructureKey = categoryMap.infrastructure.key;
       const votingKey = categoryMap.voting.key;
+      const analyticsKey = categoryMap.analytics.key;
+      const researchKey = categoryMap.research.key;
 
       const messagingCompanies = effectiveCategories[messagingKey];
       const infrastructureCompanies = effectiveCategories[infrastructureKey];
       const votingCompanies = effectiveCategories[votingKey];
+      const analyticsCompanies = effectiveCategories[analyticsKey];
+      const researchCompanies = effectiveCategories[researchKey];
 
       if (messagingCompanies && infrastructureCompanies) {
         const hubspotIndex = messagingCompanies.findIndex(company => company.name === 'HubSpot');
@@ -284,6 +288,19 @@ export default function App() {
         if (pakflattSource && !votingCompanies.some(company => company.name === 'Pakflatt')) {
           votingCompanies.push(pakflattSource);
         }
+      }
+
+      if (analyticsCompanies && researchCompanies) {
+        const moveToResearch = ['Poli - X', 'eulytix.eu'];
+        moveToResearch.forEach(name => {
+          const index = analyticsCompanies.findIndex(company => company.name === name);
+          if (index !== -1) {
+            const [company] = analyticsCompanies.splice(index, 1);
+            if (!researchCompanies.some(existing => existing.name === company.name)) {
+              researchCompanies.push(company);
+            }
+          }
+        });
       }
     }
 
