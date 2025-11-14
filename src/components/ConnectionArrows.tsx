@@ -13,9 +13,10 @@ type CategoryPositions = Partial<Record<CategoryKey, { x: number; y: number }>>;
 
 interface ConnectionArrowsProps {
   positions?: CategoryPositions;
+  variant?: 'desktop' | 'mobile';
 }
 
-export function ConnectionArrows({ positions: dynamicPositions = {} }: ConnectionArrowsProps = {}) {
+export function ConnectionArrows({ positions: dynamicPositions = {}, variant = 'desktop' }: ConnectionArrowsProps = {}) {
   // Calculate positions based on viewport units
   // Match the layout calculations from App.tsx
   // Grid container: left/right = clamp(30px, 3.1vw, 60px), top = clamp(120px, 18.5vh, 200px), bottom = clamp(60px, 5.5vh, 120px)
@@ -76,7 +77,7 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     infrastructure: { row: 1, fractionalCol: 2.5 }, // Centered between col 2 and 3
   };
 
-  const connections: Array<{
+  const baseConnections: Array<{
     from: CategoryKey;
     to: CategoryKey;
     thick?: boolean;
@@ -110,6 +111,28 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
     // [6,0] Voting Tech → Research & Insights (feedback loop - bidirectional)
     { from: 'voting', to: 'research', thick: false, bidirectional: true },
   ];
+
+  const connections = baseConnections.filter((conn) => {
+    if (variant === 'mobile') {
+      // Only keep cross-row connections and a few key intra-row ones
+      const crossRowPairs: Array<[CategoryKey, CategoryKey]> = [
+        ['research', 'analytics'],
+        ['research', 'messaging'],
+        ['analytics', 'messaging'],
+        ['analytics', 'fundraising'],
+        ['analytics', 'voting'],
+        ['messaging', 'engagement'],
+        ['engagement', 'fundraising'],
+        ['infrastructure', 'fundraising'],
+      ];
+      return crossRowPairs.some(
+        ([from, to]) =>
+          (conn.from === from && conn.to === to) ||
+          (conn.from === to && conn.to === from)
+      );
+    }
+    return true;
+  });
 
   const getCenterForCategory = (key: CategoryKey) => {
     const dynamic = dynamicPositions[key];
@@ -195,13 +218,19 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
             <path
               d={path}
               stroke="#6B1FA8"
-              strokeWidth={isThin ? "0.15" : "0.2"}
+              strokeWidth={
+                variant === 'mobile' ? "0.08" : isThin ? "0.15" : "0.2"
+              }
               fill="none"
-              opacity={isThin ? "0.4" : "0.5"}
+              opacity={variant === 'mobile' ? "0.25" : isThin ? "0.4" : "0.5"}
               strokeLinecap="round"
-              markerEnd={`url(#${isThin ? 'arrowhead-thin' : 'arrowhead'})`}
+              markerEnd={
+                variant === 'mobile'
+                  ? undefined
+                  : `url(#${isThin ? 'arrowhead-thin' : 'arrowhead'})`
+              }
             />
-            {conn.bidirectional && (
+            {conn.bidirectional && variant !== 'mobile' && (
               <path
                 d={createCurvedPath(conn.to, conn.from)}
                 stroke="#6B1FA8"
