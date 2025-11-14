@@ -6,6 +6,7 @@ type Company = {
   name: string;
   domain?: string;
   description?: string;
+  hq?: string;
 };
 
 type CompaniesByCategory = Record<string, Company[]>;
@@ -15,7 +16,7 @@ type CompanyCategoryMap = Record<string, string>; // company name -> category ke
 
 // Helper to map domain to logo filename
 // Logo files are named like: change-org.png, datack-com.ico, engagingnetworks-net.png
-function domainToLogoPath(domain: string): string | null {
+export function domainToLogoPath(domain: string): string | null {
   if (!domain) return null;
   
   // Normalize domain: remove protocol, www, trailing slash, get just the domain
@@ -34,7 +35,7 @@ function domainToLogoPath(domain: string): string | null {
 
 // Helper to map company name to logo filename (for entities without domains)
 // Logo files are named like: electify.png, my-company.png
-function nameToLogoPath(name: string): string | null {
+export function nameToLogoPath(name: string): string | null {
   if (!name) return null;
   
   // Normalize name: lowercase, replace spaces and special chars with hyphens
@@ -46,9 +47,9 @@ function nameToLogoPath(name: string): string | null {
   return `/logos/${normalized}.png`;
 }
 
-const STORAGE_KEY = 'company-category-assignments';
+export const STORAGE_KEY = 'company-category-assignments';
 
-const categoryMap = {
+export const categoryMap = {
   messaging: { 
     name: 'Messaging & Media', 
     bgColor: '#F3E8FF', 
@@ -263,7 +264,7 @@ export default function App() {
     <div 
       className="relative" 
       style={{ 
-        backgroundColor: '#FAF8FF',
+        backgroundColor: '#FFFFFF',
         width: '100vw',
         height: '100vh',
         overflow: 'hidden'
@@ -282,7 +283,7 @@ export default function App() {
             fontFamily: 'Inter, sans-serif',
             fontWeight: 800,
             fontSize: 'clamp(28px, 2.9vw, 56px)',
-            color: '#7E22CE',
+            color: '#000000',
             letterSpacing: '-0.02em'
           }}
         >
@@ -308,7 +309,7 @@ export default function App() {
           fontFamily: 'Inter, sans-serif',
           fontWeight: 600,
           fontSize: 'clamp(11px, 0.73vw, 14px)',
-          color: '#7E22CE',
+          color: '#6B1FA8',
           backgroundColor: '#F3E8FF',
           padding: 'clamp(6px, 0.74vh, 8px) clamp(12px, 1.56vw, 16px)',
           borderRadius: '8px',
@@ -528,92 +529,155 @@ export default function App() {
       )}
 
       {/* Company Details Modal */}
-      {open && selected && (
-        <div
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setOpen(false);
-              setSelected(null);
-            }
-          }}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10000,
-            padding: '20px'
-          }}
-        >
+      {open && selected && (() => {
+        const logoUrl = selected.domain 
+          ? (domainToLogoPath(selected.domain) || nameToLogoPath(selected.name))
+          : nameToLogoPath(selected.name);
+        
+        return (
           <div
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setOpen(false);
+                setSelected(null);
+              }
+            }}
             style={{
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              padding: '24px',
-              maxWidth: '500px',
-              width: '100%',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-              fontFamily: 'Inter, sans-serif'
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10000,
+              padding: '20px'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-              <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#111827', margin: 0 }}>
-                {selected.name}
-              </h2>
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  setSelected(null);
-                }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '24px',
-                  cursor: 'pointer',
-                  color: '#6B7280',
-                  padding: 0,
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                aria-label="Close"
-              >
-                ×
-              </button>
-            </div>
-            
-            {selected.domain ? (
-              <div style={{ marginBottom: '16px' }}>
-                <a
-                  href={selected.domain.startsWith('http') ? selected.domain : `https://${selected.domain}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    color: '#7E22CE',
-                    textDecoration: 'underline',
-                    fontSize: '14px'
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                padding: 'clamp(20px, 2vw, 32px)',
+                maxWidth: '560px',
+                width: '100%',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {/* Header with Logo and Close Button */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
+                  {logoUrl && (
+                    <div
+                      style={{
+                        width: 'clamp(80px, 8vw, 120px)',
+                        height: 'clamp(80px, 8vw, 120px)',
+                        flexShrink: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#F9FAFB',
+                        borderRadius: '8px',
+                        border: '1px solid #E5E7EB',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <img
+                        src={logoUrl}
+                        alt={`${selected.name} logo`}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                          objectFit: 'contain'
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h2 style={{ fontSize: 'clamp(18px, 1.5vw, 24px)', fontWeight: 600, color: '#111827', margin: 0, marginBottom: '4px' }}>
+                      {selected.name}
+                    </h2>
+                    {selected.hq && (
+                      <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '2px' }}>
+                        {selected.hq}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    setSelected(null);
                   }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    color: '#6B7280',
+                    padding: '4px',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F3F4F6';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                  aria-label="Close"
                 >
-                  {selected.domain}
-                </a>
+                  ×
+                </button>
               </div>
-            ) : (
-              <div style={{ marginBottom: '16px', color: '#9CA3AF', fontSize: '14px' }}>
-                No website available
-              </div>
-            )}
-            
-            <div style={{ fontSize: '14px', color: '#374151', lineHeight: '1.6', marginBottom: '20px' }}>
-              {selected.description || 'No description available.'}
+              
+              {/* URL */}
+              {selected.domain ? (
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 500, color: '#6B7280', marginBottom: '4px' }}>
+                    URL:
+                  </div>
+                  <a
+                    href={selected.domain.startsWith('http') ? selected.domain : `https://${selected.domain}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      color: '#6B1FA8',
+                      textDecoration: 'underline',
+                      fontSize: '14px',
+                      wordBreak: 'break-all'
+                    }}
+                  >
+                    {selected.domain}
+                  </a>
+                </div>
+              ) : null}
+              
+              {/* Description */}
+              {selected.description && (
+                <div style={{ 
+                  fontSize: '14px', 
+                  color: '#374151', 
+                  lineHeight: '1.6',
+                  paddingTop: '16px',
+                  borderTop: '1px solid #E5E7EB'
+                }}>
+                  {selected.description}
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

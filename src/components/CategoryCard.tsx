@@ -39,7 +39,7 @@ function LogoImage({ url, name }: { url: string; name: string }) {
           fontFamily: 'Inter, sans-serif',
           fontSize: 'clamp(8px, 0.52vw, 10px)',
           fontWeight: 500,
-          color: '#7E22CE',
+          color: '#6B1FA8',
           textAlign: 'center',
           padding: 'clamp(3px, 0.21vw, 4px)'
         }}
@@ -58,8 +58,7 @@ function LogoImage({ url, name }: { url: string; name: string }) {
         maxHeight: '100%',
         width: 'auto',
         height: 'auto',
-        objectFit: 'contain',
-        transform: 'scale(1.2)'
+        objectFit: 'contain'
       }}
       onError={() => setHasError(true)}
     />
@@ -75,8 +74,8 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
     <div 
       className="relative flex flex-col rounded-[24px]"
       style={{
-        backgroundColor: bgColor,
-        border: '2px solid #E9D5FF',
+        backgroundColor: '#FFFFFF',
+        border: '2px solid #000000',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
         padding: 'clamp(12px, 1.25vw, 24px)',
         gap: 'clamp(8px, 0.83vw, 16px)',
@@ -90,7 +89,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
             fontSize: 'clamp(16px, 1.25vw, 24px)',
-            color: '#7E22CE',
+            color: '#6B1FA8',
             lineHeight: '1.2',
             textAlign: 'center',
             cursor: onTitleClick ? 'pointer' : (tooltip ? 'help' : 'default'),
@@ -175,108 +174,97 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
         <div 
           className="flex flex-wrap"
           style={{
-            gap: 'clamp(8px, 0.83vw, 16px)',
+            gap: 'clamp(5px, 0.6vw, 8px)',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'flex-start',
+            alignContent: 'flex-start'
           }}
         >
           {items.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        if (item.company && onLogoClick) {
-                          onLogoClick(item.company);
-                        }
-                      }}
-                      className="flex flex-col items-center justify-start"
-                      style={{
-                        width: 'clamp(80px, 6.67vw, 128px)',
-                        minHeight: 'clamp(60px, 5.6vh, 90px)',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #E5E7EB',
-                        borderRadius: '12px',
-                        overflow: 'hidden',
-                        padding: 'clamp(6px, 0.42vw, 8px)',
-                        gap: 'clamp(4px, 0.31vw, 6px)',
-                        cursor: item.company && onLogoClick ? 'pointer' : 'default',
-                        transition: 'transform 0.2s, box-shadow 0.2s',
-                        ...(item.company && onLogoClick ? {
-                          ':hover': {
-                            transform: 'scale(1.05)',
-                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-                          }
-                        } : {})
-                      }}
+            <div
+              key={index}
+              onClick={() => {
+                if (item.company && onLogoClick) {
+                  onLogoClick(item.company);
+                }
+              }}
+              className="flex flex-col items-center justify-start"
+              style={{
+                width: 'calc((100% - 16px) / 3)',
+                maxWidth: 'clamp(95px, 7.5vw, 120px)',
+                cursor: item.company && onLogoClick ? 'pointer' : 'default',
+                transition: 'opacity 0.2s',
+                flexShrink: 0
+              }}
               onMouseEnter={(e) => {
                 if (item.company && onLogoClick) {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.opacity = '0.8';
                 }
               }}
               onMouseLeave={(e) => {
                 if (item.company && onLogoClick) {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.opacity = '1';
                 }
               }}
             >
-                      {/* Logo Container */}
-                      <div
-                        style={{
-                          width: '100%',
-                          height: 'clamp(32px, 3.3vh, 48px)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0
-                        }}
-                      >
-                        {item.url ? (
-                          <LogoImage url={item.url} name={item.name} />
-                        ) : (
-                          <div 
-                            style={{
-                              width: 'clamp(60px, 4.17vw, 80px)',
-                              height: 'clamp(30px, 2.8vh, 40px)',
-                              backgroundColor: '#E9D5FF',
-                              borderRadius: '4px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: 'clamp(8px, 0.52vw, 10px)',
-                              fontWeight: 500,
-                              color: '#7E22CE',
-                              textAlign: 'center',
-                              padding: 'clamp(3px, 0.21vw, 4px)'
-                            }}
-                          >
-                            {item.name.substring(0, 8)}
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Company Name */}
-                      <div
-                        style={{
-                          width: '100%',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(9px, 0.57vw, 11px)',
-                          fontWeight: 500,
-                          color: '#374151',
-                          textAlign: 'center',
-                          lineHeight: '1.3',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          wordBreak: 'break-word'
-                        }}
-                        title={item.name}
-                      >
-                        {item.name}
-                      </div>
+              {/* Logo - Direct display without container */}
+              <div
+                style={{
+                  width: 'clamp(70px, 6vw, 100px)',
+                  height: 'clamp(45px, 4.5vh, 65px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  marginBottom: 'clamp(3px, 0.4vw, 5px)'
+                }}
+              >
+                {item.url ? (
+                  <LogoImage url={item.url} name={item.name} />
+                ) : (
+                  <div 
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: '#E9D5FF',
+                      borderRadius: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 'clamp(10px, 0.75vw, 12px)',
+                      fontWeight: 500,
+                      color: '#6B1FA8',
+                      textAlign: 'center',
+                      padding: 'clamp(5px, 0.5vw, 7px)'
+                    }}
+                  >
+                    {item.name.substring(0, 10)}
+                  </div>
+                )}
+              </div>
+              
+              {/* Company Name - No container */}
+              <div
+                style={{
+                  width: '100%',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: 'clamp(9px, 0.65vw, 12px)',
+                  fontWeight: 500,
+                  color: '#374151',
+                  textAlign: 'center',
+                  lineHeight: '1.3',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'break-word'
+                }}
+                title={item.name}
+              >
+                {item.name}
+              </div>
             </div>
           ))}
         </div>

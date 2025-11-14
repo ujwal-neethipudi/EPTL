@@ -165,8 +165,8 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
         >
           <path
             d="M0,0 L0,0.4 L0.55,0.2 z"
-            fill="#A855F7"
-            opacity="0.25"
+            fill="#6B1FA8"
+            opacity="0.5"
           />
         </marker>
         <marker
@@ -180,8 +180,8 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
         >
           <path
             d="M0,0 L0,0.35 L0.45,0.175 z"
-            fill="#A855F7"
-            opacity="0.15"
+            fill="#6B1FA8"
+            opacity="0.4"
           />
         </marker>
       </defs>
@@ -194,20 +194,20 @@ export function ConnectionArrows({ positions: dynamicPositions = {} }: Connectio
           <g key={index}>
             <path
               d={path}
-              stroke="#A855F7"
-              strokeWidth={isThin ? "0.1" : "0.18"}
+              stroke="#6B1FA8"
+              strokeWidth={isThin ? "0.15" : "0.2"}
               fill="none"
-              opacity={isThin ? "0.15" : "0.25"}
+              opacity={isThin ? "0.4" : "0.5"}
               strokeLinecap="round"
               markerEnd={`url(#${isThin ? 'arrowhead-thin' : 'arrowhead'})`}
             />
             {conn.bidirectional && (
               <path
                 d={createCurvedPath(conn.to, conn.from)}
-                stroke="#A855F7"
-                strokeWidth="0.18"
+                stroke="#6B1FA8"
+                strokeWidth="0.2"
                 fill="none"
-                opacity="0.25"
+                opacity="0.5"
                 strokeLinecap="round"
                 markerEnd="url(#arrowhead)"
               />
