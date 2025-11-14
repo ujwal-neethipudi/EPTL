@@ -338,19 +338,21 @@ export default function App() {
       </div>
 
       {/* Version Label */}
-      <div 
-        className="absolute"
-        style={{ 
-          fontFamily: '"Courier New", Courier, monospace',
-          fontWeight: 600,
-          fontSize: 'clamp(11px, 0.73vw, 14px)',
-          color: '#000000',
-          top: 'clamp(20px, 3.7vh, 40px)',
-          left: 'clamp(30px, 3.1vw, 60px)'
-        }}
-      >
-        v1 Prototype
-      </div>
+      {!isMobile && (
+        <div 
+          className="absolute"
+          style={{ 
+            fontFamily: '"Courier New", Courier, monospace',
+            fontWeight: 600,
+            fontSize: 'clamp(11px, 0.73vw, 14px)',
+            color: '#000000',
+            top: 'clamp(20px, 3.7vh, 40px)',
+            left: 'clamp(30px, 3.1vw, 60px)'
+          }}
+        >
+          v1 Prototype
+        </div>
+      )}
 
       {/* Connection Arrows - Behind cards */}
       {!isMobile && <ConnectionArrows />}
