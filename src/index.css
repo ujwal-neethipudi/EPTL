@@ -539,6 +539,12 @@ html {
   font-size: var(--font-size);
 }
 
+@media (max-width: 768px) {
+  .company-name-label {
+    display: none !important;
+  }
+}
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;

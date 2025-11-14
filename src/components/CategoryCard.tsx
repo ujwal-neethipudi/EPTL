@@ -246,6 +246,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
               
               {/* Company Name - No container */}
               <div
+                className="company-name-label"
                 style={{
                   width: '100%',
                   fontFamily: 'Inter, sans-serif',
