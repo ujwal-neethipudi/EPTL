@@ -545,6 +545,22 @@ html {
 }
 
 @media (max-width: 768px) {
+  html,
+  body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body {
+    position: fixed;
+    width: 100%;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+
   .category-card-logo-grid {
     gap: 8px !important;
     flex-wrap: nowrap !important;

@@ -299,7 +299,7 @@ export default function App() {
       style={{ 
         backgroundColor: '#FFFFFF',
         width: '100vw',
-        height: '100vh',
+        height: isMobile ? '100dvh' : '100vh',
         minHeight: isMobile ? '100dvh' : '100vh',
         overflow: 'hidden'
       }}
