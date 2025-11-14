@@ -291,7 +291,7 @@ export default function App() {
       }
 
       if (analyticsCompanies && researchCompanies) {
-        const moveToResearch = ['Poli - X', 'eulytix.eu'];
+        const moveToResearch = ['Polit - X', 'Eulytix'];
         moveToResearch.forEach(name => {
           const index = analyticsCompanies.findIndex(company => company.name === name);
           if (index !== -1) {
