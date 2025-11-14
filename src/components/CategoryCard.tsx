@@ -78,20 +78,10 @@ function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: 
 
 export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick, onLogoClick, isMobile = false }: CategoryCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [maxLogoWidth, setMaxLogoWidth] = useState<number | null>(null);
   const logoGridRef = useRef<HTMLDivElement>(null);
   // Show placeholders if no logos provided, otherwise show actual logos
   const items = logos.length > 0 ? logos : Array(8).fill({ url: '', name: 'LOGO' });
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
-    const listener = (event: MediaQueryListEvent) => setIsMobile(event.matches);
-    setIsMobile(mediaQuery.matches);
-    mediaQuery.addEventListener('change', listener);
-    return () => mediaQuery.removeEventListener('change', listener);
-  }, []);
 
   const measureLogoWidths = useCallback(() => {
     if (!logoGridRef.current || !isMobile) {
