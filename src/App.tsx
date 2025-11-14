@@ -256,6 +256,37 @@ export default function App() {
       }
     });
 
+    if (isMobile) {
+      const messagingKey = categoryMap.messaging.key;
+      const infrastructureKey = categoryMap.infrastructure.key;
+      const votingKey = categoryMap.voting.key;
+
+      const messagingCompanies = effectiveCategories[messagingKey];
+      const infrastructureCompanies = effectiveCategories[infrastructureKey];
+      const votingCompanies = effectiveCategories[votingKey];
+
+      if (messagingCompanies && infrastructureCompanies) {
+        const hubspotIndex = messagingCompanies.findIndex(company => company.name === 'HubSpot');
+        if (hubspotIndex !== -1) {
+          const [hubspotCompany] = messagingCompanies.splice(hubspotIndex, 1);
+          if (!infrastructureCompanies.some(company => company.name === 'HubSpot')) {
+            infrastructureCompanies.push(hubspotCompany);
+          }
+        }
+      }
+
+      if (votingCompanies) {
+        const govTechCompanies = companiesByCategory['GovTech / Civic Infrastructure'] ?? [];
+        const pakflattSource =
+          votingCompanies.find(company => company.name === 'Pakflatt') ||
+          govTechCompanies.find(company => company.name === 'Pakflatt');
+
+        if (pakflattSource && !votingCompanies.some(company => company.name === 'Pakflatt')) {
+          votingCompanies.push(pakflattSource);
+        }
+      }
+    }
+
     return Object.entries(categoryMap).map(([id, config]) => {
       const companies = effectiveCategories[config.key] ?? [];
       const logos = companies.map(company => ({
@@ -280,7 +311,7 @@ export default function App() {
         }
       };
     });
-  }, [data, categoryAssignments]);
+  }, [data, categoryAssignments, isMobile]);
 
   const gridHorizontalMargin = isMobile ? 'clamp(12px, 4vw, 24px)' : 'clamp(30px, 3.1vw, 60px)';
   const gridTopOffset = isMobile ? 'clamp(80px, 13vh, 150px)' : 'clamp(120px, 18.5vh, 200px)';
