@@ -316,9 +316,9 @@ export default function App() {
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 800,
-            fontSize: isMobile ? 'clamp(22px, 6vw, 32px)' : 'clamp(28px, 2.9vw, 56px)',
+            fontSize: isMobile ? 'clamp(18px, 5vw, 26px)' : 'clamp(28px, 2.9vw, 56px)',
             color: '#000000',
-            letterSpacing: '-0.02em',
+            letterSpacing: isMobile ? '-0.03em' : '-0.02em',
             lineHeight: isMobile ? 1.1 : 1.2
           }}
         >
