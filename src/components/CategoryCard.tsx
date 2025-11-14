@@ -148,6 +148,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
         }}
       >
         <h2 
+          className={isMobile ? 'category-title category-title-mobile' : 'category-title'}
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
@@ -157,15 +158,12 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
             textAlign: 'center',
             cursor: onTitleClick ? 'pointer' : (tooltip ? 'help' : 'default'),
             transition: onTitleClick ? 'opacity 0.2s' : 'none',
-            backgroundColor: isMobile ? '#FFFFFF' : 'transparent',
-            padding: isMobile ? '0 clamp(12px, 3vw, 20px)' : 0,
-            borderRadius: isMobile ? '999px' : 0,
-            border: isMobile ? '2px solid #000000' : 'none',
             position: isMobile ? 'absolute' : 'relative',
             top: isMobile ? 0 : 'auto',
             left: isMobile ? '50%' : 'auto',
             transform: isMobile ? 'translate(-50%, -50%)' : 'none',
-            zIndex: 2
+            zIndex: 2,
+            padding: isMobile ? '0 clamp(10px, 3vw, 18px)' : 0
           }}
           onMouseEnter={() => tooltip && setShowTooltip(true)}
           onMouseLeave={(e) => {

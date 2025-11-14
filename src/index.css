@@ -563,6 +563,25 @@ html {
   .company-name-label {
     display: none !important;
   }
+
+  .category-title-mobile {
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .category-title-mobile::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% + 16px) !important;
+    height: calc(100% + 10px) !important;
+    background-color: #fff !important;
+    z-index: -1 !important;
+  }
 }
 
 @property --tw-border-style {
