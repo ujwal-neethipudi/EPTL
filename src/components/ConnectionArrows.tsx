@@ -219,10 +219,10 @@ export function ConnectionArrows({ positions: dynamicPositions = {}, variant = '
               d={path}
               stroke="#6B1FA8"
               strokeWidth={
-                variant === 'mobile' ? "0.08" : isThin ? "0.15" : "0.2"
+                variant === 'mobile' ? "0.12" : isThin ? "0.15" : "0.2"
               }
               fill="none"
-              opacity={variant === 'mobile' ? "0.25" : isThin ? "0.4" : "0.5"}
+              opacity={variant === 'mobile' ? "0.35" : isThin ? "0.4" : "0.5"}
               strokeLinecap="round"
               markerEnd={
                 variant === 'mobile'
