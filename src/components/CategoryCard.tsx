@@ -168,12 +168,14 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
           flex: 1,
           minHeight: 0,
           overflowY: 'auto',
+          overflowX: 'hidden',
           paddingRight: 'clamp(4px, 0.42vw, 8px)'
         }}
       >
         <div 
           className="category-card-logo-grid flex flex-wrap"
           style={{
+            width: '100%',
             gap: 'clamp(5px, 0.6vw, 8px)',
             justifyContent: 'center',
             alignItems: 'flex-start',
