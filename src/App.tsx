@@ -316,9 +316,10 @@ export default function App() {
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 800,
-            fontSize: 'clamp(28px, 2.9vw, 56px)',
+            fontSize: isMobile ? 'clamp(22px, 6vw, 32px)' : 'clamp(28px, 2.9vw, 56px)',
             color: '#000000',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
+            lineHeight: isMobile ? 1.1 : 1.2
           }}
         >
           European Political Tech Landscape
@@ -397,6 +398,7 @@ export default function App() {
                     bgColor={category.bgColor}
                     logos={category.logos}
                     tooltip={category.tooltip}
+                    isMobile={isMobile}
                     onTitleClick={category.detailed ? () => {
                       setSelectedCategoryInfo({
                         name: category.name,
@@ -448,6 +450,7 @@ export default function App() {
                     bgColor={category.bgColor}
                     logos={category.logos}
                     tooltip={category.tooltip}
+                    isMobile={isMobile}
                     onTitleClick={category.detailed ? () => {
                       setSelectedCategoryInfo({
                         name: category.name,

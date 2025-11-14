@@ -19,6 +19,7 @@ interface CategoryCardProps {
   tooltip?: string;
   onTitleClick?: () => void;
   onLogoClick?: (company: Company) => void;
+  isMobile?: boolean;
 }
 
 // Component to handle logo image with fallback
@@ -75,7 +76,7 @@ function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: 
   );
 }
 
-export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick, onLogoClick }: CategoryCardProps) {
+export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick, onLogoClick, isMobile = false }: CategoryCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [maxLogoWidth, setMaxLogoWidth] = useState<number | null>(null);
@@ -142,12 +143,20 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
         border: '2px solid #000000',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
         padding: 'clamp(12px, 1.25vw, 24px)',
+        paddingTop: isMobile ? 'clamp(40px, 8vw, 60px)' : 'clamp(12px, 1.25vw, 24px)',
         gap: 'clamp(8px, 0.83vw, 16px)',
         height: '100%'
       }}
     >
       {/* Category Heading */}
-      <div style={{ position: 'relative', width: '100%' }}>
+      <div 
+        style={{ 
+          position: 'relative', 
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center'
+        }}
+      >
         <h2 
           style={{ 
             fontFamily: 'Inter, sans-serif',
@@ -157,7 +166,16 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
             lineHeight: '1.2',
             textAlign: 'center',
             cursor: onTitleClick ? 'pointer' : (tooltip ? 'help' : 'default'),
-            transition: onTitleClick ? 'opacity 0.2s' : 'none'
+            transition: onTitleClick ? 'opacity 0.2s' : 'none',
+            backgroundColor: isMobile ? '#FFFFFF' : 'transparent',
+            padding: isMobile ? '0 clamp(12px, 3vw, 20px)' : 0,
+            borderRadius: isMobile ? '999px' : 0,
+            border: isMobile ? '2px solid #000000' : 'none',
+            position: isMobile ? 'absolute' : 'relative',
+            top: isMobile ? 0 : 'auto',
+            left: isMobile ? '50%' : 'auto',
+            transform: isMobile ? 'translate(-50%, -50%)' : 'none',
+            zIndex: 2
           }}
           onMouseEnter={() => tooltip && setShowTooltip(true)}
           onMouseLeave={(e) => {
