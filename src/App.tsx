@@ -295,7 +295,7 @@ export default function App() {
             fontFamily: 'Inter, sans-serif',
             fontWeight: 400,
             fontSize: 'clamp(14px, 1.04vw, 20px)',
-            color: '#6B7280'
+            color: '#000000'
           }}
         >
           Prototype · Nov 2025 · Partisan
@@ -306,14 +306,10 @@ export default function App() {
       <div 
         className="absolute"
         style={{ 
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: '"Courier New", Courier, monospace',
           fontWeight: 600,
           fontSize: 'clamp(11px, 0.73vw, 14px)',
-          color: '#6B1FA8',
-          backgroundColor: '#F3E8FF',
-          padding: 'clamp(6px, 0.74vh, 8px) clamp(12px, 1.56vw, 16px)',
-          borderRadius: '8px',
-          border: '1.5px solid #E9D5FF',
+          color: '#000000',
           top: 'clamp(20px, 3.7vh, 40px)',
           left: 'clamp(30px, 3.1vw, 60px)'
         }}
