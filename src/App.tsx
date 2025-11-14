@@ -115,6 +115,7 @@ export default function App() {
   const [categoryAssignments, setCategoryAssignments] = useState<CompanyCategoryMap>({});
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState<{ name: string; detailed?: string; subcategories?: string } | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Load data and category assignments
   useEffect(() => {
@@ -160,6 +161,27 @@ export default function App() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(categoryAssignments));
     }
   }, [categoryAssignments]);
+
+  // Track viewport size for responsive tweaks
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+    setIsMobile(mediaQuery.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange);
+      };
+    } else {
+      mediaQuery.addListener(handleChange);
+      return () => {
+        mediaQuery.removeListener(handleChange);
+      };
+    }
+  }, []);
 
   // Function to get the effective category for a company (from assignments or original data)
   const getCompanyCategory = useCallback((companyName: string, originalData: CompaniesByCategory): string | null => {
@@ -260,6 +282,17 @@ export default function App() {
     });
   }, [data, categoryAssignments]);
 
+  const gridHorizontalMargin = isMobile ? 'clamp(12px, 4vw, 24px)' : 'clamp(30px, 3.1vw, 60px)';
+  const gridTopOffset = isMobile ? 'clamp(65px, 10vh, 130px)' : 'clamp(120px, 18.5vh, 200px)';
+  const gridBottomOffset = isMobile ? 'clamp(30px, 4vh, 70px)' : 'clamp(60px, 5.5vh, 120px)';
+  const gridGap = isMobile ? 'clamp(12px, 3vw, 24px)' : 'clamp(24px, 2.5vw, 48px)';
+  const mobileRowShrink = 'clamp(24px, 5vh, 60px)';
+  const rowHeight = isMobile
+    ? `calc((100% - ${gridGap}) / 2 - ${mobileRowShrink})`
+    : `calc((100% - ${gridGap}) / 2)`;
+  const rowSpacing = gridGap;
+  const cardWidth = `calc((100% - (3 * ${gridGap})) / 4)`;
+
   return (
     <div 
       className="relative" 
@@ -267,6 +300,7 @@ export default function App() {
         backgroundColor: '#FFFFFF',
         width: '100vw',
         height: '100vh',
+        minHeight: isMobile ? '100dvh' : '100vh',
         overflow: 'hidden'
       }}
     >
@@ -318,24 +352,24 @@ export default function App() {
       </div>
 
       {/* Connection Arrows - Behind cards */}
-      <ConnectionArrows />
+      {!isMobile && <ConnectionArrows />}
 
       {/* Grid Container */}
       <div 
         className="absolute"
         style={{
-          top: 'clamp(120px, 18.5vh, 200px)',
-          left: 'clamp(30px, 3.1vw, 60px)',
-          right: 'clamp(30px, 3.1vw, 60px)',
-          bottom: 'clamp(60px, 5.5vh, 120px)',
+          top: gridTopOffset,
+          left: gridHorizontalMargin,
+          right: gridHorizontalMargin,
+          bottom: gridBottomOffset,
         }}
       >
         {/* Row 0: 4 categories using absolute positioning */}
         <div 
           style={{ 
             position: 'relative', 
-            height: 'calc((100% - clamp(24px, 2.5vw, 48px)) / 2)',
-            marginBottom: 'clamp(24px, 2.5vw, 48px)'
+            height: rowHeight,
+            marginBottom: rowSpacing
           }}
         >
           {categories
@@ -345,9 +379,7 @@ export default function App() {
               // Calculate positions for 4 items in 4-column space
               // Use calc to distribute available width across 4 columns with 3 gaps
               const col = category.position.col;
-              const cardWidth = 'calc((100% - (3 * clamp(24px, 2.5vw, 48px))) / 4)';
-              const gap = 'clamp(24px, 2.5vw, 48px)';
-              const left = `calc(${col} * (${cardWidth} + ${gap}))`;
+              const left = `calc(${col} * (${cardWidth} + ${gridGap}))`;
               
               return (
                 <div
@@ -387,7 +419,7 @@ export default function App() {
         <div 
           style={{ 
             position: 'relative', 
-            height: 'calc((100% - clamp(24px, 2.5vw, 48px)) / 2)'
+            height: rowHeight
           }}
         >
           {categories
@@ -397,10 +429,8 @@ export default function App() {
               // Calculate positions to center 3 items in 4-column space
               // To center 3 items: start at column 0.5, 1.5, 2.5
               const fractionalCol = 0.5 + index; // 0.5, 1.5, 2.5
-              const cardWidth = 'calc((100% - (3 * clamp(24px, 2.5vw, 48px))) / 4)';
-              const gap = 'clamp(24px, 2.5vw, 48px)';
               // Calculate left position: (fractionalCol * cardWidth) + (fractionalCol * gap)
-              const left = `calc(${fractionalCol} * (${cardWidth} + ${gap}))`;
+              const left = `calc(${fractionalCol} * (${cardWidth} + ${gridGap}))`;
               
               return (
                 <div
