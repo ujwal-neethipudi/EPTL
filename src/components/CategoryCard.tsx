@@ -152,7 +152,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
           style={{ 
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
-            fontSize: 'clamp(16px, 1.25vw, 24px)',
+            fontSize: 'clamp(14px, 1.1vw, 20px)',
             color: '#6B1FA8',
             lineHeight: '1.2',
             textAlign: 'center',
