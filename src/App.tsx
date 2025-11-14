@@ -357,7 +357,6 @@ export default function App() {
 
       {/* Connection Arrows - Behind cards */}
       {!isMobile && <ConnectionArrows variant="desktop" />}
-      {isMobile && <ConnectionArrows variant="mobile" />}
 
       {/* Grid Container */}
       <div 
