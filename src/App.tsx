@@ -283,8 +283,8 @@ export default function App() {
   }, [data, categoryAssignments]);
 
   const gridHorizontalMargin = isMobile ? 'clamp(12px, 4vw, 24px)' : 'clamp(30px, 3.1vw, 60px)';
-  const gridTopOffset = isMobile ? 'clamp(65px, 10vh, 130px)' : 'clamp(120px, 18.5vh, 200px)';
-  const gridBottomOffset = isMobile ? 'clamp(30px, 4vh, 70px)' : 'clamp(60px, 5.5vh, 120px)';
+  const gridTopOffset = isMobile ? 'clamp(80px, 13vh, 150px)' : 'clamp(120px, 18.5vh, 200px)';
+  const gridBottomOffset = isMobile ? 'clamp(20px, 3vh, 60px)' : 'clamp(60px, 5.5vh, 120px)';
   const gridGap = isMobile ? 'clamp(12px, 3vw, 24px)' : 'clamp(24px, 2.5vw, 48px)';
   const mobileRowShrink = 'clamp(24px, 5vh, 60px)';
   const rowHeight = isMobile
@@ -330,7 +330,8 @@ export default function App() {
             fontFamily: 'Inter, sans-serif',
             fontWeight: 400,
             fontSize: 'clamp(14px, 1.04vw, 20px)',
-            color: '#000000'
+            color: '#000000',
+            marginBottom: isMobile ? 'clamp(8px, 1.5vh, 16px)' : 'clamp(12px, 1.5vh, 20px)'
           }}
         >
           Prototype · Nov 2025 · Partisan
