@@ -172,7 +172,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
         }}
       >
         <div 
-          className="flex flex-wrap"
+          className="category-card-logo-grid flex flex-wrap"
           style={{
             gap: 'clamp(5px, 0.6vw, 8px)',
             justifyContent: 'center',
@@ -188,10 +188,8 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
                   onLogoClick(item.company);
                 }
               }}
-              className="flex flex-col items-center justify-start"
+              className="category-card-logo-item flex flex-col items-center justify-start"
               style={{
-                width: 'calc((100% - 16px) / 3)',
-                maxWidth: 'clamp(95px, 7.5vw, 120px)',
                 cursor: item.company && onLogoClick ? 'pointer' : 'default',
                 transition: 'opacity 0.2s',
                 flexShrink: 0
@@ -209,6 +207,7 @@ export function CategoryCard({ name, bgColor, logos = [], tooltip, onTitleClick,
             >
               {/* Logo - Direct display without container */}
               <div
+                className="category-card-logo-wrapper"
                 style={{
                   width: 'clamp(70px, 6vw, 100px)',
                   height: 'clamp(45px, 4.5vh, 65px)',
