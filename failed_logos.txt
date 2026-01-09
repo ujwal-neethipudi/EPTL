@@ -1,0 +1,79 @@
+Failed Logo Downloads
+============================================================
+
+Entity: influencethe.com
+Domain: influencethe.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Electify
+Domain: electify.vote
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Genaios GmbH
+Domain: genaios.ai
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Future Shift Labs
+Domain: futureshiftlabs.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: eXplain
+Domain: explain.fr
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Trollrensics
+Domain: trollrensics.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Eulytix
+Domain: eulytix.eu
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: eKairos
+Domain: ekairos.net
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: SocialHub
+Domain: socialhub.io
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: HaiX AI
+Domain: haix.ai
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: pollytix strategic research GmbH
+Domain: pollytix.de
+Reason: Failed to convert to PNG
+------------------------------------------------------------
+Entity: Policylead
+Domain: policylead.eu
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Delib Ltd
+Domain: delib.net
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Rootcause
+Domain: rootcause.global
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Participation Factory
+Domain: participationfactory.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Bully Pulpit International
+Domain: bpigroup.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Commonplace
+Domain: commonplace.is
+Reason: Failed to convert to PNG
+------------------------------------------------------------
+Entity: Connexa
+Domain: myconnexa.com
+Reason: Could not resolve logo URL
+------------------------------------------------------------
+Entity: Logically
+Domain: logically.ai
+Reason: Could not resolve logo URL
+------------------------------------------------------------
