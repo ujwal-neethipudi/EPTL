@@ -84,11 +84,11 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
   const basePadding = isMobile ? 6 : 8;
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const [showScrollIndicator, setShowScrollIndicator] = React.useState(false);
-  const isLegislativeTracking = subcategoryName === 'Legislative & Policy Tracking';
+  const [isHovered, setIsHovered] = React.useState(false);
   
   // Check if content is scrollable and handle scroll events
   React.useEffect(() => {
-    if (!isLegislativeTracking || !scrollContainerRef.current) {
+    if (!scrollContainerRef.current) {
       setShowScrollIndicator(false);
       return;
     }
@@ -127,10 +127,12 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
       container.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', checkScrollable);
     };
-  }, [isLegislativeTracking, companies]);
+  }, [companies]);
   
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         padding: `${basePadding}px`,
         backgroundColor: '#FFFFFF',
@@ -172,7 +174,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
           }}
         >
           <div
-            ref={isLegislativeTracking ? scrollContainerRef : undefined}
+            ref={scrollContainerRef}
             style={{
               flex: 1,
               display: 'flex',
@@ -287,8 +289,8 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
           })}
           </div>
           
-          {/* Scroll Indicator Icon - Only for Legislative & Policy Tracking */}
-          {isLegislativeTracking && showScrollIndicator && (
+          {/* Scroll Indicator Icon - Visible on hover for all scrollable subcategories */}
+          {showScrollIndicator && isHovered && (
             <div
               style={{
                 position: 'absolute',

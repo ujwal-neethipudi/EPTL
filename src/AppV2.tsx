@@ -89,6 +89,126 @@ export default function AppV2() {
         overflow: 'hidden' // Fit in one frame - no scrolling
       }}
     >
+      {/* Subtle Web-like Background Lines */}
+      <svg
+        style={{
+          position: 'absolute',
+          top: isMobile ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
+          left: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          bottom: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
+          pointerEvents: 'none',
+          zIndex: 0,
+          width: '100%',
+          height: '100%'
+        }}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        {/* Web-like lines connecting the three pillars */}
+        {/* Left pillar (16.67%) to Center pillar (50%) */}
+        <line
+          x1="16.67"
+          y1="20"
+          x2="50"
+          y2="35"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="16.67"
+          y1="40"
+          x2="50"
+          y2="50"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="16.67"
+          y1="60"
+          x2="50"
+          y2="65"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="16.67"
+          y1="80"
+          x2="50"
+          y2="80"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        {/* Center pillar (50%) to Right pillar (83.33%) */}
+        <line
+          x1="50"
+          y1="25"
+          x2="83.33"
+          y2="40"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="50"
+          y1="45"
+          x2="83.33"
+          y2="55"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="50"
+          y1="65"
+          x2="83.33"
+          y2="70"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        <line
+          x1="50"
+          y1="85"
+          x2="83.33"
+          y2="85"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.5"
+        />
+        {/* Cross-pillar connections (Left to Right) */}
+        <line
+          x1="16.67"
+          y1="30"
+          x2="83.33"
+          y2="45"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.4"
+        />
+        <line
+          x1="16.67"
+          y1="50"
+          x2="83.33"
+          y2="60"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.4"
+        />
+        <line
+          x1="16.67"
+          y1="70"
+          x2="83.33"
+          y2="75"
+          stroke="#9CA3AF"
+          strokeWidth="0.15"
+          opacity="0.4"
+        />
+      </svg>
       {/* Header - Compact for single frame */}
       <div 
         className="absolute left-0 right-0 text-center"
@@ -147,6 +267,7 @@ export default function AppV2() {
           left: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
           right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
           bottom: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
+          zIndex: 1 // Ensure content is above background lines
         }}
       >
         <div
