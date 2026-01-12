@@ -39,15 +39,15 @@ function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: 
     return (
       <div 
         style={{
-      width: 'clamp(50px, 3.5vw, 61px)',
-      height: 'clamp(31px, 2.75vh, 39px)',
+          width: 'clamp(53px, 3.68vw, 64px)', // 5% increase
+      height: 'clamp(33px, 2.89vh, 41px)', // 5% increase
           backgroundColor: '#E9D5FF',
           borderRadius: '4px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'Inter, sans-serif',
-          fontSize: 'clamp(8px, 0.52vw, 10px)',
+          fontSize: 'clamp(8px, 0.55vw, 11px)', // 5% increase
           fontWeight: 500,
           color: '#6B1FA8',
           textAlign: 'center',
@@ -136,7 +136,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
       style={{
         padding: `${basePadding}px`,
         backgroundColor: '#FFFFFF',
-        border: `1px solid ${borderColor}`,
+        boxShadow: `0 0 0 1px ${borderColor}`, // Box-shadow respects border-radius and won't be clipped
         borderRadius: '4px',
         height: '100%',
         display: 'flex',
@@ -148,7 +148,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
       {/* Subcategory Header - Compact */}
       <h3
         style={{
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'monospace',
           fontWeight: 600,
           fontSize: isMobile ? 'clamp(10px, 2vw, 12px)' : 'clamp(10px, 0.75vw, 12px)',
           color: '#000000', // Black
@@ -226,11 +226,11 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
                 <div
                   style={{
                     width: isMobile 
-                      ? 'clamp(50px, 6.6vw, 61px)' 
-                      : 'clamp(55px, 3.85vw, 66px)', // Logo fits within container width
+                      ? 'clamp(53px, 6.93vw, 64px)' 
+                      : 'clamp(58px, 4.04vw, 69px)', // Logo fits within container width (5% increase)
                     height: isMobile 
-                      ? 'clamp(31px, 3.85vh, 39px)' 
-                      : 'clamp(33px, 2.75vh, 40px)',
+                      ? 'clamp(33px, 4.04vh, 41px)' 
+                      : 'clamp(35px, 2.89vh, 42px)', // 5% increase
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -251,7 +251,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontFamily: 'Inter, sans-serif',
-                        fontSize: 'clamp(8px, 0.6vw, 10px)',
+                        fontSize: 'clamp(8px, 0.63vw, 11px)', // 5% increase
                         fontWeight: 500,
                         color: '#6B1FA8',
                         textAlign: 'center',
@@ -268,7 +268,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
                   style={{
                     width: '100%',
                     fontFamily: 'Inter, sans-serif',
-                    fontSize: isMobile ? 'clamp(8px, 1.5vw, 9px)' : 'clamp(8px, 0.6vw, 10px)',
+                    fontSize: isMobile ? 'clamp(8px, 1.58vw, 9px)' : 'clamp(8px, 0.63vw, 11px)', // 5% increase
                     fontWeight: 500,
                     color: '#374151',
                     textAlign: 'center',

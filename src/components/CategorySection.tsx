@@ -143,7 +143,7 @@ export function CategorySection({
         padding: categoryCount > 2 ? 'clamp(4px, 0.4vw, 6px)' : 'clamp(6px, 0.6vw, 10px)', // Very compact padding for Engine
         backgroundColor: bgColor,
         borderRadius: '6px',
-        border: `1px solid ${borderColor}`,
+        boxShadow: `0 0 0 1px ${borderColor}`, // Box-shadow respects border-radius and won't be clipped
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden' // Keep content within box
@@ -152,7 +152,7 @@ export function CategorySection({
       {/* Category Header - Compact */}
       <h2
         style={{
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'monospace',
           fontWeight: 600,
           fontSize: isMobile ? 'clamp(11px, 2.5vw, 14px)' : (categoryCount > 2 ? 'clamp(11px, 0.8vw, 13px)' : 'clamp(12px, 0.9vw, 14px)'),
           color: '#003399', // EU blue

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { PillarColumn } from './components/PillarColumn';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 
 type Company = {
   name: string;
@@ -24,6 +25,7 @@ export default function AppV2() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Company | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<string>('All');
 
   // Load data
   useEffect(() => {
@@ -60,6 +62,59 @@ export default function AppV2() {
       };
     }
   }, []);
+
+  // Extract unique countries from data
+  const countries = useMemo(() => {
+    if (!data) return [];
+    const countrySet = new Set<string>();
+    Object.values(data).forEach((pillar) => {
+      Object.values(pillar).forEach((category) => {
+        const companies = Array.isArray(category) ? category : Object.values(category).flat();
+        companies.forEach((company) => {
+          if (company.hq) {
+            countrySet.add(company.hq);
+          }
+        });
+      });
+    });
+    return Array.from(countrySet).sort();
+  }, [data]);
+
+  // Filter data by selected country - keep structure, filter only companies
+  const filteredData = useMemo(() => {
+    if (!data || selectedCountry === 'All') return data;
+    
+    const filterCompanies = (companies: Company[]): Company[] => {
+      return companies.filter(company => company.hq === selectedCountry);
+    };
+
+    const filtered: PillarStructure = {
+      Brain: {},
+      Engine: {},
+      Megaphone: {}
+    };
+
+    // Keep all categories and subcategories, just filter the companies
+    Object.entries(data).forEach(([pillarName, categories]) => {
+      const filteredCategories: Record<string, CategoryData> = {};
+      Object.entries(categories).forEach(([categoryName, categoryData]) => {
+        if (Array.isArray(categoryData)) {
+          // Flat category - filter companies but keep structure
+          filteredCategories[categoryName] = filterCompanies(categoryData);
+        } else {
+          // Category with subcategories - filter companies in each subcategory but keep all subcategories
+          const filteredSubcats: Record<string, Company[]> = {};
+          Object.entries(categoryData).forEach(([subcatName, companies]) => {
+            filteredSubcats[subcatName] = filterCompanies(companies);
+          });
+          filteredCategories[categoryName] = filteredSubcats;
+        }
+      });
+      filtered[pillarName as keyof PillarStructure] = filteredCategories;
+    });
+
+    return filtered;
+  }, [data, selectedCountry]);
 
   if (!data) {
     return (
@@ -105,110 +160,95 @@ export default function AppV2() {
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
-        {/* Web-like lines connecting the three pillars */}
+        {/* Web-like lines connecting the three pillars - Dense criss-cross pattern */}
+        {/* Lines stay within map bounds: Y from ~15% (after header) to ~85% (before bottom) */}
         {/* Left pillar (16.67%) to Center pillar (50%) */}
-        <line
-          x1="16.67"
-          y1="20"
-          x2="50"
-          y2="35"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="16.67"
-          y1="40"
-          x2="50"
-          y2="50"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="16.67"
-          y1="60"
-          x2="50"
-          y2="65"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="16.67"
-          y1="80"
-          x2="50"
-          y2="80"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
+        <line x1="16.67" y1="20" x2="50" y2="28" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="25" x2="50" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="30" x2="50" y2="36" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="35" x2="50" y2="40" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="40" x2="50" y2="44" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="45" x2="50" y2="48" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="50" x2="50" y2="52" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="55" x2="50" y2="56" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="60" x2="50" y2="60" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="65" x2="50" y2="64" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="70" x2="50" y2="68" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="75" x2="50" y2="72" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="80" x2="50" y2="76" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         {/* Center pillar (50%) to Right pillar (83.33%) */}
-        <line
-          x1="50"
-          y1="25"
-          x2="83.33"
-          y2="40"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="50"
-          y1="45"
-          x2="83.33"
-          y2="55"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="50"
-          y1="65"
-          x2="83.33"
-          y2="70"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        <line
-          x1="50"
-          y1="85"
-          x2="83.33"
-          y2="85"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.5"
-        />
-        {/* Cross-pillar connections (Left to Right) */}
-        <line
-          x1="16.67"
-          y1="30"
-          x2="83.33"
-          y2="45"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.4"
-        />
-        <line
-          x1="16.67"
-          y1="50"
-          x2="83.33"
-          y2="60"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.4"
-        />
-        <line
-          x1="16.67"
-          y1="70"
-          x2="83.33"
-          y2="75"
-          stroke="#9CA3AF"
-          strokeWidth="0.15"
-          opacity="0.4"
-        />
+        <line x1="50" y1="22" x2="83.33" y2="30" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="28" x2="83.33" y2="35" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="34" x2="83.33" y2="40" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="40" x2="83.33" y2="45" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="46" x2="83.33" y2="50" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="52" x2="83.33" y2="55" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="58" x2="83.33" y2="60" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="64" x2="83.33" y2="65" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="70" x2="83.33" y2="70" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="76" x2="83.33" y2="75" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="82" x2="83.33" y2="80" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        {/* Cross-pillar connections (Left to Right) - Criss-cross pattern */}
+        <line x1="16.67" y1="22" x2="83.33" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="28" x2="83.33" y2="38" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="34" x2="83.33" y2="44" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="40" x2="83.33" y2="50" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="46" x2="83.33" y2="56" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="52" x2="83.33" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="58" x2="83.33" y2="68" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="64" x2="83.33" y2="74" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="70" x2="83.33" y2="78" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        {/* Reverse criss-cross (Right to Left) */}
+        <line x1="83.33" y1="22" x2="16.67" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="30" x2="16.67" y2="42" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="38" x2="16.67" y2="52" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="46" x2="16.67" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="54" x2="16.67" y2="72" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="62" x2="16.67" y2="78" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="70" x2="16.67" y2="82" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
       </svg>
+      {/* Country Filter - Top Right */}
+      <div
+        className="absolute"
+        style={{
+          top: isMobile ? 'clamp(12px, 2vh, 24px)' : 'clamp(12px, 2vh, 24px)',
+          right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          zIndex: 10000
+        }}
+      >
+        <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+          <SelectTrigger
+            className="!border-none !bg-transparent !shadow-none hover:!bg-transparent focus:!bg-transparent [&_svg]:!text-black"
+            style={{
+              width: isMobile ? 'clamp(120px, 25vw, 160px)' : 'clamp(140px, 12vw, 180px)',
+              fontSize: isMobile ? 'clamp(11px, 2vw, 13px)' : 'clamp(12px, 0.9vw, 14px)',
+              height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
+              padding: 0,
+              border: 'none',
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              fontFamily: 'monospace'
+            }}
+          >
+            <SelectValue placeholder="Filter by country" style={{ fontFamily: 'monospace' }} />
+          </SelectTrigger>
+          <SelectContent 
+            className="!z-[10001] !bg-white font-mono [&_[data-slot=select-item]>span]:hidden !max-h-[200px] !overflow-y-auto" 
+            style={{ zIndex: 10001, backgroundColor: '#FFFFFF', fontFamily: 'monospace', cursor: 'default', maxHeight: '200px', overflowY: 'auto' }}
+            onCloseAutoFocus={(e) => e.preventDefault()}
+          >
+            <SelectItem value="All" className="font-mono !cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: 'monospace', cursor: 'pointer' }}>
+              All Countries
+            </SelectItem>
+            {countries.map((country) => (
+              <SelectItem key={country} value={country} className="font-mono !cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: 'monospace', cursor: 'pointer' }}>
+                {country}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Header - Compact for single frame */}
       <div 
         className="absolute left-0 right-0 text-center"
@@ -240,24 +280,42 @@ export default function AppV2() {
             margin: 0
           }}
         >
-          v2 Prototype · Nov 2025 · Partisan
+          v2 Prototype. Jan 2026. Political Tech Summit
         </p>
       </div>
 
-      {/* Partisan Logo - Top Left */}
-      <img 
-        src="/logos/partisan.jpeg"
-        alt="Partisan"
+      {/* Partisan and PTS Logos - Top Left */}
+      <div
         style={{
           position: 'absolute',
           top: 'clamp(12px, 2vh, 24px)',
           left: 'clamp(20px, 2.5vw, 40px)',
-          height: isMobile ? 'clamp(48px, 12vw, 66px)' : 'clamp(66px, 6.6vw, 108px)', // 3x the title font size
-          width: 'auto',
-          objectFit: 'contain',
-          maxWidth: 'clamp(150px, 15vw, 200px)' // Prevent overflow
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'clamp(8px, 1vw, 12px)'
         }}
-      />
+      >
+        <img 
+          src="/logos/partisan.jpeg"
+          alt="Partisan"
+          style={{
+            height: isMobile ? 'clamp(48px, 12vw, 66px)' : 'clamp(66px, 6.6vw, 108px)', // Original size
+            width: 'auto',
+            objectFit: 'contain',
+            maxWidth: 'clamp(150px, 15vw, 200px)' // Prevent overflow
+          }}
+        />
+        <img 
+          src="/logos/pts.png"
+          alt="PTS"
+          style={{
+            height: isMobile ? 'clamp(32px, 8vw, 44px)' : 'clamp(44px, 4.4vw, 72px)', // Same size as Partisan logo
+            width: 'auto',
+            objectFit: 'contain',
+            maxWidth: 'clamp(100px, 10vw, 130px)' // Prevent overflow
+          }}
+        />
+      </div>
 
       {/* 3-Pillar Layout Container - Fit in single viewport frame */}
       <div 
@@ -267,7 +325,9 @@ export default function AppV2() {
           left: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
           right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
           bottom: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
-          zIndex: 1 // Ensure content is above background lines
+          zIndex: 1, // Ensure content is above background lines
+          transform: 'scale(0.9)',
+          transformOrigin: 'center center'
         }}
       >
         <div
@@ -283,7 +343,7 @@ export default function AppV2() {
           {/* Brain Pillar */}
           <PillarColumn
             pillarName="Brain"
-            categories={data.Brain}
+            categories={filteredData?.Brain || {}}
             onCompanyClick={(company) => {
               setSelected(company);
               setOpen(true);
@@ -294,7 +354,7 @@ export default function AppV2() {
           {/* Engine Pillar */}
           <PillarColumn
             pillarName="Engine"
-            categories={data.Engine}
+            categories={filteredData?.Engine || {}}
             onCompanyClick={(company) => {
               setSelected(company);
               setOpen(true);
@@ -305,7 +365,7 @@ export default function AppV2() {
           {/* Megaphone Pillar */}
           <PillarColumn
             pillarName="Megaphone"
-            categories={data.Megaphone}
+            categories={filteredData?.Megaphone || {}}
             onCompanyClick={(company) => {
               setSelected(company);
               setOpen(true);
