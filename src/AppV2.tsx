@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { Maximize2, X } from 'lucide-react';
 import { PillarColumn } from './components/PillarColumn';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 
@@ -26,6 +27,12 @@ export default function AppV2() {
   const [selected, setSelected] = useState<Company | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string>('All');
+  const [maximizedBox, setMaximizedBox] = useState<{
+    type: 'category' | 'subcategory';
+    categoryName: string;
+    subcategoryName?: string;
+    pillarName: string;
+  } | null>(null);
 
   // Load data
   useEffect(() => {
@@ -348,6 +355,9 @@ export default function AppV2() {
               setSelected(company);
               setOpen(true);
             }}
+            onMaximize={(categoryName, subcategoryName) => {
+              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Brain' });
+            }}
             isMobile={isMobile}
           />
 
@@ -359,6 +369,9 @@ export default function AppV2() {
               setSelected(company);
               setOpen(true);
             }}
+            onMaximize={(categoryName, subcategoryName) => {
+              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Engine' });
+            }}
             isMobile={isMobile}
           />
 
@@ -369,6 +382,9 @@ export default function AppV2() {
             onCompanyClick={(company) => {
               setSelected(company);
               setOpen(true);
+            }}
+            onMaximize={(categoryName, subcategoryName) => {
+              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Megaphone' });
             }}
             isMobile={isMobile}
           />
@@ -520,6 +536,285 @@ export default function AppV2() {
                   borderTop: '1px solid #E5E7EB'
                 }}>
                   {selected.description}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Maximized Box Modal */}
+      {maximizedBox && (() => {
+        const pillarData = filteredData?.[maximizedBox.pillarName as keyof PillarStructure];
+        const categoryData = pillarData?.[maximizedBox.categoryName];
+        
+        if (!categoryData) return null;
+
+        let companiesToShow: Company[] = [];
+        let title = maximizedBox.categoryName;
+        
+        if (maximizedBox.type === 'subcategory' && maximizedBox.subcategoryName) {
+          // Subcategory view
+          if (!Array.isArray(categoryData)) {
+            companiesToShow = categoryData[maximizedBox.subcategoryName] || [];
+            title = `${maximizedBox.categoryName} - ${maximizedBox.subcategoryName}`;
+          }
+        } else {
+          // Flat category view
+          if (Array.isArray(categoryData)) {
+            companiesToShow = categoryData;
+          }
+        }
+
+        // Sort companies alphabetically
+        const sortedCompanies = [...companiesToShow].sort((a, b) => 
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
+
+        return (
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setMaximizedBox(null);
+              }
+            }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10001, // Above company modal
+              padding: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(20px, 2vw, 40px)'
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: '#FFFFFF',
+                borderRadius: '12px',
+                padding: isMobile ? 'clamp(16px, 2vw, 24px)' : 'clamp(24px, 2.5vw, 40px)',
+                maxWidth: isMobile ? '95vw' : '90vw',
+                maxHeight: isMobile ? '90vh' : '85vh',
+                width: '100%',
+                height: 'auto',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                position: 'relative'
+              }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setMaximizedBox(null)}
+                style={{
+                  position: 'absolute',
+                  top: isMobile ? 'clamp(12px, 1.5vw, 16px)' : 'clamp(16px, 1.5vw, 20px)',
+                  right: isMobile ? 'clamp(12px, 1.5vw, 16px)' : 'clamp(16px, 1.5vw, 20px)',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '6px',
+                  padding: 'clamp(6px, 0.6vw, 8px)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10,
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+                }}
+                aria-label="Close"
+              >
+                <X size={isMobile ? 18 : 20} color="#6B7280" />
+              </button>
+
+              {/* Title */}
+              <h2
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontWeight: 600,
+                  fontSize: isMobile ? 'clamp(18px, 4vw, 22px)' : 'clamp(24px, 2vw, 32px)',
+                  color: '#001A66',
+                  marginBottom: isMobile ? 'clamp(16px, 2vh, 20px)' : 'clamp(20px, 2vh, 28px)',
+                  marginTop: 0,
+                  textAlign: 'center',
+                  paddingRight: isMobile ? 'clamp(32px, 4vw, 40px)' : 'clamp(40px, 3vw, 48px)' // Space for close button
+                }}
+              >
+                {title}
+              </h2>
+
+              {/* Logo Grid - Larger in maximized view */}
+              {sortedCompanies.length > 0 ? (
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    alignContent: 'flex-start',
+                    gap: isMobile ? 'clamp(12px, 2vw, 16px)' : 'clamp(16px, 1.5vw, 24px)',
+                    overflowY: 'auto',
+                    paddingRight: 'clamp(4px, 0.4vw, 8px)',
+                    paddingBottom: 'clamp(4px, 0.4vw, 8px)'
+                  }}
+                >
+                  {sortedCompanies.map((company, index) => {
+                    const logoUrl = company.logo || 
+                      (company.domain 
+                        ? `/logos/${company.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`
+                        : null);
+                    
+                    return (
+                      <div
+                        key={`${company.name}-${index}`}
+                        onClick={() => {
+                          setMaximizedBox(null);
+                          setSelected(company);
+                          setOpen(true);
+                        }}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          transition: 'opacity 0.2s, transform 0.2s',
+                          padding: isMobile ? 'clamp(8px, 1vw, 12px)' : 'clamp(12px, 1vw, 16px)',
+                          flexShrink: 0,
+                          width: isMobile 
+                            ? 'calc(33.333% - clamp(8px, 1.33vw, 10.67px))'
+                            : 'clamp(120px, 8vw, 160px)'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = '0.8';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = '1';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        {/* Logo - Larger in maximized view */}
+                        <div
+                          style={{
+                            width: isMobile 
+                              ? 'clamp(80px, 10vw, 100px)' 
+                              : 'clamp(100px, 6.5vw, 140px)',
+                            height: isMobile 
+                              ? 'clamp(50px, 6.25vh, 62px)' 
+                              : 'clamp(62px, 4.3vh, 87px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: isMobile ? 'clamp(6px, 0.8vw, 8px)' : 'clamp(8px, 0.6vw, 12px)',
+                            flexShrink: 0,
+                            backgroundColor: '#F9FAFB',
+                            borderRadius: '8px',
+                            border: '1px solid #E5E7EB',
+                            padding: 'clamp(4px, 0.4vw, 8px)'
+                          }}
+                        >
+                          {logoUrl ? (
+                            <img 
+                              src={logoUrl} 
+                              alt={company.name}
+                              style={{
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                width: 'auto',
+                                height: 'auto',
+                                objectFit: 'contain'
+                              }}
+                              onError={(e) => {
+                                const target = e.currentTarget as HTMLImageElement;
+                                target.style.display = 'none';
+                                const parent = target.parentElement;
+                                if (parent) {
+                                  parent.innerHTML = `<div style="
+                                    width: 100%;
+                                    height: 100%;
+                                    background-color: #E9D5FF;
+                                    border-radius: 6px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-family: Inter, sans-serif;
+                                    font-size: clamp(10px, 1vw, 14px);
+                                    font-weight: 500;
+                                    color: #6B1FA8;
+                                    text-align: center;
+                                    padding: clamp(4px, 0.4vw, 8px);
+                                  ">${company.name.substring(0, 12)}</div>`;
+                                }
+                              }}
+                            />
+                          ) : (
+                            <div 
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: '#E9D5FF',
+                                borderRadius: '6px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontFamily: 'Inter, sans-serif',
+                                fontSize: isMobile ? 'clamp(10px, 1.2vw, 12px)' : 'clamp(12px, 0.8vw, 16px)',
+                                fontWeight: 500,
+                                color: '#6B1FA8',
+                                textAlign: 'center',
+                                padding: 'clamp(4px, 0.4vw, 8px)'
+                              }}
+                            >
+                              {company.name.substring(0, 12)}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Company Name - Larger in maximized view */}
+                        <div
+                          style={{
+                            width: '100%',
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: isMobile ? 'clamp(10px, 1.5vw, 12px)' : 'clamp(12px, 0.9vw, 16px)',
+                            fontWeight: 500,
+                            color: '#374151',
+                            textAlign: 'center',
+                            lineHeight: '1.3',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            wordBreak: 'break-word'
+                          }}
+                          title={company.name}
+                        >
+                          {company.name}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: isMobile ? 'clamp(14px, 2vw, 16px)' : 'clamp(16px, 1.2vw, 18px)',
+                    color: '#9CA3AF',
+                    textAlign: 'center',
+                    padding: 'clamp(32px, 4vh, 48px)'
+                  }}
+                >
+                  No companies in this {maximizedBox.type === 'subcategory' ? 'subcategory' : 'category'}
                 </div>
               )}
             </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Maximize2 } from 'lucide-react';
 
 type Company = {
   name: string;
@@ -12,6 +13,7 @@ interface SubcategoryGroupProps {
   subcategoryName: string;
   companies: Company[];
   onCompanyClick?: (company: Company) => void;
+  onMaximize?: () => void;
   isMobile?: boolean;
   logosPerRow?: number; // Optional: specify number of logos per row (e.g., 5 for Legislative & Policy Tracking)
   borderColor?: string; // Border color to match parent category
@@ -79,7 +81,7 @@ function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: 
   );
 }
 
-export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, isMobile = false, logosPerRow, borderColor = '#E5E7EB' }: SubcategoryGroupProps) {
+export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, onMaximize, isMobile = false, logosPerRow, borderColor = '#E5E7EB' }: SubcategoryGroupProps) {
   // Compact padding for single-frame viewport
   const basePadding = isMobile ? 6 : 8;
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -145,6 +147,40 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
         position: 'relative'
       }}
     >
+      {/* Maximize icon - appears on hover */}
+      {isHovered && onMaximize && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onMaximize();
+          }}
+          style={{
+            position: 'absolute',
+            top: 'clamp(4px, 0.4vw, 6px)',
+            right: 'clamp(4px, 0.4vw, 6px)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            border: '1px solid #E5E7EB',
+            borderRadius: '4px',
+            padding: 'clamp(2px, 0.2vw, 4px)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            transition: 'background 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+          }}
+          aria-label="Maximize subcategory"
+        >
+          <Maximize2 size={isMobile ? 12 : 14} color="#6B7280" />
+        </button>
+      )}
+
       {/* Subcategory Header - Compact */}
       <h3
         style={{

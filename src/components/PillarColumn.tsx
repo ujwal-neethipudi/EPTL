@@ -17,6 +17,7 @@ interface PillarColumnProps {
   pillarName: string;
   categories: Record<string, CategoryData>;
   onCompanyClick?: (company: Company) => void;
+  onMaximize?: (categoryName: string, subcategoryName?: string) => void;
   isMobile?: boolean;
 }
 
@@ -27,7 +28,7 @@ const pillarColors: Record<string, string> = {
   'Megaphone': '#FFF5F0' // Very light orange
 };
 
-export function PillarColumn({ pillarName, categories, onCompanyClick, isMobile = false }: PillarColumnProps) {
+export function PillarColumn({ pillarName, categories, onCompanyClick, onMaximize, isMobile = false }: PillarColumnProps) {
   const bgColor = pillarColors[pillarName] || '#FFFFFF';
 
   return (
@@ -99,6 +100,7 @@ export function PillarColumn({ pillarName, categories, onCompanyClick, isMobile 
                   companies={isArray ? categoryData : undefined}
                   subcategories={hasSubcategories ? categoryData : undefined}
                   onCompanyClick={onCompanyClick}
+                  onMaximize={onMaximize}
                   isMobile={isMobile}
                   entityCount={entityCount}
                   categoryCount={categoryCount} // Pass category count to adjust sizing

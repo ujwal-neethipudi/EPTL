@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Maximize2 } from 'lucide-react';
 import { SubcategoryGroup } from './SubcategoryGroup';
 
 type Company = {
@@ -52,6 +53,7 @@ interface CategorySectionProps {
   companies?: Company[]; // For flat categories (no subcategories)
   subcategories?: Record<string, Company[]>; // For categories with subcategories
   onCompanyClick?: (company: Company) => void;
+  onMaximize?: (categoryName: string, subcategoryName?: string) => void;
   isMobile?: boolean;
   bgColor?: string;
   entityCount?: number; // Total number of entities for adaptive sizing
@@ -64,7 +66,8 @@ export function CategorySection({
   categoryName, 
   companies, 
   subcategories, 
-  onCompanyClick, 
+  onCompanyClick,
+  onMaximize,
   isMobile = false,
   bgColor = '#FFFFFF',
   entityCount = 0,
@@ -132,9 +135,13 @@ export function CategorySection({
     : Math.max(totalCount * 0.1, 0.5); // Standard for Brain/Megaphone (2 categories)
   const flexGrowValue = normalizedFlexGrow;
   const borderColor = categoryBorderColors[categoryName] || '#E5E7EB';
+  const [isHovered, setIsHovered] = useState(false);
+  const isFlatCategory = companies && companies.length > 0 && !hasSubcategories;
 
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         flexShrink: 0,
         flexGrow: forceFullHeight ? 1 : (hasSubcategories ? 0 : flexGrowValue), // Fill container if forceFullHeight, otherwise use original logic
@@ -146,9 +153,43 @@ export function CategorySection({
         border: `1px solid ${borderColor}`,
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden' // Keep content within box
+        overflow: 'hidden', // Keep content within box
+        position: 'relative'
       }}
     >
+      {/* Maximize icon for flat categories - appears on hover */}
+      {isFlatCategory && isHovered && onMaximize && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onMaximize(categoryName);
+          }}
+          style={{
+            position: 'absolute',
+            top: 'clamp(4px, 0.4vw, 6px)',
+            right: 'clamp(4px, 0.4vw, 6px)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            border: '1px solid #E5E7EB',
+            borderRadius: '4px',
+            padding: 'clamp(2px, 0.2vw, 4px)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            transition: 'background 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+          }}
+          aria-label="Maximize category"
+        >
+          <Maximize2 size={isMobile ? 12 : 14} color="#6B7280" />
+        </button>
+      )}
       {/* Category Header - Compact */}
       <h2
         style={{
@@ -206,6 +247,7 @@ export function CategorySection({
                       subcategoryName={firstSubcat[0][0]}
                       companies={firstSubcat[0][1]}
                       onCompanyClick={onCompanyClick}
+                      onMaximize={() => onMaximize?.(categoryName, firstSubcat[0][0])}
                       isMobile={isMobile}
                       logosPerRow={5} // 5 logos per row for Deliberative Tech & Citizen Input
                       borderColor={getSubcategoryHue(borderColor, getSubcatIndex(firstSubcat[0][0]), subcatEntries.length)}
@@ -238,6 +280,7 @@ export function CategorySection({
                           subcategoryName={subcatName}
                           companies={subcatCompanies}
                           onCompanyClick={onCompanyClick}
+                          onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
                           borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
                         />
@@ -274,6 +317,7 @@ export function CategorySection({
                         subcategoryName={subcatName}
                         companies={subcatCompanies}
                         onCompanyClick={onCompanyClick}
+                        onMaximize={() => onMaximize?.(categoryName, subcatName)}
                         isMobile={isMobile}
                         borderColor={getSubcategoryHue(borderColor, index, subcatEntries.length)}
                       />
@@ -331,6 +375,7 @@ export function CategorySection({
                           subcategoryName={subcatName}
                           companies={subcatCompanies}
                           onCompanyClick={onCompanyClick}
+                          onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
                           logosPerRow={5} // 5 logos per row for Info Integrity & Social Media
                           borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
@@ -365,6 +410,7 @@ export function CategorySection({
                           subcategoryName={subcatName}
                           companies={subcatCompanies}
                           onCompanyClick={onCompanyClick}
+                          onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
                           borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
                         />
@@ -421,6 +467,7 @@ export function CategorySection({
                     subcategoryName={firstSubcat[0]}
                     companies={firstSubcat[1]}
                     onCompanyClick={onCompanyClick}
+                    onMaximize={() => onMaximize?.(categoryName, firstSubcat[0])}
                     isMobile={isMobile}
                     logosPerRow={firstSubcat[0] === 'Legislative & Policy Tracking' || firstSubcat[0] === 'Strategic Advisory & Agencies' ? 5 : undefined} // Special cases: 5 per row
                     borderColor={getSubcategoryHue(borderColor, 0, subcatEntries.length)}
@@ -455,6 +502,7 @@ export function CategorySection({
                           subcategoryName={subcatName}
                           companies={subcatCompanies}
                           onCompanyClick={onCompanyClick}
+                          onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
                           logosPerRow={subcatName === 'Strategic Advisory & Agencies' ? 5 : undefined} // 5 per row for Strategic Advisory & Agencies
                           borderColor={getSubcategoryHue(borderColor, originalIndex, subcatEntries.length)}
