@@ -143,7 +143,7 @@ export function CategorySection({
         padding: categoryCount > 2 ? 'clamp(4px, 0.4vw, 6px)' : 'clamp(6px, 0.6vw, 10px)', // Very compact padding for Engine
         backgroundColor: bgColor,
         borderRadius: '6px',
-        boxShadow: `0 0 0 1px ${borderColor}`, // Box-shadow respects border-radius and won't be clipped
+        border: `1px solid ${borderColor}`,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden' // Keep content within box
@@ -152,10 +152,10 @@ export function CategorySection({
       {/* Category Header - Compact */}
       <h2
         style={{
-          fontFamily: 'monospace',
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 600,
           fontSize: isMobile ? 'clamp(11px, 2.5vw, 14px)' : (categoryCount > 2 ? 'clamp(11px, 0.8vw, 13px)' : 'clamp(12px, 0.9vw, 14px)'),
-          color: '#003399', // EU blue
+          color: '#001A66', // Darker blue
           marginBottom: categoryCount > 2 ? 'clamp(3px, 0.4vh, 5px)' : 'clamp(4px, 0.5vh, 6px)',
           paddingBottom: 0,
           marginTop: 0,
@@ -481,7 +481,7 @@ export function CategorySection({
             overflowY: 'auto' // Allow scrolling if needed
           }}
         >
-          {companies!.map((company, index) => {
+          {[...companies!].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })).map((company, index) => {
             const logoUrl = company.logo || 
               (company.domain 
                 ? `/logos/${company.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`

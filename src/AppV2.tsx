@@ -227,21 +227,21 @@ export default function AppV2() {
               border: 'none',
               backgroundColor: 'transparent',
               boxShadow: 'none',
-              fontFamily: 'monospace'
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
             }}
           >
-            <SelectValue placeholder="Filter by country" style={{ fontFamily: 'monospace' }} />
+            <SelectValue placeholder="Filter by country" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }} />
           </SelectTrigger>
           <SelectContent 
-            className="!z-[10001] !bg-white font-mono [&_[data-slot=select-item]>span]:hidden !max-h-[200px] !overflow-y-auto" 
-            style={{ zIndex: 10001, backgroundColor: '#FFFFFF', fontFamily: 'monospace', cursor: 'default', maxHeight: '200px', overflowY: 'auto' }}
+            className="!z-[10001] !bg-white [&_[data-slot=select-item]>span]:hidden !max-h-[200px] !overflow-y-auto" 
+            style={{ zIndex: 10001, backgroundColor: '#FFFFFF', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'default', maxHeight: '200px', overflowY: 'auto' }}
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
-            <SelectItem value="All" className="font-mono !cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: 'monospace', cursor: 'pointer' }}>
+            <SelectItem value="All" className="!cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'pointer', fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)' }}>
               All Countries
             </SelectItem>
             {countries.map((country) => (
-              <SelectItem key={country} value={country} className="font-mono !cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: 'monospace', cursor: 'pointer' }}>
+              <SelectItem key={country} value={country} className="!cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'pointer', fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)' }}>
                 {country}
               </SelectItem>
             ))}
@@ -259,10 +259,10 @@ export default function AppV2() {
         <h1 
           className="tracking-tight" 
           style={{ 
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
             fontWeight: 800,
             fontSize: isMobile ? 'clamp(16px, 4vw, 22px)' : 'clamp(22px, 2.2vw, 36px)',
-            color: '#003399', // EU blue
+            color: '#001A66', // Darker blue
             letterSpacing: isMobile ? '-0.03em' : '-0.02em',
             lineHeight: 1.1,
             margin: 0,
@@ -273,7 +273,7 @@ export default function AppV2() {
         </h1>
         <p 
           style={{ 
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'monospace',
             fontWeight: 400,
             fontSize: 'clamp(11px, 0.9vw, 14px)',
             color: '#000000',

@@ -136,7 +136,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
       style={{
         padding: `${basePadding}px`,
         backgroundColor: '#FFFFFF',
-        boxShadow: `0 0 0 1px ${borderColor}`, // Box-shadow respects border-radius and won't be clipped
+        border: `1px solid ${borderColor}`,
         borderRadius: '4px',
         height: '100%',
         display: 'flex',
@@ -148,7 +148,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
       {/* Subcategory Header - Compact */}
       <h3
         style={{
-          fontFamily: 'monospace',
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 600,
           fontSize: isMobile ? 'clamp(10px, 2vw, 12px)' : 'clamp(10px, 0.75vw, 12px)',
           color: '#000000', // Black
@@ -186,7 +186,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, i
               overflowY: 'auto', // Allow scrolling within subcategory if needed
             }}
           >
-          {companies.map((company, index) => {
+          {[...companies].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })).map((company, index) => {
             const logoUrl = getLogoUrl(company);
             // Calculate max-width: use logosPerRow if specified, otherwise ensure at least 3 per row
             const targetPerRow = logosPerRow || (companies.length >= 3 ? 3 : companies.length);
