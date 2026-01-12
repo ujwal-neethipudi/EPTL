@@ -413,7 +413,7 @@ export default function AppV2() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 10000,
+              zIndex: 10002, // Above maximized box (10001)
               padding: '20px'
             }}
           >
@@ -677,7 +677,7 @@ export default function AppV2() {
                       <div
                         key={`${company.name}-${index}`}
                         onClick={() => {
-                          setMaximizedBox(null);
+                          // Don't close maximized box - keep it open so we can return to it
                           setSelected(company);
                           setOpen(true);
                         }}
