@@ -170,48 +170,97 @@ export default function AppV2() {
         {/* Web-like lines connecting the three pillars - Dense criss-cross pattern */}
         {/* Lines stay within map bounds: Y from ~15% (after header) to ~85% (before bottom) */}
         {/* Left pillar (16.67%) to Center pillar (50%) */}
+        {/* More lines to first row */}
+        <line x1="16.67" y1="15" x2="50" y2="22" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="18" x2="50" y2="25" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="20" x2="50" y2="28" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="22" x2="50" y2="30" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="25" x2="50" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="28" x2="50" y2="34" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="30" x2="50" y2="36" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="33" x2="50" y2="38" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="35" x2="50" y2="40" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="38" x2="50" y2="42" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="40" x2="50" y2="44" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="43" x2="50" y2="46" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="45" x2="50" y2="48" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="48" x2="50" y2="50" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="50" x2="50" y2="52" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="53" x2="50" y2="54" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="55" x2="50" y2="56" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="58" x2="50" y2="58" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="60" x2="50" y2="60" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="63" x2="50" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="65" x2="50" y2="64" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="68" x2="50" y2="66" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="70" x2="50" y2="68" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="73" x2="50" y2="70" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="75" x2="50" y2="72" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="16.67" y1="78" x2="50" y2="74" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="16.67" y1="80" x2="50" y2="76" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         {/* Center pillar (50%) to Right pillar (83.33%) */}
+        {/* More lines to first row */}
+        <line x1="50" y1="18" x2="83.33" y2="26" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="20" x2="83.33" y2="28" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="22" x2="83.33" y2="30" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="24" x2="83.33" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="28" x2="83.33" y2="35" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="31" x2="83.33" y2="37" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="34" x2="83.33" y2="40" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="37" x2="83.33" y2="42" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="40" x2="83.33" y2="45" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="43" x2="83.33" y2="47" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="46" x2="83.33" y2="50" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="49" x2="83.33" y2="52" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="52" x2="83.33" y2="55" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="55" x2="83.33" y2="57" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="58" x2="83.33" y2="60" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="61" x2="83.33" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="64" x2="83.33" y2="65" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="67" x2="83.33" y2="67" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="70" x2="83.33" y2="70" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="73" x2="83.33" y2="72" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="76" x2="83.33" y2="75" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
+        <line x1="50" y1="79" x2="83.33" y2="77" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         <line x1="50" y1="82" x2="83.33" y2="80" stroke="#003399" strokeWidth="0.25" opacity="0.35" />
         {/* Cross-pillar connections (Left to Right) - Criss-cross pattern */}
+        {/* More lines to first row */}
+        <line x1="16.67" y1="15" x2="83.33" y2="25" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="18" x2="83.33" y2="28" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="20" x2="83.33" y2="30" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="22" x2="83.33" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="25" x2="83.33" y2="35" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="28" x2="83.33" y2="38" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="31" x2="83.33" y2="41" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="34" x2="83.33" y2="44" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="37" x2="83.33" y2="47" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="40" x2="83.33" y2="50" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="43" x2="83.33" y2="53" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="46" x2="83.33" y2="56" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="49" x2="83.33" y2="59" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="52" x2="83.33" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="55" x2="83.33" y2="65" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="58" x2="83.33" y2="68" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="61" x2="83.33" y2="71" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="64" x2="83.33" y2="74" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
+        <line x1="16.67" y1="67" x2="83.33" y2="76" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         <line x1="16.67" y1="70" x2="83.33" y2="78" stroke="#003399" strokeWidth="0.25" opacity="0.3" />
         {/* Reverse criss-cross (Right to Left) */}
+        {/* More lines to first row */}
+        <line x1="83.33" y1="18" x2="16.67" y2="28" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="20" x2="16.67" y2="30" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="22" x2="16.67" y2="32" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="26" x2="16.67" y2="36" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="30" x2="16.67" y2="42" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="34" x2="16.67" y2="46" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="38" x2="16.67" y2="52" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="42" x2="16.67" y2="58" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="46" x2="16.67" y2="62" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="50" x2="16.67" y2="66" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="54" x2="16.67" y2="72" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="58" x2="16.67" y2="75" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="62" x2="16.67" y2="78" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
+        <line x1="83.33" y1="66" x2="16.67" y2="80" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="70" x2="16.67" y2="82" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
       </svg>
       {/* Country Filter - Top Right */}
