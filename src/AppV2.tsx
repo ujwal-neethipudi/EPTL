@@ -27,6 +27,7 @@ export default function AppV2() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Company | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [maximizedBox, setMaximizedBox] = useState<{
@@ -70,6 +71,45 @@ export default function AppV2() {
         mediaQuery.removeListener(handleChange);
       };
     }
+  }, []);
+
+  // Track orientation for mobile devices
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const checkOrientation = () => {
+      // Check if landscape: width > height
+      setIsLandscape(window.innerWidth > window.innerHeight);
+    };
+    
+    // Initial check
+    checkOrientation();
+    
+    // Listen for orientation changes
+    const orientationMediaQuery = window.matchMedia('(orientation: landscape)');
+    const handleOrientationChange = () => {
+      checkOrientation();
+    };
+    
+    // Use orientationchange event for better mobile support
+    window.addEventListener('orientationchange', checkOrientation);
+    window.addEventListener('resize', checkOrientation);
+    
+    if (orientationMediaQuery.addEventListener) {
+      orientationMediaQuery.addEventListener('change', handleOrientationChange);
+    } else {
+      orientationMediaQuery.addListener(handleOrientationChange);
+    }
+    
+    return () => {
+      window.removeEventListener('orientationchange', checkOrientation);
+      window.removeEventListener('resize', checkOrientation);
+      if (orientationMediaQuery.removeEventListener) {
+        orientationMediaQuery.removeEventListener('change', handleOrientationChange);
+      } else {
+        orientationMediaQuery.removeListener(handleOrientationChange);
+      }
+    };
   }, []);
 
   // Extract unique countries from data
@@ -172,10 +212,10 @@ export default function AppV2() {
       <svg
         style={{
           position: 'absolute',
-          top: isMobile ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
-          left: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          bottom: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
+          top: (isMobile && !isLandscape) ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
+          left: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          right: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          bottom: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
           pointerEvents: 'none',
           zIndex: 0,
           width: '100%',
@@ -400,10 +440,10 @@ export default function AppV2() {
       <div 
         className="absolute"
         style={{
-          top: isMobile ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
-          left: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          bottom: isMobile ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
+          top: (isMobile && !isLandscape) ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
+          left: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          right: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          bottom: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
           zIndex: 1, // Ensure content is above background lines
           transform: 'scale(0.9)',
           transformOrigin: 'center center'
@@ -412,8 +452,8 @@ export default function AppV2() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-            gap: isMobile ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)',
+            gridTemplateColumns: (isMobile && !isLandscape) ? '1fr' : 'repeat(3, 1fr)',
+            gap: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)',
             height: '100%',
             width: '100%',
             alignItems: 'stretch'
