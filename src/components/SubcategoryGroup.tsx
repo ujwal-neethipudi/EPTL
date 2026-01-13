@@ -85,13 +85,15 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
   // Compact padding for single-frame viewport
   const basePadding = isMobile ? 6 : 8;
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
-  const [showScrollIndicator, setShowScrollIndicator] = React.useState(false);
+  const [showScrollDownIndicator, setShowScrollDownIndicator] = React.useState(false);
+  const [showScrollUpIndicator, setShowScrollUpIndicator] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
   
   // Check if content is scrollable and handle scroll events
   React.useEffect(() => {
     if (!scrollContainerRef.current) {
-      setShowScrollIndicator(false);
+      setShowScrollDownIndicator(false);
+      setShowScrollUpIndicator(false);
       return;
     }
     
@@ -101,19 +103,25 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
       if (container) {
         const isScrollable = container.scrollHeight > container.clientHeight;
         if (!isScrollable) {
-          setShowScrollIndicator(false);
+          setShowScrollDownIndicator(false);
+          setShowScrollUpIndicator(false);
           return;
         }
-        // Show indicator only if not scrolled to bottom (with small threshold)
+        // Check if near bottom (with small threshold)
         const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 10;
-        setShowScrollIndicator(!isNearBottom);
+        const isNearTop = container.scrollTop < 10;
+        // Show down indicator when not at bottom, show up indicator when at bottom (but not at top)
+        setShowScrollDownIndicator(!isNearBottom);
+        setShowScrollUpIndicator(isNearBottom && !isNearTop);
       }
     };
     
     const handleScroll = () => {
       if (container) {
         const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 10;
-        setShowScrollIndicator(!isNearBottom);
+        const isNearTop = container.scrollTop < 10;
+        setShowScrollDownIndicator(!isNearBottom);
+        setShowScrollUpIndicator(isNearBottom && !isNearTop);
       }
     };
     
@@ -325,8 +333,8 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
           })}
           </div>
           
-          {/* Scroll Indicator Icon - Visible on hover for all scrollable subcategories */}
-          {showScrollIndicator && isHovered && (
+          {/* Scroll Down Indicator Icon - Visible when not at bottom */}
+          {showScrollDownIndicator && isHovered && (
             <div
               style={{
                 position: 'absolute',
@@ -355,6 +363,40 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
                 }}
               >
                 ↓
+              </div>
+            </div>
+          )}
+          
+          {/* Scroll Up Indicator Icon - Visible when at bottom (to indicate can scroll up) */}
+          {showScrollUpIndicator && isHovered && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 'clamp(4px, 0.5vh, 8px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 10,
+                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                  color: '#FFFFFF',
+                  borderRadius: '50%',
+                  width: 'clamp(16px, 1.5vw, 20px)',
+                  height: 'clamp(16px, 1.5vw, 20px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 'clamp(10px, 0.9vw, 12px)',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                }}
+              >
+                ↑
               </div>
             </div>
           )}
