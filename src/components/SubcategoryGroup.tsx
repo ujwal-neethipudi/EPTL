@@ -194,7 +194,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
         style={{
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 600,
-          fontSize: isMobile ? 'clamp(10px, 2vw, 12px)' : 'clamp(10px, 0.75vw, 12px)',
+          fontSize: isMobile ? 'clamp(11px, 2.2vw, 13px)' : 'clamp(11px, 0.825vw, 13px)',
           color: '#000000', // Black
           marginBottom: 'clamp(4px, 0.5vh, 6px)',
           paddingBottom: 0,
@@ -312,7 +312,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
                   style={{
                     width: '100%',
                     fontFamily: 'Inter, sans-serif',
-                    fontSize: isMobile ? 'clamp(8px, 1.58vw, 9px)' : 'clamp(8px, 0.63vw, 11px)', // 5% increase
+                    fontSize: isMobile ? 'clamp(9px, 1.74vw, 10px)' : 'clamp(9px, 0.69vw, 12px)',
                     fontWeight: 500,
                     color: '#374151',
                     textAlign: 'center',

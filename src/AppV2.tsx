@@ -236,25 +236,25 @@ export default function AppV2() {
         {Array.from({ length: 38 }, (_, i) => {
           const y1 = 8 + (i * 74 / 37);
           const y2 = 10 + (i * 70 / 37);
-          return <line key={`left-center-${i}`} x1="16.67" y1={y1.toFixed(2)} x2="50" y2={y2.toFixed(2)} stroke="#003399" strokeWidth="0.25" opacity="0.35" />;
+          return <line key={`left-center-${i}`} x1="16.67" y1={y1.toFixed(2)} x2="50" y2={y2.toFixed(2)} stroke="#000000" strokeWidth="0.25" opacity="0.2" />;
         })}
         {/* Center pillar (50%) to Right pillar (83.33%) - Criss-cross */}
         {Array.from({ length: 38 }, (_, i) => {
           const y1 = 10 + (i * 70 / 37);
           const y2 = 12 + (i * 66 / 37);
-          return <line key={`center-right-${i}`} x1="50" y1={y1.toFixed(2)} x2="83.33" y2={y2.toFixed(2)} stroke="#003399" strokeWidth="0.25" opacity="0.35" />;
+          return <line key={`center-right-${i}`} x1="50" y1={y1.toFixed(2)} x2="83.33" y2={y2.toFixed(2)} stroke="#000000" strokeWidth="0.25" opacity="0.2" />;
         })}
         {/* Cross-pillar connections (Left to Right) - Criss-cross */}
         {Array.from({ length: 30 }, (_, i) => {
           const y1 = 8 + (i * 74 / 29);
           const y2 = 15 + (i * 62 / 29);
-          return <line key={`left-right-${i}`} x1="16.67" y1={y1.toFixed(2)} x2="83.33" y2={y2.toFixed(2)} stroke="#003399" strokeWidth="0.25" opacity="0.3" />;
+          return <line key={`left-right-${i}`} x1="16.67" y1={y1.toFixed(2)} x2="83.33" y2={y2.toFixed(2)} stroke="#000000" strokeWidth="0.25" opacity="0.18" />;
         })}
         {/* Reverse criss-cross (Right to Left) */}
         {Array.from({ length: 30 }, (_, i) => {
           const y1 = 12 + (i * 64 / 29);
           const y2 = 8 + (i * 74 / 29);
-          return <line key={`right-left-${i}`} x1="83.33" y1={y1.toFixed(2)} x2="16.67" y2={y2.toFixed(2)} stroke="#003399" strokeWidth="0.25" opacity="0.25" />;
+          return <line key={`right-left-${i}`} x1="83.33" y1={y1.toFixed(2)} x2="16.67" y2={y2.toFixed(2)} stroke="#000000" strokeWidth="0.25" opacity="0.15" />;
         })}
       </svg>
       {/* Filters - Top Right */}

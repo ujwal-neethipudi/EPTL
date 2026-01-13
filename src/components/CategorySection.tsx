@@ -195,7 +195,7 @@ export function CategorySection({
         style={{
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 600,
-          fontSize: isMobile ? 'clamp(11px, 2.5vw, 14px)' : (categoryCount > 2 ? 'clamp(11px, 0.8vw, 13px)' : 'clamp(12px, 0.9vw, 14px)'),
+          fontSize: isMobile ? 'clamp(12px, 2.75vw, 15px)' : (categoryCount > 2 ? 'clamp(12px, 0.88vw, 14px)' : 'clamp(13px, 0.99vw, 15px)'),
           color: '#001A66', // Darker blue
           marginBottom: categoryCount > 2 ? 'clamp(3px, 0.4vh, 5px)' : 'clamp(4px, 0.5vh, 6px)',
           paddingBottom: 0,
@@ -648,7 +648,7 @@ export function CategorySection({
                   style={{
                     width: '100%',
                     fontFamily: 'Inter, sans-serif',
-                    fontSize: isMobile ? 'clamp(8px, 1.5vw, 9px)' : 'clamp(8px, 0.6vw, 10px)',
+                    fontSize: isMobile ? 'clamp(9px, 1.65vw, 10px)' : 'clamp(9px, 0.66vw, 11px)',
                     fontWeight: 500,
                     color: '#374151',
                     textAlign: 'center',
