@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Maximize2, X } from 'lucide-react';
+import { Maximize2, X, Search } from 'lucide-react';
 import { PillarColumn } from './components/PillarColumn';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
+import { Input } from './components/ui/input';
 
 type Company = {
   name: string;
@@ -27,6 +28,7 @@ export default function AppV2() {
   const [selected, setSelected] = useState<Company | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [maximizedBox, setMaximizedBox] = useState<{
     type: 'category' | 'subcategory';
     categoryName: string;
@@ -87,12 +89,27 @@ export default function AppV2() {
     return Array.from(countrySet).sort();
   }, [data]);
 
-  // Filter data by selected country - keep structure, filter only companies
+  // Filter data by selected country and search query - keep structure, filter only companies
   const filteredData = useMemo(() => {
-    if (!data || selectedCountry === 'All') return data;
+    if (!data) return data;
     
     const filterCompanies = (companies: Company[]): Company[] => {
-      return companies.filter(company => company.hq === selectedCountry);
+      let filtered = companies;
+      
+      // Filter by country
+      if (selectedCountry !== 'All') {
+        filtered = filtered.filter(company => company.hq === selectedCountry);
+      }
+      
+      // Filter by search query (company name)
+      if (searchQuery.trim() !== '') {
+        const query = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(company => 
+          company.name.toLowerCase().includes(query)
+        );
+      }
+      
+      return filtered;
     };
 
     const filtered: PillarStructure = {
@@ -121,7 +138,7 @@ export default function AppV2() {
     });
 
     return filtered;
-  }, [data, selectedCountry]);
+  }, [data, selectedCountry, searchQuery]);
 
   if (!data) {
     return (
@@ -263,15 +280,20 @@ export default function AppV2() {
         <line x1="83.33" y1="66" x2="16.67" y2="80" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
         <line x1="83.33" y1="70" x2="16.67" y2="82" stroke="#003399" strokeWidth="0.25" opacity="0.25" />
       </svg>
-      {/* Country Filter - Top Right */}
+      {/* Filters - Top Right */}
       <div
         className="absolute"
         style={{
           top: isMobile ? 'clamp(12px, 2vh, 24px)' : 'clamp(12px, 2vh, 24px)',
           right: isMobile ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          zIndex: 10000
+          zIndex: 10000,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0,
+          alignItems: 'flex-end'
         }}
       >
+        {/* Country Filter */}
         <Select value={selectedCountry} onValueChange={setSelectedCountry}>
           <SelectTrigger
             className="!border-none !bg-transparent !shadow-none hover:!bg-transparent focus:!bg-transparent [&_svg]:!text-black"
@@ -303,6 +325,76 @@ export default function AppV2() {
             ))}
           </SelectContent>
         </Select>
+        
+        {/* Search by Company */}
+        <div
+          style={{
+            position: 'relative',
+            width: isMobile ? 'clamp(120px, 25vw, 160px)' : 'clamp(140px, 12vw, 180px)',
+            height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
+            marginTop: isMobile ? '-4px' : '-6px'
+          }}
+        >
+          <Search
+            size={isMobile ? 14 : 16}
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#666',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              style={{
+                position: 'absolute',
+                right: isMobile ? '4px' : '6px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '2px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2,
+                color: '#666'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#000';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#666';
+              }}
+            >
+              <X size={isMobile ? 12 : 14} />
+            </button>
+          )}
+          <Input
+            type="text"
+            placeholder="Search by company"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="!border-none !bg-transparent !shadow-none focus-visible:!ring-0 focus-visible:!ring-offset-0 pl-6 pr-2 search-company-input"
+            style={{
+              width: '100%',
+              height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
+              fontSize: isMobile ? 'clamp(11px, 2vw, 13px)' : 'clamp(12px, 0.9vw, 14px)',
+              paddingLeft: isMobile ? '20px' : '22px',
+              paddingRight: searchQuery ? (isMobile ? '20px' : '24px') : (isMobile ? '8px' : '10px'),
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+              outline: 'none'
+            }}
+          />
+        </div>
       </div>
 
       {/* Header - Compact for single frame */}

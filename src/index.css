@@ -544,6 +544,15 @@ html {
   max-width: clamp(95px, 7.5vw, 120px);
 }
 
+.search-company-input::placeholder {
+  font-weight: 700 !important;
+  opacity: 1 !important;
+}
+
+[data-slot="select-value"] {
+  font-weight: 700 !important;
+}
+
 @media (max-width: 768px) {
   html,
   body {
