@@ -79,35 +79,41 @@ export default function AppV2() {
     
     const checkOrientation = () => {
       // Check if landscape: width > height
-      setIsLandscape(window.innerWidth > window.innerHeight);
+      const isLandscapeOrientation = window.innerWidth > window.innerHeight;
+      setIsLandscape(isLandscapeOrientation);
     };
     
     // Initial check
     checkOrientation();
     
-    // Listen for orientation changes
+    // Listen for orientation changes using media query (more reliable)
     const orientationMediaQuery = window.matchMedia('(orientation: landscape)');
-    const handleOrientationChange = () => {
-      checkOrientation();
+    const handleOrientationChange = (event: MediaQueryListEvent | MediaQueryList) => {
+      const isLandscapeOrientation = 'matches' in event ? event.matches : orientationMediaQuery.matches;
+      setIsLandscape(isLandscapeOrientation);
     };
     
-    // Use orientationchange event for better mobile support
-    window.addEventListener('orientationchange', checkOrientation);
+    // Use orientationchange event for better mobile support (with small delay for dimension updates)
+    const handleOrientationChangeEvent = () => {
+      setTimeout(checkOrientation, 100);
+    };
+    
+    window.addEventListener('orientationchange', handleOrientationChangeEvent);
     window.addEventListener('resize', checkOrientation);
     
     if (orientationMediaQuery.addEventListener) {
       orientationMediaQuery.addEventListener('change', handleOrientationChange);
     } else {
-      orientationMediaQuery.addListener(handleOrientationChange);
+      orientationMediaQuery.addListener(handleOrientationChange as any);
     }
     
     return () => {
-      window.removeEventListener('orientationchange', checkOrientation);
+      window.removeEventListener('orientationchange', handleOrientationChangeEvent);
       window.removeEventListener('resize', checkOrientation);
       if (orientationMediaQuery.removeEventListener) {
         orientationMediaQuery.removeEventListener('change', handleOrientationChange);
       } else {
-        orientationMediaQuery.removeListener(handleOrientationChange);
+        orientationMediaQuery.removeListener(handleOrientationChange as any);
       }
     };
   }, []);
