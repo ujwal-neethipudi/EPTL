@@ -520,9 +520,9 @@ export default function AppV2() {
       <div 
         className="absolute"
         style={{
-          top: (isMobile && !isLandscape) ? 'clamp(60px, 8vh, 80px)' : 'clamp(55px, 7vh, 70px)',
-          left: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
-          right: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
+          top: (isMobile && !isLandscape) ? 'clamp(70px, 9vh, 90px)' : 'clamp(65px, 8vh, 80px)',
+          left: (isMobile && !isLandscape) ? 'clamp(2px, 0.5vw, 6px)' : 'clamp(8px, 1vw, 18px)',
+          right: (isMobile && !isLandscape) ? 'clamp(2px, 0.5vw, 6px)' : 'clamp(8px, 1vw, 18px)',
           bottom: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
           zIndex: 1, // Ensure content is above background lines
           border: '2px solid #001A66', // Border around the entire map (dark EU blue)
@@ -551,7 +551,7 @@ export default function AppV2() {
           const { allCategories, pillarData } = mergedCanvasStructure;
           const gridTemplateRows = `repeat(100, 1fr)`;
           const categoryGap = isMobile ? 'clamp(3px, 0.3vh, 5px)' : 'clamp(3px, 0.3vh, 5px)';
-          const columnGap = (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)'; // Original gap values
+          const columnGap = (isMobile && !isLandscape) ? 'clamp(6px, 1.2vh, 10px)' : 'clamp(6px, 0.6vw, 10px)'; // Further reduced gap - columns remain proportional
 
           return (
             <div
@@ -559,7 +559,6 @@ export default function AppV2() {
                 display: 'grid',
                 gridTemplateColumns: (isMobile && !isLandscape) ? '1fr' : 'repeat(3, 1fr)',
                 gridTemplateRows: gridTemplateRows,
-                gap: columnGap,
                 columnGap: columnGap,
                 rowGap: categoryGap,
                 height: '100%',

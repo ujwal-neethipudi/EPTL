@@ -600,11 +600,11 @@ export function CategorySection({
                 <div
                   style={{
                     width: isMobile 
-                      ? 'clamp(50px, 6.6vw, 61px)' 
-                      : 'clamp(55px, 3.85vw, 72px)', // Logo fits within container width
+                      ? 'clamp(55px, 7.26vw, 67px)' 
+                      : 'clamp(61px, 4.24vw, 79px)', // Logo fits within container width (~10% increase)
                     height: isMobile 
-                      ? 'clamp(31px, 3.85vh, 39px)' 
-                      : 'clamp(33px, 2.75vh, 40px)',
+                      ? 'clamp(34px, 4.24vh, 43px)' 
+                      : 'clamp(36px, 3.03vh, 44px)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -637,7 +637,7 @@ export function CategorySection({
                             align-items: center;
                             justify-content: center;
                             font-family: Inter, sans-serif;
-                            font-size: clamp(8px, 0.6vw, 10px);
+                            font-size: clamp(9px, 0.66vw, 11px);
                             font-weight: 500;
                             color: #6B1FA8;
                             text-align: center;
@@ -657,7 +657,7 @@ export function CategorySection({
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontFamily: 'Inter, sans-serif',
-                        fontSize: 'clamp(8px, 0.6vw, 10px)',
+                        fontSize: 'clamp(9px, 0.66vw, 11px)',
                         fontWeight: 500,
                         color: '#6B1FA8',
                         textAlign: 'center',
@@ -674,7 +674,7 @@ export function CategorySection({
                   style={{
                     width: '100%',
                     fontFamily: 'Inter, sans-serif',
-                    fontSize: isMobile ? 'clamp(9px, 1.65vw, 10px)' : 'clamp(9px, 0.66vw, 11px)',
+                    fontSize: isMobile ? 'clamp(10px, 1.82vw, 11px)' : 'clamp(10px, 0.73vw, 12px)',
                     fontWeight: 500,
                     color: '#374151',
                     textAlign: 'center',
