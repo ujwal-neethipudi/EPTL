@@ -31,6 +31,7 @@ export default function AppV2() {
   const [selected, setSelected] = useState<Company | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
+  const [orientationLocked, setOrientationLocked] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [maximizedBox, setMaximizedBox] = useState<{
@@ -76,14 +77,40 @@ export default function AppV2() {
     }
   }, []);
 
-  // Track orientation for mobile devices
+  // Force landscape mode on mobile devices
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !isMobile) return;
     
     const checkOrientation = () => {
       // Check if landscape: width > height
       const isLandscapeOrientation = window.innerWidth > window.innerHeight;
       setIsLandscape(isLandscapeOrientation);
+      
+      // Try to lock orientation to landscape on supported browsers
+      if (isMobile && !isLandscapeOrientation) {
+        // Attempt orientation lock (requires user gesture, so we'll try on first interaction)
+        if ('orientation' in screen && typeof (screen as any).orientation?.lock === 'function') {
+          // Lock will be attempted on first user interaction
+          const tryLock = async () => {
+            try {
+              await (screen as any).orientation.lock('landscape');
+              setOrientationLocked(true);
+            } catch (err) {
+              // Lock failed (might require fullscreen or user gesture)
+              setOrientationLocked(false);
+            }
+          };
+          
+          // Try to lock on any user interaction
+          const events = ['touchstart', 'click', 'touchend'];
+          const attemptLock = () => {
+            tryLock();
+            events.forEach(e => window.removeEventListener(e, attemptLock));
+          };
+          
+          events.forEach(e => window.addEventListener(e, attemptLock, { once: true }));
+        }
+      }
     };
     
     // Initial check
@@ -118,8 +145,13 @@ export default function AppV2() {
       } else {
         orientationMediaQuery.removeListener(handleOrientationChange as any);
       }
+      
+      // Unlock orientation on unmount if locked
+      if (orientationLocked && 'orientation' in screen && typeof (screen as any).orientation?.unlock === 'function') {
+        (screen as any).orientation.unlock();
+      }
     };
-  }, []);
+  }, [isMobile, orientationLocked]);
 
   // Extract unique countries from data
   const countries = useMemo(() => {
@@ -263,6 +295,55 @@ export default function AppV2() {
     return { allCategories, pillarData };
   }, [filteredData]);
 
+  // Calculate rotation and scaling for portrait mode on mobile (game-like landscape forcing)
+  // IMPORTANT: All hooks must be called before any early returns to follow React's rules of hooks
+  const needsRotation = isMobile && !isLandscape;
+  const [rotationScale, setRotationScale] = useState<{
+    rotate: string;
+    scale: number;
+    translateX: string;
+    translateY: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!needsRotation || typeof window === 'undefined') {
+      setRotationScale(null);
+      return;
+    }
+
+    const calculateTransform = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // When in portrait (e.g., 375x667), rotate 90deg clockwise to show landscape view
+      // After rotation: content dimensions swap (667w x 375h)
+      // To fit rotated content (667w x 375h) in portrait viewport (375w x 667h):
+      // Scale to fit width: viewportWidth / rotatedWidth = 375 / 667 ≈ 0.56
+      // Scale to fit height: viewportHeight / rotatedHeight = 667 / 375 ≈ 1.78
+      // Use minimum to ensure it fits in both dimensions
+      const scale = Math.min(viewportWidth / viewportHeight, viewportHeight / viewportWidth) * 0.98; // Slight margin
+      
+      // After rotation and scaling, center the content
+      // Rotated and scaled width = viewportHeight * scale
+      // Rotated and scaled height = viewportWidth * scale
+      const scaledWidth = viewportHeight * scale;
+      const scaledHeight = viewportWidth * scale;
+      const translateX = (viewportWidth - scaledHeight) / 2; // X-axis becomes height after rotation
+      const translateY = (viewportHeight - scaledWidth) / 2; // Y-axis becomes width after rotation
+
+      setRotationScale({
+        rotate: '90deg',
+        scale,
+        translateX: `${translateX}px`,
+        translateY: `${translateY}px`
+      });
+    };
+
+    calculateTransform();
+    window.addEventListener('resize', calculateTransform);
+    return () => window.removeEventListener('resize', calculateTransform);
+  }, [needsRotation]);
+
   if (!data) {
     return (
       <div 
@@ -273,7 +354,8 @@ export default function AppV2() {
           alignItems: 'center', 
           justifyContent: 'center',
           fontFamily: 'Inter, sans-serif',
-          color: '#6B7280'
+          color: '#6B7280',
+          backgroundColor: '#FFFFFF'
         }}
       >
         Loading data...
@@ -281,14 +363,20 @@ export default function AppV2() {
     );
   }
 
-  return (
+  // Debug: Log when data is loaded
+  console.log('Data loaded:', !!data, 'Filtered data:', !!filteredData, 'Merged structure:', !!mergedCanvasStructure);
+
+  // Build the main content (same for both mobile portrait and desktop)
+  const mainContent = (
     <div 
       className="relative" 
       style={{ 
         backgroundColor: '#FFFFFF',
         width: '100vw',
         height: '100vh',
-        overflow: 'hidden' // Fit in one frame - no scrolling
+        overflow: 'hidden', // Fit in one frame - no scrolling
+        position: 'relative',
+        display: 'block'
       }}
     >
       {/* Subtle Web-like Background Lines */}
@@ -640,7 +728,7 @@ export default function AppV2() {
           }}
         >
         {/* Single merged canvas - categories rendered directly in grid */}
-        {mergedCanvasStructure && (() => {
+        {mergedCanvasStructure ? (() => {
           const { allCategories, pillarData } = mergedCanvasStructure;
           const gridTemplateRows = `repeat(100, 1fr)`;
           const categoryGap = isMobile ? 'clamp(3px, 0.3vh, 5px)' : 'clamp(3px, 0.3vh, 5px)';
@@ -746,7 +834,16 @@ export default function AppV2() {
               })}
             </div>
           );
-        })()}
+        })() : (
+          <div style={{ 
+            padding: '20px', 
+            textAlign: 'center', 
+            color: '#666',
+            fontFamily: 'Inter, sans-serif'
+          }}>
+            Loading map...
+          </div>
+        )}
         </div>
       </div>
 
@@ -1225,6 +1322,83 @@ export default function AppV2() {
           }} 
         />
       </a>
+
+      {/* Portrait Mode Overlay - Show when in portrait on mobile */}
+      {needsRotation && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 26, 102, 0.95)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100000,
+            color: '#FFFFFF',
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            padding: 'clamp(20px, 5vw, 40px)',
+            textAlign: 'center'
+          }}
+        >
+          <div
+            style={{
+              fontSize: 'clamp(48px, 12vw, 72px)',
+              marginBottom: 'clamp(24px, 6vh, 40px)',
+              animation: 'rotateDevice 2s ease-in-out infinite',
+              transform: 'rotate(90deg)'
+            }}
+          >
+            📱
+          </div>
+          <h2
+            style={{
+              fontSize: 'clamp(20px, 5vw, 28px)',
+              fontWeight: 700,
+              marginBottom: 'clamp(16px, 4vh, 24px)',
+              color: '#FFFFFF'
+            }}
+          >
+            Please Rotate Your Device
+          </h2>
+          <p
+            style={{
+              fontSize: 'clamp(14px, 3.5vw, 18px)',
+              fontWeight: 400,
+              color: 'rgba(255, 255, 255, 0.9)',
+              lineHeight: 1.6,
+              maxWidth: '400px'
+            }}
+          >
+            For the best experience, please rotate your device to landscape mode.
+          </p>
+        </div>
+      )}
     </div>
   );
+
+  // Wrap with rotation div only if needed (mobile portrait)
+  if (needsRotation && rotationScale) {
+    return (
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          position: 'relative',
+          overflow: 'hidden',
+          transform: `rotate(${rotationScale.rotate}) scale(${rotationScale.scale}) translate(${rotationScale.translateX}, ${rotationScale.translateY})`,
+          transformOrigin: 'center center',
+          transition: 'transform 0.3s ease'
+        }}
+      >
+        {mainContent}
+      </div>
+    );
+  }
+
+  // Normal desktop/landscape rendering without rotation wrapper
+  return mainContent;
 }

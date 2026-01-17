@@ -498,6 +498,16 @@
   --sidebar-ring: oklch(.708 0 0);
 }
 
+/* Rotation animation for portrait overlay */
+@keyframes rotateDevice {
+  0%, 100% {
+    transform: rotate(90deg) scale(1);
+  }
+  50% {
+    transform: rotate(90deg) scale(1.1);
+  }
+}
+
 /* Scrollbar styling for scrollable boxes - show on hover */
 /* Firefox scrollbar */
 .scrollable-box {
