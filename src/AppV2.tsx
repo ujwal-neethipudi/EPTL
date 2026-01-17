@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Maximize2, X, Search } from 'lucide-react';
-import { PillarColumn } from './components/PillarColumn';
+import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
 
@@ -185,6 +185,80 @@ export default function AppV2() {
 
     return filtered;
   }, [data, selectedCountry, searchQuery]);
+
+  // v3: Calculate merged canvas structure
+  const mergedCanvasStructure = useMemo(() => {
+    if (!filteredData) return null;
+
+    const pillarData = [
+      { name: 'Brain', data: filteredData.Brain || {}, column: 1, bgColor: '#F0F4F8' },
+      { name: 'Engine', data: filteredData.Engine || {}, column: 2, bgColor: '#F0F9F5' },
+      { name: 'Megaphone', data: filteredData.Megaphone || {}, column: 3, bgColor: '#FFF5F0' }
+    ];
+
+    // Calculate all category positions
+    const allCategories: Array<{
+      pillarName: string;
+      categoryName: string;
+      categoryData: CategoryData;
+      gridColumn: number;
+      gridRowStart: number;
+      gridRowEnd: number;
+      entityCount: number;
+      categoryCount: number;
+      pillarBgColor: string;
+    }> = [];
+
+    pillarData.forEach(pillar => {
+      const categoryEntries = Object.entries(pillar.data);
+      const categoryCount = categoryEntries.length;
+      
+      // Calculate row proportions
+      let rowProportions: number[];
+      if (categoryCount === 2) {
+        // Brain/Megaphone: 50% each
+        rowProportions = [50, 50];
+      } else if (categoryCount === 4) {
+        // Engine: 25%, 30%, 15%, 30%
+        rowProportions = [25, 30, 15, 30];
+      } else {
+        // Fallback: equal distribution
+        rowProportions = Array(categoryCount).fill(100 / categoryCount);
+      }
+
+      // Calculate cumulative row positions (in percentage units, base 1-100)
+      let currentRow = 1;
+      categoryEntries.forEach(([categoryName, categoryData], index) => {
+        const proportion = rowProportions[index];
+        const rowStart = currentRow;
+        const rowEnd = currentRow + proportion;
+        
+        // Calculate entity count
+        let entityCount = 0;
+        if (Array.isArray(categoryData)) {
+          entityCount = categoryData.length;
+        } else {
+          entityCount = Object.values(categoryData).reduce((sum, companies) => sum + companies.length, 0);
+        }
+
+        allCategories.push({
+          pillarName: pillar.name,
+          categoryName,
+          categoryData,
+          gridColumn: pillar.column,
+          gridRowStart: rowStart,
+          gridRowEnd: rowEnd,
+          entityCount,
+          categoryCount,
+          pillarBgColor: pillar.bgColor
+        });
+
+        currentRow = rowEnd;
+      });
+    });
+
+    return { allCategories, pillarData };
+  }, [filteredData]);
 
   if (!data) {
     return (
@@ -455,58 +529,115 @@ export default function AppV2() {
           transformOrigin: 'center center'
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: (isMobile && !isLandscape) ? '1fr' : 'repeat(3, 1fr)',
-            gap: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)',
-            height: '100%',
-            width: '100%',
-            alignItems: 'stretch'
-          }}
-        >
-          {/* Brain Pillar */}
-          <PillarColumn
-            pillarName="Brain"
-            categories={filteredData?.Brain || {}}
-            onCompanyClick={(company) => {
-              setSelected(company);
-              setOpen(true);
-            }}
-            onMaximize={(categoryName, subcategoryName) => {
-              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Brain' });
-            }}
-            isMobile={isMobile}
-          />
+        {/* v3: Single merged canvas - categories rendered directly in grid */}
+        {mergedCanvasStructure && (() => {
+          const { allCategories, pillarData } = mergedCanvasStructure;
+          const gridTemplateRows = `repeat(100, 1fr)`;
+          const categoryGap = isMobile ? 'clamp(3px, 0.3vh, 5px)' : 'clamp(3px, 0.3vh, 5px)';
+          const columnGap = (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)';
 
-          {/* Engine Pillar */}
-          <PillarColumn
-            pillarName="Engine"
-            categories={filteredData?.Engine || {}}
-            onCompanyClick={(company) => {
-              setSelected(company);
-              setOpen(true);
-            }}
-            onMaximize={(categoryName, subcategoryName) => {
-              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Engine' });
-            }}
-            isMobile={isMobile}
-          />
+          return (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: (isMobile && !isLandscape) ? '1fr' : 'repeat(3, 1fr)',
+                gridTemplateRows: gridTemplateRows,
+                gap: columnGap,
+                columnGap: columnGap,
+                rowGap: categoryGap,
+                height: '100%',
+                width: '100%',
+                position: 'relative'
+              }}
+            >
+              {/* Column backgrounds */}
+              {(!isMobile || isLandscape) && (
+                <>
+                  {/* Brain column background */}
+                  <div
+                    style={{
+                      gridColumn: '1',
+                      gridRow: '1 / -1',
+                      backgroundColor: '#F0F4F8',
+                      borderRadius: '8px',
+                      padding: isMobile ? 'clamp(8px, 1.5vw, 12px)' : 'clamp(10px, 1vw, 14px)',
+                      paddingRight: 'clamp(2px, 0.3vw, 4px)',
+                      zIndex: 0,
+                      pointerEvents: 'none'
+                    }}
+                  />
+                  {/* Engine column background */}
+                  <div
+                    style={{
+                      gridColumn: '2',
+                      gridRow: '1 / -1',
+                      backgroundColor: '#F0F9F5',
+                      borderRadius: '8px',
+                      padding: isMobile ? 'clamp(8px, 1.5vw, 12px)' : 'clamp(10px, 1vw, 14px)',
+                      paddingRight: 'clamp(2px, 0.3vw, 4px)',
+                      zIndex: 0,
+                      pointerEvents: 'none'
+                    }}
+                  />
+                  {/* Megaphone column background */}
+                  <div
+                    style={{
+                      gridColumn: '3',
+                      gridRow: '1 / -1',
+                      backgroundColor: '#FFF5F0',
+                      borderRadius: '8px',
+                      padding: isMobile ? 'clamp(8px, 1.5vw, 12px)' : 'clamp(10px, 1vw, 14px)',
+                      paddingRight: 'clamp(2px, 0.3vw, 4px)',
+                      zIndex: 0,
+                      pointerEvents: 'none'
+                    }}
+                  />
+                </>
+              )}
 
-          {/* Megaphone Pillar */}
-          <PillarColumn
-            pillarName="Megaphone"
-            categories={filteredData?.Megaphone || {}}
-            onCompanyClick={(company) => {
-              setSelected(company);
-              setOpen(true);
-            }}
-            onMaximize={(categoryName, subcategoryName) => {
-              setMaximizedBox({ type: subcategoryName ? 'subcategory' : 'category', categoryName, subcategoryName, pillarName: 'Megaphone' });
-            }}
-            isMobile={isMobile}
-          />
-        </div>
+              {/* Render all categories */}
+              {allCategories.map(({ pillarName, categoryName, categoryData, gridColumn, gridRowStart, gridRowEnd, entityCount, categoryCount, pillarBgColor }, index) => {
+                const isArray = Array.isArray(categoryData);
+                const hasSubcategories = !isArray && typeof categoryData === 'object' && categoryData !== null;
+                const isTwoCategoryColumn = categoryCount === 2;
+                const isFourCategoryColumn = categoryCount === 4;
+                const categoryIndex = allCategories.filter(c => c.pillarName === pillarName).findIndex(c => c.categoryName === categoryName);
+                
+                return (
+                  <div
+                    key={`${pillarName}-${categoryName}`}
+                    style={{
+                      gridColumn: (isMobile && !isLandscape) ? '1' : gridColumn.toString(),
+                      gridRow: `${Math.max(1, Math.round(gridRowStart))} / ${Math.max(1, Math.round(gridRowEnd))}`,
+                      minHeight: 0,
+                      overflow: 'hidden',
+                      zIndex: 1
+                    }}
+                  >
+                    <CategorySection
+                      categoryName={categoryName}
+                      companies={isArray ? categoryData : undefined}
+                      subcategories={hasSubcategories ? categoryData : undefined}
+                      onCompanyClick={(company) => {
+                        setSelected(company);
+                        setOpen(true);
+                      }}
+                      onMaximize={(catName, subcatName) => {
+                        setMaximizedBox({ type: subcatName ? 'subcategory' : 'category', categoryName: catName, subcategoryName: subcatName, pillarName });
+                      }}
+                      isMobile={isMobile}
+                      entityCount={entityCount}
+                      categoryCount={categoryCount}
+                      forceFullHeight={isTwoCategoryColumn || isFourCategoryColumn}
+                      logosPerRow={isFourCategoryColumn && categoryIndex < 3 ? 5 : undefined}
+                      bgColor={pillarBgColor}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Company Details Modal */}
