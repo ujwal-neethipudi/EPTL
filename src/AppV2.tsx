@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Maximize2, X, Search } from 'lucide-react';
+import { Maximize2, X, Search, MessageSquare } from 'lucide-react';
 import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
@@ -21,6 +21,9 @@ type PillarStructure = {
   Engine: PillarData;
   Megaphone: PillarData;
 };
+
+// Feedback form URL - can be replaced with Typeform or Google Form URL later
+const FEEDBACK_URL = 'https://eptl.vercel.app';
 
 export default function AppV2() {
   const [data, setData] = useState<PillarStructure | null>(null);
@@ -1087,6 +1090,51 @@ export default function AppV2() {
           </div>
         );
       })()}
+
+      {/* Feedback Button - Bottom Right */}
+      <a
+        href={FEEDBACK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'fixed',
+          bottom: isMobile ? 'clamp(16px, 3vh, 24px)' : 'clamp(20px, 2.5vh, 32px)',
+          right: isMobile ? 'clamp(12px, 2vw, 20px)' : 'clamp(20px, 2.5vw, 32px)',
+          width: isMobile ? 'clamp(44px, 6vw, 52px)' : 'clamp(48px, 3vw, 56px)',
+          height: isMobile ? 'clamp(44px, 6vw, 52px)' : 'clamp(48px, 3vw, 56px)',
+          borderRadius: '50%',
+          backgroundColor: '#001A66', // Dark EU blue matching theme
+          color: '#FFFFFF',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(0, 26, 102, 0.2), 0 4px 12px rgba(0, 26, 102, 0.15)',
+          transition: 'all 0.2s ease',
+          zIndex: 1000, // Ensure it's above other content
+          textDecoration: 'none',
+          border: '2px solid rgba(255, 255, 255, 0.1)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.05)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 26, 102, 0.3), 0 6px 16px rgba(0, 26, 102, 0.2)';
+          e.currentTarget.style.backgroundColor = '#002699';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 26, 102, 0.2), 0 4px 12px rgba(0, 26, 102, 0.15)';
+          e.currentTarget.style.backgroundColor = '#001A66';
+        }}
+        aria-label="Provide feedback"
+      >
+        <MessageSquare 
+          style={{ 
+            width: isMobile ? 'clamp(22px, 3.3vw, 26px)' : 'clamp(24px, 1.5vw, 28px)',
+            height: isMobile ? 'clamp(22px, 3.3vw, 26px)' : 'clamp(24px, 1.5vw, 28px)',
+            strokeWidth: 2
+          }} 
+        />
+      </a>
     </div>
   );
 }
