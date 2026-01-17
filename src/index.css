@@ -590,8 +590,10 @@ html {
   max-width: clamp(95px, 7.5vw, 120px);
 }
 
+/* Styled input placeholder */
 .search-company-input::placeholder {
-  font-weight: 700 !important;
+  font-weight: 500 !important;
+  color: rgba(0, 26, 102, 0.6) !important;
   opacity: 1 !important;
 }
 

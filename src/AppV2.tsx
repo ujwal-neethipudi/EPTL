@@ -350,30 +350,81 @@ export default function AppV2() {
         {/* Country Filter */}
         <Select value={selectedCountry} onValueChange={setSelectedCountry}>
           <SelectTrigger
-            className="!border-none !bg-transparent !shadow-none hover:!bg-transparent focus:!bg-transparent [&_svg]:!text-black"
+            className="country-filter-trigger [&_svg]:!text-[#001A66] [&_svg]:opacity-70 hover:[&_svg]:opacity-100"
             style={{
               width: isMobile ? 'clamp(120px, 25vw, 160px)' : 'clamp(140px, 12vw, 180px)',
               fontSize: isMobile ? 'clamp(11px, 2vw, 13px)' : 'clamp(12px, 0.9vw, 14px)',
               height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
-              padding: 0,
-              border: 'none',
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+              padding: isMobile ? '0 8px' : '0 10px',
+              border: '1px solid #001A66',
+              borderRadius: '6px',
+              backgroundColor: '#FFFFFF',
+              boxShadow: '0 1px 2px rgba(0, 26, 102, 0.1)',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontWeight: 600,
+              color: '#001A66',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#001A66';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 26, 102, 0.15)';
+              e.currentTarget.style.backgroundColor = '#F8F9FA';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#001A66';
+              e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 26, 102, 0.1)';
+              e.currentTarget.style.backgroundColor = '#FFFFFF';
             }}
           >
-            <SelectValue placeholder="Filter by country" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }} />
+            <SelectValue placeholder="Filter by country" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontWeight: 600, color: '#001A66' }} />
           </SelectTrigger>
           <SelectContent 
-            className="!z-[10001] !bg-white [&_[data-slot=select-item]>span]:hidden !max-h-[200px] !overflow-y-auto" 
-            style={{ zIndex: 10001, backgroundColor: '#FFFFFF', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'default', maxHeight: '200px', overflowY: 'auto' }}
+            className="!z-[10001] !bg-white [&_[data-slot=select-item]>span]:hidden !max-h-[200px] !overflow-y-auto !border-[#001A66] !border-opacity-20" 
+            style={{ 
+              zIndex: 10001, 
+              backgroundColor: '#FFFFFF', 
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
+              cursor: 'default', 
+              maxHeight: '200px', 
+              overflowY: 'auto',
+              border: '1px solid #001A66',
+              borderRadius: '6px',
+              boxShadow: '0 4px 12px rgba(0, 26, 102, 0.15)',
+              padding: '4px'
+            }}
             onCloseAutoFocus={(e) => e.preventDefault()}
           >
-            <SelectItem value="All" className="!cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'pointer', fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)' }}>
+            <SelectItem 
+              value="All" 
+              className="!cursor-pointer !pr-2 [&>span]:hidden hover:!bg-[#F0F4F8] focus:!bg-[#F0F4F8] !rounded-[4px] !mx-1" 
+              style={{ 
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
+                cursor: 'pointer', 
+                fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)',
+                fontWeight: selectedCountry === 'All' ? 600 : 400,
+                color: selectedCountry === 'All' ? '#001A66' : '#374151',
+                padding: isMobile ? '6px 8px' : '8px 10px',
+                transition: 'all 0.15s ease'
+              }}
+            >
               All Countries
             </SelectItem>
             {countries.map((country) => (
-              <SelectItem key={country} value={country} className="!cursor-pointer !pr-2 [&>span]:hidden" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', cursor: 'pointer', fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)' }}>
+              <SelectItem 
+                key={country} 
+                value={country} 
+                className="!cursor-pointer !pr-2 [&>span]:hidden hover:!bg-[#F0F4F8] focus:!bg-[#F0F4F8] !rounded-[4px] !mx-1" 
+                style={{ 
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  cursor: 'pointer', 
+                  fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.8vw, 13px)',
+                  fontWeight: selectedCountry === country ? 600 : 400,
+                  color: selectedCountry === country ? '#001A66' : '#374151',
+                  padding: isMobile ? '6px 8px' : '8px 10px',
+                  transition: 'all 0.15s ease'
+                }}
+              >
                 {country}
               </SelectItem>
             ))}
@@ -382,23 +433,40 @@ export default function AppV2() {
         
         {/* Search by Company */}
         <div
+          className="search-input-wrapper"
           style={{
             position: 'relative',
             width: isMobile ? 'clamp(120px, 25vw, 160px)' : 'clamp(140px, 12vw, 180px)',
             height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
-            marginTop: isMobile ? '-4px' : '-6px'
+            marginTop: isMobile ? '-4px' : '-6px',
+            border: '1px solid #001A66',
+            borderRadius: '6px',
+            backgroundColor: '#FFFFFF',
+            boxShadow: '0 1px 2px rgba(0, 26, 102, 0.1)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#001A66';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 26, 102, 0.15)';
+            e.currentTarget.style.backgroundColor = '#F8F9FA';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#001A66';
+            e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 26, 102, 0.1)';
+            e.currentTarget.style.backgroundColor = '#FFFFFF';
           }}
         >
           <Search
             size={isMobile ? 14 : 16}
             style={{
               position: 'absolute',
-              left: 0,
+              left: isMobile ? '8px' : '10px',
               top: '50%',
               transform: 'translateY(-50%)',
               color: '#666',
               pointerEvents: 'none',
-              zIndex: 1
+              zIndex: 1,
+              transition: 'color 0.2s ease'
             }}
           />
           {searchQuery && (
@@ -406,24 +474,30 @@ export default function AppV2() {
               onClick={() => setSearchQuery('')}
               style={{
                 position: 'absolute',
-                right: isMobile ? '4px' : '6px',
+                right: isMobile ? '6px' : '8px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                background: 'none',
+                background: 'rgba(0, 26, 102, 0.05)',
                 border: 'none',
+                borderRadius: '4px',
                 cursor: 'pointer',
-                padding: '2px',
+                padding: '4px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 2,
-                color: '#666'
+                color: '#666',
+                transition: 'all 0.15s ease',
+                width: isMobile ? '18px' : '20px',
+                height: isMobile ? '18px' : '20px'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#000';
+                e.currentTarget.style.color = '#001A66';
+                e.currentTarget.style.backgroundColor = 'rgba(0, 26, 102, 0.1)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = '#666';
+                e.currentTarget.style.backgroundColor = 'rgba(0, 26, 102, 0.05)';
               }}
             >
               <X size={isMobile ? 12 : 14} />
@@ -434,18 +508,34 @@ export default function AppV2() {
             placeholder="Search by company"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="!border-none !bg-transparent !shadow-none focus-visible:!ring-0 focus-visible:!ring-offset-0 pl-6 pr-2 search-company-input"
+            className="!border-none !bg-transparent !shadow-none focus-visible:!ring-2 focus-visible:!ring-[#001A66] focus-visible:!ring-offset-0 search-company-input"
             style={{
               width: '100%',
               height: isMobile ? 'clamp(28px, 5vw, 32px)' : 'clamp(32px, 2.5vw, 36px)',
               fontSize: isMobile ? 'clamp(11px, 2vw, 13px)' : 'clamp(12px, 0.9vw, 14px)',
-              paddingLeft: isMobile ? '20px' : '22px',
-              paddingRight: searchQuery ? (isMobile ? '20px' : '24px') : (isMobile ? '8px' : '10px'),
+              paddingLeft: isMobile ? '28px' : '32px',
+              paddingRight: searchQuery ? (isMobile ? '28px' : '32px') : (isMobile ? '10px' : '12px'),
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               backgroundColor: 'transparent',
               border: 'none',
               boxShadow: 'none',
-              outline: 'none'
+              outline: 'none',
+              color: '#001A66',
+              fontWeight: 500
+            }}
+            onFocus={(e) => {
+              const wrapper = e.currentTarget.closest('.search-input-wrapper') as HTMLElement;
+              if (wrapper) {
+                wrapper.style.borderColor = '#001A66';
+                wrapper.style.boxShadow = '0 2px 6px rgba(0, 26, 102, 0.2)';
+              }
+            }}
+            onBlur={(e) => {
+              const wrapper = e.currentTarget.closest('.search-input-wrapper') as HTMLElement;
+              if (wrapper) {
+                wrapper.style.borderColor = '#001A66';
+                wrapper.style.boxShadow = '0 1px 2px rgba(0, 26, 102, 0.1)';
+              }
             }}
           />
         </div>
