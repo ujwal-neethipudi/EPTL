@@ -170,7 +170,9 @@ export function CategorySection({
         height: forceFullHeight ? '100%' : categoryBoxHeight, // Fill container if forceFullHeight, otherwise use calculated height
         minHeight: forceFullHeight ? '100%' : (hasSubcategories ? categoryBoxHeight : `${adaptiveHeight}px`), // Fill container if forceFullHeight
         padding: categoryCount > 2 ? 'clamp(4px, 0.4vw, 6px)' : 'clamp(6px, 0.6vw, 10px)', // Very compact padding for Engine
-        backgroundColor: (isFlatCategory && isHoveringBox) ? 'rgba(0, 0, 0, 0.02)' : bgColor,
+        backgroundColor: isFlatCategory 
+          ? (isHoveringBox ? 'rgba(0, 0, 0, 0.02)' : '#FFFFFF') // White by default for flat categories
+          : bgColor, // Use pillar bgColor for categories with subcategories
         borderRadius: '6px',
         border: `1px solid ${borderColor}`,
         display: 'flex',
@@ -540,6 +542,7 @@ export function CategorySection({
       ) : isFlat ? (
         // Render flat logo grid (no subcategories) - compact, centered
         <div
+          className={isFlatCategory ? 'scrollable-box' : ''}
           onMouseEnter={(e) => {
             // Keep hover state true anywhere in logo grid (only for flat categories)
             if (isFlatCategory) {

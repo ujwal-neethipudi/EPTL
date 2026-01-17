@@ -236,6 +236,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
         >
           <div
             ref={scrollContainerRef}
+            className="scrollable-box"
             onMouseEnter={(e) => {
               // Keep hover state true anywhere in scroll container
               setIsHoveringBox(true);
@@ -252,7 +253,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
               alignItems: 'flex-start',
               alignContent: 'flex-start',
               gap: 'clamp(3px, 0.3vw, 5px)',
-              overflowY: 'auto', // Allow scrolling within subcategory if needed
+              overflowY: 'auto' // Allow scrolling within subcategory if needed
             }}
           >
           {[...companies].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })).map((company, index) => {

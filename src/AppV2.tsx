@@ -186,7 +186,7 @@ export default function AppV2() {
     return filtered;
   }, [data, selectedCountry, searchQuery]);
 
-  // v3: Calculate merged canvas structure
+  // Calculate merged canvas structure
   const mergedCanvasStructure = useMemo(() => {
     if (!filteredData) return null;
 
@@ -525,16 +525,33 @@ export default function AppV2() {
           right: (isMobile && !isLandscape) ? 'clamp(8px, 1.5vw, 16px)' : 'clamp(20px, 2.5vw, 40px)',
           bottom: (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 20px)' : 'clamp(16px, 2vh, 24px)',
           zIndex: 1, // Ensure content is above background lines
-          transform: 'scale(0.9)',
+          border: '2px solid #001A66', // Border around the entire map (dark EU blue)
+          borderRadius: '6px', // Match category box border radius
+          backgroundColor: '#FFFFFF', // White background like category boxes
+          padding: isMobile ? 'clamp(6px, 0.8vw, 10px)' : 'clamp(8px, 0.6vw, 12px)', // Padding so border is visible
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          transform: 'scale(0.922) translateY(1%)',
           transformOrigin: 'center center'
         }}
       >
-        {/* v3: Single merged canvas - categories rendered directly in grid */}
+        <div
+          style={{
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            minHeight: 0,
+            overflow: 'hidden'
+          }}
+        >
+        {/* Single merged canvas - categories rendered directly in grid */}
         {mergedCanvasStructure && (() => {
           const { allCategories, pillarData } = mergedCanvasStructure;
           const gridTemplateRows = `repeat(100, 1fr)`;
           const categoryGap = isMobile ? 'clamp(3px, 0.3vh, 5px)' : 'clamp(3px, 0.3vh, 5px)';
-          const columnGap = (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)';
+          const columnGap = (isMobile && !isLandscape) ? 'clamp(12px, 2vh, 18px)' : 'clamp(12px, 1.2vw, 18px)'; // Original gap values
 
           return (
             <div
@@ -638,6 +655,7 @@ export default function AppV2() {
             </div>
           );
         })()}
+        </div>
       </div>
 
       {/* Company Details Modal */}

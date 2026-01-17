@@ -498,6 +498,52 @@
   --sidebar-ring: oklch(.708 0 0);
 }
 
+/* Scrollbar styling for scrollable boxes - show on hover */
+/* Firefox scrollbar */
+.scrollable-box {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0) transparent;
+}
+
+.scrollable-box:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+/* For Chrome/Webkit browsers - scrollbar must have width for hover to work */
+.scrollable-box::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+  -webkit-appearance: none;
+}
+
+.scrollable-box::-webkit-scrollbar-track {
+  background: transparent !important;
+  -webkit-box-shadow: none;
+}
+
+.scrollable-box::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* Default: invisible scrollbar thumb */
+.scrollable-box::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border-radius: 4px !important;
+  border: none !important;
+  -webkit-box-shadow: none;
+  transition: background-color 0.15s ease !important;
+}
+
+/* Show scrollbar on hover - Chrome needs !important and explicit hover */
+.scrollable-box:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  -webkit-box-shadow: none !important;
+}
+
+.scrollable-box:hover::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
 .dark {
   --background: oklch(.145 0 0);
   --foreground: oklch(.985 0 0);
