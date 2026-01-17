@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Maximize2 } from 'lucide-react';
+import { ZoomIn } from 'lucide-react';
 import { SubcategoryGroup } from './SubcategoryGroup';
 
 type Company = {
@@ -136,59 +136,81 @@ export function CategorySection({
   const flexGrowValue = normalizedFlexGrow;
   const borderColor = categoryBorderColors[categoryName] || '#E5E7EB';
   const [isHovered, setIsHovered] = useState(false);
+  const [isHoveringBox, setIsHoveringBox] = useState(false);
   const isFlatCategory = companies && companies.length > 0 && !hasSubcategories;
 
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={(e) => {
+        setIsHovered(true);
+        // Show zoom icon for flat categories anywhere in the box
+        if (isFlatCategory) {
+          setIsHoveringBox(true);
+        }
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsHoveringBox(false);
+      }}
+      onMouseMove={(e) => {
+        // Keep hover state true as mouse moves within container (only for flat categories)
+        if (isFlatCategory) {
+          setIsHoveringBox(true);
+        }
+      }}
+      onClick={(e) => {
+        // Whole box is clickable to maximize (for flat categories)
+        if (isFlatCategory && onMaximize) {
+          onMaximize(categoryName);
+        }
+      }}
       style={{
         flexShrink: 0,
         flexGrow: forceFullHeight ? 1 : (hasSubcategories ? 0 : flexGrowValue), // Fill container if forceFullHeight, otherwise use original logic
         height: forceFullHeight ? '100%' : categoryBoxHeight, // Fill container if forceFullHeight, otherwise use calculated height
         minHeight: forceFullHeight ? '100%' : (hasSubcategories ? categoryBoxHeight : `${adaptiveHeight}px`), // Fill container if forceFullHeight
         padding: categoryCount > 2 ? 'clamp(4px, 0.4vw, 6px)' : 'clamp(6px, 0.6vw, 10px)', // Very compact padding for Engine
-        backgroundColor: bgColor,
+        backgroundColor: (isFlatCategory && isHoveringBox) ? 'rgba(0, 0, 0, 0.02)' : bgColor,
         borderRadius: '6px',
         border: `1px solid ${borderColor}`,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden', // Keep content within box
-        position: 'relative'
+        position: 'relative',
+        cursor: (isFlatCategory && isHoveringBox) ? 'pointer' : 'default',
+        transition: 'background-color 0.2s'
       }}
     >
-      {/* Maximize icon for flat categories - appears on hover */}
-      {isFlatCategory && isHovered && onMaximize && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onMaximize(categoryName);
-          }}
+      {/* Zoom icon for flat categories - appears centered when hovering anywhere in the box */}
+      {isFlatCategory && isHoveringBox && isHovered && onMaximize && (
+        <div
           style={{
             position: 'absolute',
-            top: 'clamp(4px, 0.4vw, 6px)',
-            right: 'clamp(4px, 0.4vw, 6px)',
-            background: 'rgba(255, 255, 255, 0.9)',
-            border: '1px solid #E5E7EB',
-            borderRadius: '4px',
-            padding: 'clamp(2px, 0.2vw, 4px)',
-            cursor: 'pointer',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 9,
+            pointerEvents: 'none',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10,
-            transition: 'background 0.2s'
+            justifyContent: 'center'
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
-          }}
-          aria-label="Maximize category"
         >
-          <Maximize2 size={isMobile ? 12 : 14} color="#6B7280" />
-        </button>
+          <div
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              borderRadius: '50%',
+              width: 'clamp(32px, 3vw, 40px)',
+              height: 'clamp(32px, 3vw, 40px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            <ZoomIn size={isMobile ? 16 : 20} color="#FFFFFF" />
+          </div>
+        </div>
       )}
       {/* Category Header - Compact */}
       <h2
@@ -518,6 +540,18 @@ export function CategorySection({
       ) : isFlat ? (
         // Render flat logo grid (no subcategories) - compact, centered
         <div
+          onMouseEnter={(e) => {
+            // Keep hover state true anywhere in logo grid (only for flat categories)
+            if (isFlatCategory) {
+              setIsHoveringBox(true);
+            }
+          }}
+          onMouseMove={(e) => {
+            // Keep hover state true as mouse moves within logo grid (only for flat categories)
+            if (isFlatCategory) {
+              setIsHoveringBox(true);
+            }
+          }}
           style={{
             flex: 1,
             display: 'flex',
@@ -544,13 +578,12 @@ export function CategorySection({
             return (
               <div
                 key={`${company.name}-${index}`}
-                onClick={() => onCompanyClick?.(company)}
+                className="logo-container"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  cursor: onCompanyClick ? 'pointer' : 'default',
-                  transition: 'opacity 0.2s',
+                  cursor: 'default', // Logos not clickable in normal view
                   padding: 'clamp(4px, 0.4vw, 6px)',
                   flexShrink: 0,
                   width: isMobile 
@@ -558,16 +591,6 @@ export function CategorySection({
                     : (maxWidthPerLogo || 'clamp(77px, 4.95vw, 88px)'), // Dynamic width if logosPerRow specified, otherwise fixed width
                   maxWidth: maxWidthPerLogo, // Cap at calculated width if logosPerRow specified
                   minWidth: isMobile ? undefined : (logosPerRow === 5 ? 'clamp(44px, 2.75vw, 55px)' : undefined) // Smaller min width for 5 per row
-                }}
-                onMouseEnter={(e) => {
-                  if (onCompanyClick) {
-                    e.currentTarget.style.opacity = '0.8';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (onCompanyClick) {
-                    e.currentTarget.style.opacity = '1';
-                  }
                 }}
               >
                 {/* Logo - Compact */}

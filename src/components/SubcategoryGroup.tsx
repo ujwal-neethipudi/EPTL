@@ -1,5 +1,5 @@
 import React from 'react';
-import { Maximize2 } from 'lucide-react';
+import { ZoomIn } from 'lucide-react';
 
 type Company = {
   name: string;
@@ -88,6 +88,7 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
   const [showScrollDownIndicator, setShowScrollDownIndicator] = React.useState(false);
   const [showScrollUpIndicator, setShowScrollUpIndicator] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
+  const [isHoveringBox, setIsHoveringBox] = React.useState(false);
   
   // Check if content is scrollable and handle scroll events
   React.useEffect(() => {
@@ -141,52 +142,68 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
   
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={(e) => {
+        setIsHovered(true);
+        setIsHoveringBox(true); // Show zoom icon anywhere in the box
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsHoveringBox(false);
+      }}
+      onMouseMove={(e) => {
+        // Keep hover state true as mouse moves within container
+        setIsHoveringBox(true);
+      }}
+      onClick={(e) => {
+        // Whole box is clickable to maximize
+        if (onMaximize) {
+          onMaximize();
+        }
+      }}
       style={{
         padding: `${basePadding}px`,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: isHoveringBox ? 'rgba(0, 0, 0, 0.02)' : '#FFFFFF',
         border: `1px solid ${borderColor}`,
         borderRadius: '4px',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        position: 'relative'
+        position: 'relative',
+        cursor: isHoveringBox ? 'pointer' : 'default',
+        transition: 'background-color 0.2s'
       }}
     >
-      {/* Maximize icon - appears on hover */}
-      {isHovered && onMaximize && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onMaximize();
-          }}
+      {/* Zoom icon - appears centered when hovering anywhere in the box */}
+      {isHoveringBox && isHovered && onMaximize && (
+        <div
           style={{
             position: 'absolute',
-            top: 'clamp(4px, 0.4vw, 6px)',
-            right: 'clamp(4px, 0.4vw, 6px)',
-            background: 'rgba(255, 255, 255, 0.9)',
-            border: '1px solid #E5E7EB',
-            borderRadius: '4px',
-            padding: 'clamp(2px, 0.2vw, 4px)',
-            cursor: 'pointer',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 9,
+            pointerEvents: 'none',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10,
-            transition: 'background 0.2s'
+            justifyContent: 'center'
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
-          }}
-          aria-label="Maximize subcategory"
         >
-          <Maximize2 size={isMobile ? 12 : 14} color="#6B7280" />
-        </button>
+          <div
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              borderRadius: '50%',
+              width: 'clamp(32px, 3vw, 40px)',
+              height: 'clamp(32px, 3vw, 40px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            <ZoomIn size={isMobile ? 16 : 20} color="#FFFFFF" />
+          </div>
+        </div>
       )}
 
       {/* Subcategory Header - Compact */}
@@ -219,6 +236,14 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
         >
           <div
             ref={scrollContainerRef}
+            onMouseEnter={(e) => {
+              // Keep hover state true anywhere in scroll container
+              setIsHoveringBox(true);
+            }}
+            onMouseMove={(e) => {
+              // Keep hover state true as mouse moves within scroll container
+              setIsHoveringBox(true);
+            }}
             style={{
               flex: 1,
               display: 'flex',
@@ -240,13 +265,12 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
             return (
               <div
                 key={`${company.name}-${index}`}
-                onClick={() => onCompanyClick?.(company)}
+                className="logo-container"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  cursor: onCompanyClick ? 'pointer' : 'default',
-                  transition: 'opacity 0.2s',
+                  cursor: 'default', // Logos not clickable in normal view
                   padding: 'clamp(2px, 0.2vw, 3px)',
                   flexShrink: 0,
                   width: isMobile 
@@ -254,16 +278,6 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
                     : maxWidthPerLogo, // Dynamic: uses logosPerRow if specified, otherwise min 3 per row
                   maxWidth: maxWidthPerLogo, // Cap at this to ensure target per row
                   minWidth: isMobile ? undefined : (logosPerRow === 5 ? 'clamp(44px, 2.75vw, 55px)' : 'clamp(55px, 3.5vw, 66px)') // Smaller min width for 5 per row
-                }}
-                onMouseEnter={(e) => {
-                  if (onCompanyClick) {
-                    e.currentTarget.style.opacity = '0.8';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (onCompanyClick) {
-                    e.currentTarget.style.opacity = '1';
-                  }
                 }}
               >
                 {/* Logo - Compact */}
