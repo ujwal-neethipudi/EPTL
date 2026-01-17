@@ -311,6 +311,7 @@ export default function AppV2() {
       return;
     }
 
+    // Immediately calculate rotation (don't wait)
     const calculateTransform = () => {
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
@@ -1323,8 +1324,8 @@ export default function AppV2() {
         />
       </a>
 
-      {/* Portrait Mode Overlay - Show when in portrait on mobile */}
-      {needsRotation && (
+      {/* Portrait Mode Overlay - Show only when rotation is NOT applied (rotationScale is null) */}
+      {needsRotation && !rotationScale && (
         <div
           style={{
             position: 'fixed',
@@ -1381,17 +1382,21 @@ export default function AppV2() {
   );
 
   // Wrap with rotation div only if needed (mobile portrait)
+  // When rotation is applied, the overlay won't show (it's inside mainContent but rotated away)
   if (needsRotation && rotationScale) {
     return (
       <div
         style={{
           width: '100vw',
           height: '100vh',
-          position: 'relative',
+          position: 'fixed',
+          top: 0,
+          left: 0,
           overflow: 'hidden',
           transform: `rotate(${rotationScale.rotate}) scale(${rotationScale.scale}) translate(${rotationScale.translateX}, ${rotationScale.translateY})`,
           transformOrigin: 'center center',
-          transition: 'transform 0.3s ease'
+          transition: 'transform 0.3s ease',
+          zIndex: 1
         }}
       >
         {mainContent}
