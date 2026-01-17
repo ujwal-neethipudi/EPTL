@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import AppDemo from "./AppDemo.tsx";
 import AppV2 from "./AppV2.tsx";
 import "./index.css";
 
@@ -8,9 +8,11 @@ import "./index.css";
 const path = window.location.pathname;
 const root = createRoot(document.getElementById("root")!);
 
-if (path === "/v2" || path.startsWith("/v2/")) {
-  root.render(<AppV2 />);
+// AppV2 is now the default (root path)
+// AppDemo (old demo version) is accessible at /demo
+if (path === "/demo" || path.startsWith("/demo/")) {
+  root.render(<AppDemo />);
 } else {
-  root.render(<App />);
+  root.render(<AppV2 />);
 }
   
