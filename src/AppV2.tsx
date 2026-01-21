@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Maximize2, X, Search, MessageSquare } from 'lucide-react';
+import { Maximize2, X, Search, MessageSquare, Mail } from 'lucide-react';
 import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
@@ -22,8 +22,8 @@ type PillarStructure = {
   Megaphone: PillarData;
 };
 
-// Feedback form URL - can be replaced with Typeform or Google Form URL later
-const FEEDBACK_URL = 'https://eptl.vercel.app';
+// Feedback email address
+const FEEDBACK_EMAIL = 'techmap@partisan.community';
 
 export default function AppV2() {
   const [data, setData] = useState<PillarStructure | null>(null);
@@ -658,10 +658,15 @@ export default function AppV2() {
             fontWeight: 400,
             fontSize: 'clamp(11px, 0.9vw, 14px)',
             color: '#000000',
-            margin: 0
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
           }}
         >
-          v2 Prototype. Jan 2026. Political Tech Summit
+          <Mail size={14} style={{ color: '#001A66' }} />
+          <span style={{ color: '#001A66' }}>techmap@partisan.community</span>
         </p>
       </div>
 
@@ -1281,9 +1286,7 @@ export default function AppV2() {
 
       {/* Feedback Button - Bottom Right */}
       <a
-        href={FEEDBACK_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`mailto:${FEEDBACK_EMAIL}`}
         style={{
           position: 'fixed',
           bottom: isMobile ? 'clamp(16px, 3vh, 24px)' : 'clamp(20px, 2.5vh, 32px)',
