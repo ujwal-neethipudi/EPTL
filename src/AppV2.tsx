@@ -860,10 +860,10 @@ export default function AppV2() {
             ? `/logos/${selected.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`
             : null);
         
-        // Hub profile links for demonstration
+        // Hub profile links for demonstration (with UTM tracking)
         const hubProfileLinks: Record<string, string> = {
-          'Qomon': 'https://hub.partisan.community/organizations/companies/Qomon61fhloy7/400421',
-          'NationBuilder': 'https://hub.partisan.community/organizations/startups/NationBuilders9ysfewl/401518',
+          'Qomon': 'https://hub.partisan.community/organizations/companies/Qomon61fhloy7/400421?utm_source=eptl&utm_medium=map&utm_campaign=hub-profile',
+          'NationBuilder': 'https://hub.partisan.community/organizations/startups/NationBuilders9ysfewl/401518?utm_source=eptl&utm_medium=map&utm_campaign=hub-profile',
         };
         
         const hasHubProfile = selected.name in hubProfileLinks;
