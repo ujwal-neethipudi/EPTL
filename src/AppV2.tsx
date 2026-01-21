@@ -23,7 +23,7 @@ type PillarStructure = {
 };
 
 // Feedback email address
-const FEEDBACK_EMAIL = 'techmap@partisan.community';
+const FEEDBACK_EMAIL = 'techmap@partisan.community'; // No spaces
 
 export default function AppV2() {
   const [data, setData] = useState<PillarStructure | null>(null);
@@ -666,7 +666,7 @@ export default function AppV2() {
           }}
         >
           <Mail size={14} style={{ color: '#001A66' }} />
-          <span style={{ color: '#001A66' }}>techmap@partisan.community</span>
+          <span style={{ color: '#001A66' }}>{FEEDBACK_EMAIL}</span>
         </p>
       </div>
 
@@ -860,6 +860,14 @@ export default function AppV2() {
             ? `/logos/${selected.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`
             : null);
         
+        // Hub profile links for demonstration
+        const hubProfileLinks: Record<string, string> = {
+          'Qomon': 'https://hub.partisan.community/organizations/companies/Qomon61fhloy7/400421',
+          'NationBuilder': 'https://hub.partisan.community/organizations/startups/NationBuilders9ysfewl/401518',
+        };
+        
+        const hasHubProfile = selected.name in hubProfileLinks;
+        
         return (
           <div
             onClick={(e) => {
@@ -966,27 +974,82 @@ export default function AppV2() {
                 </button>
               </div>
               
-              {/* URL */}
-              {selected.domain && (
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 500, color: '#6B7280', marginBottom: '4px' }}>
-                    URL:
-                  </div>
+              {/* Action Buttons */}
+              <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {/* Hub Profile Button - Only for Qomon and NationBuilder */}
+                {hasHubProfile && (
+                  <a
+                    href={hubProfileLinks[selected.name]}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'inline-block',
+                      padding: '10px 20px',
+                      backgroundColor: '#6B1FA8',
+                      color: '#FFFFFF',
+                      textDecoration: 'none',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer',
+                      border: 'none',
+                      textAlign: 'center',
+                      width: 'fit-content'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#7E22CE';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(107, 31, 168, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#6B1FA8';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    Partisan Hub Profile
+                  </a>
+                )}
+                
+                {/* Visit Website Button */}
+                {selected.domain && (
                   <a
                     href={selected.domain.startsWith('http') ? selected.domain : `https://${selected.domain}`}
                     target="_blank"
                     rel="noreferrer"
                     style={{
-                      color: '#6B1FA8',
-                      textDecoration: 'underline',
+                      display: 'inline-block',
+                      padding: '10px 20px',
+                      backgroundColor: '#001A66',
+                      color: '#FFFFFF',
+                      textDecoration: 'none',
+                      borderRadius: '6px',
                       fontSize: '14px',
-                      wordBreak: 'break-all'
+                      fontWeight: 600,
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer',
+                      border: 'none',
+                      textAlign: 'center',
+                      width: 'fit-content'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#002699';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 26, 102, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#001A66';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
-                    {selected.domain}
+                    Visit website
                   </a>
-                </div>
-              )}
+                )}
+              </div>
               
               {/* Description */}
               {selected.description && (
