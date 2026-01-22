@@ -18,6 +18,7 @@ type Company = {
   description?: string;
   hq?: string;
   logo?: string;
+  hub_url?: string;
 };
 
 type CategoryData = Company[] | Record<string, Company[]>;
@@ -868,13 +869,24 @@ export default function AppV2() {
             ? `/logos/${selected.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`
             : null);
         
-        // Hub profile links for demonstration (with UTM tracking)
-        const hubProfileLinks: Record<string, string> = {
-          'Qomon': 'https://hub.partisan.community/organizations/companies/Qomon61fhloy7/400421?utm_source=eptl&utm_medium=map&utm_campaign=hub-profile',
-          'NationBuilder': 'https://hub.partisan.community/organizations/startups/NationBuilders9ysfewl/401518?utm_source=eptl&utm_medium=map&utm_campaign=hub-profile',
+        // Helper function to append UTM parameters to hub URL
+        const addUTMParameters = (url: string): string => {
+          try {
+            const urlObj = new URL(url);
+            urlObj.searchParams.set('utm_source', 'eptl');
+            urlObj.searchParams.set('utm_medium', 'map');
+            urlObj.searchParams.set('utm_campaign', 'hub-profile');
+            return urlObj.toString();
+          } catch (e) {
+            // If URL parsing fails, append parameters manually
+            const separator = url.includes('?') ? '&' : '?';
+            return `${url}${separator}utm_source=eptl&utm_medium=map&utm_campaign=hub-profile`;
+          }
         };
         
-        const hasHubProfile = selected.name in hubProfileLinks;
+        // Check if company has hub_url and build the URL with UTM parameters
+        const hasHubProfile = !!selected.hub_url;
+        const hubProfileUrl = selected.hub_url ? addUTMParameters(selected.hub_url) : null;
         
         return (
           <div
@@ -984,21 +996,31 @@ export default function AppV2() {
               
               {/* Action Buttons */}
               <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {/* Hub Profile Button - Only for Qomon and NationBuilder */}
-                {hasHubProfile && (
+                {/* Hub Profile Button - For any company with hub_url */}
+                {hasHubProfile && hubProfileUrl && (
                   <a
-                    href={hubProfileLinks[selected.name]}
+                    href={hubProfileUrl}
                     target="_blank"
                     rel="noreferrer"
                     onClick={(e) => {
-                      // Extract destination URL (pathname) from full URL
-                      const destinationUrl = new URL(hubProfileLinks[selected.name]).pathname;
+                      // Extract destination URL (pathname) from hub_url (before UTM params)
+                      let destinationUrl = '';
+                      try {
+                        const urlObj = new URL(selected.hub_url!);
+                        destinationUrl = urlObj.pathname;
+                      } catch (err) {
+                        // Fallback: try to extract pathname from the original hub_url
+                        const match = selected.hub_url!.match(/\/\/[^\/]+(\/[^?]*)/);
+                        destinationUrl = match ? match[1] : selected.hub_url!;
+                      }
                       
                       // Track GA4 event with beacon transport
                       if (typeof window !== 'undefined' && (window as any).gtag) {
                         (window as any).gtag('event', 'hub_profile_click', {
                           'company_name': selected.name,
                           'destination_url': destinationUrl,
+                          'source': 'eptl',
+                          'medium': 'map',
                           'transport_type': 'beacon'
                         });
                       }

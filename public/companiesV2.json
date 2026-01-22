@@ -409,7 +409,8 @@
         "domain": "https://qomon.com/",
         "description": "Volunteer & supporter mobilization platform with field-canvassing, CRM, territory analysis",
         "hq": "France",
-        "logo": "https://eptl.vercel.app/logos/qomon-com.png"
+        "logo": "https://eptl.vercel.app/logos/qomon-com.png",
+        "hub_url": "https://hub.partisan.community/organizations/companies/Qomon61fhloy7/400421"
       },
       {
         "name": "Relentless",
@@ -467,7 +468,8 @@
         "domain": "https://nationbuilder.com/",
         "description": "CRM + campaign-platform for political campaigns, advocacy, nonprofits - includes supporter database, websites, outreach, fundraising, volunteer management",
         "hq": "United States",
-        "logo": "https://eptl.vercel.app/logos/nationbuilder-com.png"
+        "logo": "https://eptl.vercel.app/logos/nationbuilder-com.png",
+        "hub_url": "https://hub.partisan.community/organizations/startups/NationBuilders9ysfewl/401518"
       },
       {
         "name": "Citipo",
