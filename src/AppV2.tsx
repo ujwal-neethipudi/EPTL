@@ -990,6 +990,19 @@ export default function AppV2() {
                     href={hubProfileLinks[selected.name]}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={(e) => {
+                      // Extract destination URL (pathname) from full URL
+                      const destinationUrl = new URL(hubProfileLinks[selected.name]).pathname;
+                      
+                      // Track GA4 event with beacon transport
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'hub_profile_click', {
+                          'company_name': selected.name,
+                          'destination_url': destinationUrl,
+                          'transport_type': 'beacon'
+                        });
+                      }
+                    }}
                     style={{
                       display: 'inline-block',
                       padding: '10px 20px',
