@@ -17,6 +17,7 @@ interface SubcategoryGroupProps {
   isMobile?: boolean;
   logosPerRow?: number; // Optional: specify number of logos per row (e.g., 5 for Legislative & Policy Tracking)
   borderColor?: string; // Border color to match parent category
+  bgColor?: string; // Background color to match parent category
 }
 
 // Helper to get logo URL from company data
@@ -81,7 +82,7 @@ function LogoImage({ url, name, onLoad }: { url: string; name: string; onLoad?: 
   );
 }
 
-export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, onMaximize, isMobile = false, logosPerRow, borderColor = '#E5E7EB' }: SubcategoryGroupProps) {
+export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, onMaximize, isMobile = false, logosPerRow, borderColor = '#000000', bgColor }: SubcategoryGroupProps) {
   // Compact padding for single-frame viewport
   const basePadding = isMobile ? 6 : 8;
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -162,7 +163,9 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
       }}
       style={{
         padding: `${basePadding}px`,
-        backgroundColor: isHoveringBox ? 'rgba(0, 0, 0, 0.02)' : '#FFFFFF',
+        backgroundColor: isHoveringBox 
+          ? (bgColor ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.02)') 
+          : (bgColor || '#FFFFFF'),
         border: `1px solid ${borderColor}`,
         borderRadius: '4px',
         height: '100%',

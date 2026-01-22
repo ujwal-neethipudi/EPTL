@@ -13,16 +13,28 @@ type Company = {
 // Border colors for each category
 const categoryBorderColors: Record<string, string> = {
   // Brain
-  'Research & Intelligence': '#3B82F6', // Blue
-  'Strategy & Creative Production': '#8B5CF6', // Purple
+  'Research & Intelligence': '#000000', // Black
+  'Strategy & Creative Production': '#000000', // Black
   // Engine
-  'Field & Mobilization': '#10B981', // Green
-  'Campaign Management & CRM': '#F59E0B', // Orange
-  'Fundraising & Payments': '#EF4444', // Red
-  'Organizational Infrastructure': '#06B6D4', // Cyan
+  'Field & Mobilization': '#000000', // Black
+  'Campaign Management & CRM': '#000000', // Black
+  'Fundraising & Payments': '#000000', // Black
+  'Organizational Infrastructure': '#000000', // Black
   // Megaphone
-  'Digital Communications and Advertising': '#EC4899', // Pink
-  'Participation & Election Tech': '#6366F1' // Indigo
+  'Digital Communications and Advertising': '#000000', // Black
+  'Participation & Election Tech': '#000000' // Black
+};
+
+// Background colors for specific categories
+const categoryBackgroundColors: Record<string, string> = {
+  'Research & Intelligence': '#bbcde6',
+  'Strategy & Creative Production': '#bbcde6',
+  'Field & Mobilization': '#d9d9d9',
+  'Campaign Management & CRM': '#d9d9d9',
+  'Fundraising & Payments': '#d9d9d9',
+  'Organizational Infrastructure': '#d9d9d9',
+  'Digital Communications and Advertising': '#ffffff',
+  'Participation & Election Tech': '#ffffff'
 };
 
 // Helper function to generate different hues of a base color
@@ -134,7 +146,9 @@ export function CategorySection({
     ? Math.max(totalCount * 0.04, 0.25) // Much reduced flex-grow for Engine (4 categories)
     : Math.max(totalCount * 0.1, 0.5); // Standard for Brain/Megaphone (2 categories)
   const flexGrowValue = normalizedFlexGrow;
-  const borderColor = categoryBorderColors[categoryName] || '#E5E7EB';
+  const borderColor = categoryBorderColors[categoryName] || '#000000';
+  // Use category-specific background color if available, otherwise use provided bgColor
+  const categoryBgColor = categoryBackgroundColors[categoryName] || bgColor;
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveringBox, setIsHoveringBox] = useState(false);
   const isFlatCategory = companies && companies.length > 0 && !hasSubcategories;
@@ -171,8 +185,8 @@ export function CategorySection({
         minHeight: forceFullHeight ? '100%' : (hasSubcategories ? categoryBoxHeight : `${adaptiveHeight}px`), // Fill container if forceFullHeight
         padding: categoryCount > 2 ? 'clamp(4px, 0.4vw, 6px)' : 'clamp(6px, 0.6vw, 10px)', // Very compact padding for Engine
         backgroundColor: isFlatCategory 
-          ? (isHoveringBox ? 'rgba(0, 0, 0, 0.02)' : '#FFFFFF') // White by default for flat categories
-          : bgColor, // Use pillar bgColor for categories with subcategories
+          ? (isHoveringBox ? 'rgba(0, 0, 0, 0.02)' : (categoryBackgroundColors[categoryName] || '#FFFFFF')) // Use category-specific color or white for flat categories
+          : categoryBgColor, // Use category-specific background color or pillar bgColor for categories with subcategories
         borderRadius: '6px',
         border: `1px solid ${borderColor}`,
         display: 'flex',
@@ -274,7 +288,8 @@ export function CategorySection({
                       onMaximize={() => onMaximize?.(categoryName, firstSubcat[0][0])}
                       isMobile={isMobile}
                       logosPerRow={5} // 5 logos per row for Deliberative Tech & Citizen Input
-                      borderColor={getSubcategoryHue(borderColor, getSubcatIndex(firstSubcat[0][0]), subcatEntries.length)}
+                      borderColor="#000000"
+                      bgColor={categoryBgColor}
                     />
                   </div>
                 )}
@@ -306,7 +321,8 @@ export function CategorySection({
                           onCompanyClick={onCompanyClick}
                           onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
-                          borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
+                          borderColor="#000000"
+                          bgColor={categoryBgColor}
                         />
                       </div>
                     ))}
@@ -343,7 +359,8 @@ export function CategorySection({
                         onCompanyClick={onCompanyClick}
                         onMaximize={() => onMaximize?.(categoryName, subcatName)}
                         isMobile={isMobile}
-                        borderColor={getSubcategoryHue(borderColor, index, subcatEntries.length)}
+                        borderColor="#000000"
+                        bgColor={categoryBgColor}
                       />
                   </div>
                 ))}
@@ -402,7 +419,8 @@ export function CategorySection({
                           onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
                           logosPerRow={5} // 5 logos per row for Info Integrity & Social Media
-                          borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
+                          borderColor="#000000"
+                          bgColor={categoryBgColor}
                         />
                       </div>
                     ))}
@@ -436,7 +454,8 @@ export function CategorySection({
                           onCompanyClick={onCompanyClick}
                           onMaximize={() => onMaximize?.(categoryName, subcatName)}
                           isMobile={isMobile}
-                          borderColor={getSubcategoryHue(borderColor, getSubcatIndex(subcatName), subcatEntries.length)}
+                          borderColor="#000000"
+                          bgColor={categoryBgColor}
                         />
                       </div>
                     ))}
@@ -494,7 +513,8 @@ export function CategorySection({
                     onMaximize={() => onMaximize?.(categoryName, firstSubcat[0])}
                     isMobile={isMobile}
                     logosPerRow={firstSubcat[0] === 'Legislative & Policy Tracking' || firstSubcat[0] === 'Strategic Advisory & Agencies' ? 5 : undefined} // Special cases: 5 per row
-                    borderColor={getSubcategoryHue(borderColor, 0, subcatEntries.length)}
+                    borderColor="#000000"
+                    bgColor={categoryBgColor}
                   />
                 </div>
               )}
@@ -522,15 +542,16 @@ export function CategorySection({
                           overflow: 'hidden'
                         }}
                       >
-                        <SubcategoryGroup
-                          subcategoryName={subcatName}
-                          companies={subcatCompanies}
-                          onCompanyClick={onCompanyClick}
-                          onMaximize={() => onMaximize?.(categoryName, subcatName)}
-                          isMobile={isMobile}
-                          logosPerRow={subcatName === 'Strategic Advisory & Agencies' ? 5 : undefined} // 5 per row for Strategic Advisory & Agencies
-                          borderColor={getSubcategoryHue(borderColor, originalIndex, subcatEntries.length)}
-                        />
+                          <SubcategoryGroup
+                            subcategoryName={subcatName}
+                            companies={subcatCompanies}
+                            onCompanyClick={onCompanyClick}
+                            onMaximize={() => onMaximize?.(categoryName, subcatName)}
+                            isMobile={isMobile}
+                            logosPerRow={subcatName === 'Strategic Advisory & Agencies' ? 5 : undefined} // 5 per row for Strategic Advisory & Agencies
+                            borderColor="#000000"
+                            bgColor={categoryBgColor}
+                          />
                       </div>
                     );
                   })}
