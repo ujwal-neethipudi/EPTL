@@ -4,6 +4,14 @@ import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
 
+// Google Analytics 4 type declarations
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
+
 type Company = {
   name: string;
   domain?: string;
@@ -25,6 +33,9 @@ type PillarStructure = {
 // Feedback email address
 const FEEDBACK_EMAIL = 'techmap@partisan.community'; // No spaces
 
+// Google Analytics Measurement ID
+const GA_MEASUREMENT_ID = 'G-BDMJW5TNSV';
+
 export default function AppV2() {
   const [data, setData] = useState<PillarStructure | null>(null);
   const [open, setOpen] = useState(false);
@@ -40,6 +51,39 @@ export default function AppV2() {
     subcategoryName?: string;
     pillarName: string;
   } | null>(null);
+
+  // Initialize Google Analytics 4
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Load gtag.js script
+    const script1 = document.createElement('script');
+    script1.async = true;
+    script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script1);
+
+    // Initialize dataLayer and gtag function
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args: any[]) {
+      window.dataLayer.push(args);
+    }
+    (window as any).gtag = gtag;
+
+    // Configure GA4 after script loads
+    script1.onload = () => {
+      gtag('js', new Date());
+      gtag('config', GA_MEASUREMENT_ID, {
+        page_path: window.location.pathname,
+      });
+    };
+
+    return () => {
+      // Cleanup: remove script if component unmounts
+      if (document.head.contains(script1)) {
+        document.head.removeChild(script1);
+      }
+    };
+  }, []);
 
   // Load data
   useEffect(() => {
