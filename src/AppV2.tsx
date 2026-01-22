@@ -3,7 +3,6 @@ import { Maximize2, X, Search, MessageSquare, Mail } from 'lucide-react';
 import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
-import GoogleAnalytics from './components/GoogleAnalytics';
 
 // Google Analytics 4 type declarations
 declare global {
@@ -378,13 +377,11 @@ export default function AppV2() {
 
   // Build the main content (same for both mobile portrait and desktop)
   const mainContent = (
-    <>
-      <GoogleAnalytics />
-      <div 
-        className="relative" 
-        style={{ 
-          backgroundColor: '#FFFFFF',
-          width: '100vw',
+    <div 
+      className="relative" 
+      style={{ 
+        backgroundColor: '#FFFFFF',
+        width: '100vw',
         height: '100vh',
         overflow: 'hidden', // Fit in one frame - no scrolling
         position: 'relative',
@@ -1456,7 +1453,6 @@ export default function AppV2() {
         </div>
       )}
     </div>
-    </>
   );
 
   // Wrap with rotation div only if needed (mobile portrait)
