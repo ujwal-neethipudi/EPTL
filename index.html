@@ -18,7 +18,11 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-BDMJW5TNSV');
+        gtag('config', 'G-BDMJW5TNSV', {
+          linker: {
+            domains: ['hub.partisan.community']
+          }
+        });
         console.log('--- GA4 SCRIPT IS FINALLY RUNNING ---');
       </script>
     </head>

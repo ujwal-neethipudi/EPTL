@@ -831,10 +831,24 @@ export default function AppV2() {
                       companies={isArray ? categoryData : undefined}
                       subcategories={hasSubcategories ? categoryData : undefined}
                       onCompanyClick={(company) => {
+                        // Track view_company_card event
+                        if (typeof window !== 'undefined' && (window as any).gtag) {
+                          (window as any).gtag('event', 'view_company_card', {
+                            'company_name': company.name
+                          });
+                        }
                         setSelected(company);
                         setOpen(true);
                       }}
                       onMaximize={(catName, subcatName) => {
+                        // Track maximize_category event
+                        if (typeof window !== 'undefined' && (window as any).gtag) {
+                          (window as any).gtag('event', 'maximize_category', {
+                            'category_name': catName,
+                            'subcategory_name': subcatName || null,
+                            'type': subcatName ? 'subcategory' : 'category'
+                          });
+                        }
                         setMaximizedBox({ type: subcatName ? 'subcategory' : 'category', categoryName: catName, subcategoryName: subcatName, pillarName });
                       }}
                       isMobile={isMobile}
@@ -892,6 +906,12 @@ export default function AppV2() {
           <div
             onClick={(e) => {
               if (e.target === e.currentTarget) {
+                // Track close_company_card event
+                if (typeof window !== 'undefined' && (window as any).gtag && selected) {
+                  (window as any).gtag('event', 'close_company_card', {
+                    'company_name': selected.name
+                  });
+                }
                 setOpen(false);
                 setSelected(null);
               }
@@ -964,6 +984,12 @@ export default function AppV2() {
                 </div>
                 <button
                   onClick={() => {
+                    // Track close_company_card event
+                    if (typeof window !== 'undefined' && (window as any).gtag && selected) {
+                      (window as any).gtag('event', 'close_company_card', {
+                        'company_name': selected.name
+                      });
+                    }
                     setOpen(false);
                     setSelected(null);
                   }}
@@ -1001,7 +1027,7 @@ export default function AppV2() {
                   <a
                     href={hubProfileUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     onClick={(e) => {
                       // Extract destination URL (pathname) from hub_url (before UTM params)
                       let destinationUrl = '';
@@ -1061,7 +1087,19 @@ export default function AppV2() {
                   <a
                     href={selected.domain.startsWith('http') ? selected.domain : `https://${selected.domain}`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      const websiteUrl = selected.domain!.startsWith('http') ? selected.domain! : `https://${selected.domain!}`;
+                      
+                      // Track GA4 event with beacon transport
+                      if (typeof window !== 'undefined' && (window as any).gtag) {
+                        (window as any).gtag('event', 'external_website_click', {
+                          'company_name': selected.name,
+                          'link_url': websiteUrl,
+                          'transport_type': 'beacon'
+                        });
+                      }
+                    }}
                     style={{
                       display: 'inline-block',
                       padding: '10px 20px',
@@ -1143,6 +1181,14 @@ export default function AppV2() {
           <div
             onClick={(e) => {
               if (e.target === e.currentTarget) {
+                // Track close_maximize event
+                if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
+                  (window as any).gtag('event', 'close_maximize', {
+                    'category_name': maximizedBox.categoryName,
+                    'subcategory_name': maximizedBox.subcategoryName || null,
+                    'type': maximizedBox.type
+                  });
+                }
                 setMaximizedBox(null);
               }
             }}
@@ -1176,7 +1222,17 @@ export default function AppV2() {
             >
               {/* Close Button */}
               <button
-                onClick={() => setMaximizedBox(null)}
+                onClick={() => {
+                  // Track close_maximize event
+                  if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
+                    (window as any).gtag('event', 'close_maximize', {
+                      'category_name': maximizedBox.categoryName,
+                      'subcategory_name': maximizedBox.subcategoryName || null,
+                      'type': maximizedBox.type
+                    });
+                  }
+                  setMaximizedBox(null);
+                }}
                 style={{
                   position: 'absolute',
                   top: isMobile ? 'clamp(12px, 1.5vw, 16px)' : 'clamp(16px, 1.5vw, 20px)',
@@ -1245,6 +1301,12 @@ export default function AppV2() {
                       <div
                         key={`${company.name}-${index}`}
                         onClick={() => {
+                          // Track logo_click event
+                          if (typeof window !== 'undefined' && (window as any).gtag) {
+                            (window as any).gtag('event', 'logo_click', {
+                              'company_name': company.name
+                            });
+                          }
                           // Don't close maximized box - keep it open so we can return to it
                           setSelected(company);
                           setOpen(true);
