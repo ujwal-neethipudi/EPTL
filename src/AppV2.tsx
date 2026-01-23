@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Maximize2, X, Search, MessageSquare, Mail } from 'lucide-react';
+import { Maximize2, X, Search, MessageSquare, Mail, Download } from 'lucide-react';
 import { CategorySection } from './components/CategorySection';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Input } from './components/ui/input';
@@ -678,6 +678,57 @@ export default function AppV2() {
           <span style={{ color: '#001A66' }}>{FEEDBACK_EMAIL}</span>
         </p>
       </div>
+
+      {/* Download Map Button - Top Right, between title and filters */}
+      <a
+        href="/EPTL.pdf"
+        download="EPTL.pdf"
+        onClick={() => {
+          // Track PDF download event
+          if (typeof window !== 'undefined' && (window as any).gtag) {
+            (window as any).gtag('event', 'pdf_download', {
+              'file_name': 'EPTL.pdf',
+              'source': 'eptl'
+            });
+          }
+        }}
+        style={{
+          position: 'absolute',
+          top: isMobile ? 'clamp(34px, 4.2vh, 44px)' : 'clamp(34px, 4.2vh, 48px)',
+          right: isMobile ? 'clamp(140px, 30vw, 180px)' : 'clamp(180px, 18vw, 240px)',
+          zIndex: 10000,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: isMobile ? 'clamp(6px, 1.2vw, 8px) clamp(10px, 2vw, 12px)' : 'clamp(8px, 0.8vw, 10px) clamp(12px, 1vw, 16px)',
+          backgroundColor: '#001A66',
+          color: '#FFFFFF',
+          textDecoration: 'none',
+          borderRadius: '6px',
+          fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.85vw, 13px)',
+          fontWeight: 600,
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          border: 'none',
+          boxShadow: '0 1px 2px rgba(0, 26, 102, 0.2)',
+          whiteSpace: 'nowrap'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = '#002699';
+          e.currentTarget.style.transform = 'translateY(-1px)';
+          e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 26, 102, 0.3)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = '#001A66';
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 26, 102, 0.2)';
+        }}
+        aria-label="Download the print version"
+      >
+        <Download size={isMobile ? 14 : 16} />
+        <span>Download the print version</span>
+      </a>
 
       {/* Partisan and PTS Logos - Top Left */}
       <div
