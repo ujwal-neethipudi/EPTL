@@ -700,12 +700,12 @@ export default function AppV2() {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '6px',
-          padding: isMobile ? 'clamp(6px, 1.2vw, 8px) clamp(10px, 2vw, 12px)' : 'clamp(8px, 0.8vw, 10px) clamp(12px, 1vw, 16px)',
+          padding: isMobile ? 'clamp(5px, 1vw, 7px) clamp(8px, 1.8vw, 10px)' : 'clamp(6px, 0.7vw, 8px) clamp(10px, 0.9vw, 14px)',
           backgroundColor: '#001A66',
           color: '#FFFFFF',
           textDecoration: 'none',
           borderRadius: '6px',
-          fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(11px, 0.85vw, 13px)',
+          fontSize: isMobile ? 'clamp(9px, 1.6vw, 11px)' : 'clamp(10px, 0.75vw, 12px)',
           fontWeight: 600,
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           transition: 'all 0.2s ease',
@@ -726,7 +726,7 @@ export default function AppV2() {
         }}
         aria-label="Download the print version"
       >
-        <Download size={isMobile ? 14 : 16} />
+        <Download size={isMobile ? 12 : 14} />
         <span>Download the print version</span>
       </a>
 
