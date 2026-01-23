@@ -681,13 +681,13 @@ export default function AppV2() {
 
       {/* Download Map Button - Top Right, between title and filters */}
       <a
-        href="/EPTL.pdf"
-        download="EPTL.pdf"
+        href="/Partisan Political Tech Landscape V1.1 Jan 26.pdf"
+        download="European-Political-Tech-Landscape-V1.1.pdf"
         onClick={() => {
           // Track PDF download event
           if (typeof window !== 'undefined' && (window as any).gtag) {
             (window as any).gtag('event', 'pdf_download', {
-              'file_name': 'EPTL.pdf',
+              'file_name': 'European-Political-Tech-Landscape-V1.1.pdf',
               'source': 'eptl'
             });
           }
