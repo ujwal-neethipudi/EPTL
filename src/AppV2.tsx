@@ -686,9 +686,11 @@ export default function AppV2() {
         onClick={() => {
           // Track PDF download event
           if (typeof window !== 'undefined' && (window as any).gtag) {
+            console.log('Triggered Event: pdf_download');
             (window as any).gtag('event', 'pdf_download', {
               'file_name': 'European-Political-Tech-Landscape-V1.1.pdf',
-              'source': 'eptl'
+              'source': 'eptl',
+              'transport_type': 'beacon'
             });
           }
         }}
@@ -884,6 +886,7 @@ export default function AppV2() {
                       onCompanyClick={(company) => {
                         // Track view_company_card event
                         if (typeof window !== 'undefined' && (window as any).gtag) {
+                          console.log('Triggered Event: view_company_card', { company_name: company.name });
                           (window as any).gtag('event', 'view_company_card', {
                             'company_name': company.name
                           });
@@ -894,6 +897,7 @@ export default function AppV2() {
                       onMaximize={(catName, subcatName) => {
                         // Track maximize_category event
                         if (typeof window !== 'undefined' && (window as any).gtag) {
+                          console.log('Triggered Event: maximize_category', { category_name: catName, subcategory_name: subcatName || null, type: subcatName ? 'subcategory' : 'category' });
                           (window as any).gtag('event', 'maximize_category', {
                             'category_name': catName,
                             'subcategory_name': subcatName || null,
@@ -959,6 +963,7 @@ export default function AppV2() {
               if (e.target === e.currentTarget) {
                 // Track close_company_card event
                 if (typeof window !== 'undefined' && (window as any).gtag && selected) {
+                  console.log('Triggered Event: close_company_card', { company_name: selected.name });
                   (window as any).gtag('event', 'close_company_card', {
                     'company_name': selected.name
                   });
@@ -1037,6 +1042,7 @@ export default function AppV2() {
                   onClick={() => {
                     // Track close_company_card event
                     if (typeof window !== 'undefined' && (window as any).gtag && selected) {
+                      console.log('Triggered Event: close_company_card', { company_name: selected.name });
                       (window as any).gtag('event', 'close_company_card', {
                         'company_name': selected.name
                       });
@@ -1093,6 +1099,7 @@ export default function AppV2() {
                       
                       // Track GA4 event with beacon transport
                       if (typeof window !== 'undefined' && (window as any).gtag) {
+                        console.log('Triggered Event: hub_profile_click', { company_name: selected.name, destination_url: destinationUrl, source: 'eptl', medium: 'map' });
                         (window as any).gtag('event', 'hub_profile_click', {
                           'company_name': selected.name,
                           'destination_url': destinationUrl,
@@ -1144,6 +1151,7 @@ export default function AppV2() {
                       
                       // Track GA4 event with beacon transport
                       if (typeof window !== 'undefined' && (window as any).gtag) {
+                        console.log('Triggered Event: external_website_click', { company_name: selected.name, link_url: websiteUrl });
                         (window as any).gtag('event', 'external_website_click', {
                           'company_name': selected.name,
                           'link_url': websiteUrl,
@@ -1234,6 +1242,7 @@ export default function AppV2() {
               if (e.target === e.currentTarget) {
                 // Track close_maximize event
                 if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
+                  console.log('Triggered Event: close_maximize', { category_name: maximizedBox.categoryName, subcategory_name: maximizedBox.subcategoryName || null, type: maximizedBox.type });
                   (window as any).gtag('event', 'close_maximize', {
                     'category_name': maximizedBox.categoryName,
                     'subcategory_name': maximizedBox.subcategoryName || null,
@@ -1276,6 +1285,7 @@ export default function AppV2() {
                 onClick={() => {
                   // Track close_maximize event
                   if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
+                    console.log('Triggered Event: close_maximize', { category_name: maximizedBox.categoryName, subcategory_name: maximizedBox.subcategoryName || null, type: maximizedBox.type });
                     (window as any).gtag('event', 'close_maximize', {
                       'category_name': maximizedBox.categoryName,
                       'subcategory_name': maximizedBox.subcategoryName || null,
@@ -1354,8 +1364,10 @@ export default function AppV2() {
                         onClick={() => {
                           // Track logo_click event
                           if (typeof window !== 'undefined' && (window as any).gtag) {
+                            console.log('Triggered Event: logo_click', { company_name: company.name });
                             (window as any).gtag('event', 'logo_click', {
-                              'company_name': company.name
+                              'company_name': company.name,
+                              'transport_type': 'beacon'
                             });
                           }
                           // Don't close maximized box - keep it open so we can return to it
