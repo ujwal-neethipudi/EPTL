@@ -17,15 +17,29 @@
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag; // Make gtag available globally for iframe context
         gtag('js', new Date());
         gtag('config', 'G-BDMJW5TNSV', {
-          linker: {
-            domains: ['hub.partisan.community']
+          'cookie_flags': 'SameSite=None; Secure',
+          'send_page_view': true,
+          'linker': {
+            'domains': ['partisan.community', 'vercel.app', 'hub.partisan.community'],
+            'accept_incoming': true
           }
         });
         console.log('--- GA4 SCRIPT IS FINALLY RUNNING ---');
+        
+        // Process any queued events that were fired before gtag was ready
+        if (window.gtagQueue && Array.isArray(window.gtagQueue)) {
+          const queue = window.gtagQueue;
+          window.gtagQueue = [];
+          queue.forEach(function(item) {
+            console.log('Triggered Event (queued): ' + item.eventName, item.params || {});
+            gtag('event', item.eventName, item.params);
+          });
+        }
       </script>
-      <script type="module" crossorigin src="/assets/index-D9Nt6RoX.js"></script>
+      <script type="module" crossorigin src="/assets/index-YsQUSnvT.js"></script>
       <link rel="stylesheet" crossorigin href="/assets/index-C2FVbMIi.css">
     </head>
 

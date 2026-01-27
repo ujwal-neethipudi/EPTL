@@ -12,6 +12,42 @@ declare global {
   }
 }
 
+// Helper function to safely call gtag with defensive checks for iframe context
+function safeGtag(eventName: string, params?: Record<string, any>) {
+  if (typeof window === 'undefined') {
+    console.warn(`gtag call skipped (no window): ${eventName}`);
+    return;
+  }
+  
+  // Check if gtag is available (iframe has its own window context)
+  const gtagFn = (window as any).gtag;
+  
+  if (gtagFn && typeof gtagFn === 'function') {
+    console.log(`Triggered Event: ${eventName}`, params || {});
+    gtagFn('event', eventName, params);
+  } else {
+    // If gtag not ready, queue it for when it becomes available
+    if (!(window as any).gtagQueue) {
+      (window as any).gtagQueue = [];
+    }
+    (window as any).gtagQueue.push({ eventName, params });
+    console.warn(`gtag not ready, queued event: ${eventName}`);
+    
+    // Try to process queue after a short delay (gtag script loads async)
+    setTimeout(() => {
+      const gtagReady = (window as any).gtag;
+      if (gtagReady && typeof gtagReady === 'function' && (window as any).gtagQueue) {
+        const queue = (window as any).gtagQueue;
+        (window as any).gtagQueue = [];
+        queue.forEach((item: { eventName: string; params?: any }) => {
+          console.log(`Triggered Event (queued): ${item.eventName}`, item.params || {});
+          gtagReady('event', item.eventName, item.params);
+        });
+      }
+    }, 500);
+  }
+}
+
 type Company = {
   name: string;
   domain?: string;
@@ -685,14 +721,11 @@ export default function AppV2() {
         download="European-Political-Tech-Landscape-V1.1.pdf"
         onClick={() => {
           // Track PDF download event
-          if (typeof window !== 'undefined' && (window as any).gtag) {
-            console.log('Triggered Event: pdf_download');
-            (window as any).gtag('event', 'pdf_download', {
-              'file_name': 'European-Political-Tech-Landscape-V1.1.pdf',
-              'source': 'eptl',
-              'transport_type': 'beacon'
-            });
-          }
+          safeGtag('pdf_download', {
+            'file_name': 'European-Political-Tech-Landscape-V1.1.pdf',
+            'source': 'eptl',
+            'transport_type': 'beacon'
+          });
         }}
         style={{
           position: 'absolute',
@@ -885,25 +918,19 @@ export default function AppV2() {
                       subcategories={hasSubcategories ? categoryData : undefined}
                       onCompanyClick={(company) => {
                         // Track view_company_card event
-                        if (typeof window !== 'undefined' && (window as any).gtag) {
-                          console.log('Triggered Event: view_company_card', { company_name: company.name });
-                          (window as any).gtag('event', 'view_company_card', {
-                            'company_name': company.name
-                          });
-                        }
+                        safeGtag('view_company_card', {
+                          'company_name': company.name
+                        });
                         setSelected(company);
                         setOpen(true);
                       }}
                       onMaximize={(catName, subcatName) => {
                         // Track maximize_category event
-                        if (typeof window !== 'undefined' && (window as any).gtag) {
-                          console.log('Triggered Event: maximize_category', { category_name: catName, subcategory_name: subcatName || null, type: subcatName ? 'subcategory' : 'category' });
-                          (window as any).gtag('event', 'maximize_category', {
-                            'category_name': catName,
-                            'subcategory_name': subcatName || null,
-                            'type': subcatName ? 'subcategory' : 'category'
-                          });
-                        }
+                        safeGtag('maximize_category', {
+                          'category_name': catName,
+                          'subcategory_name': subcatName || null,
+                          'type': subcatName ? 'subcategory' : 'category'
+                        });
                         setMaximizedBox({ type: subcatName ? 'subcategory' : 'category', categoryName: catName, subcategoryName: subcatName, pillarName });
                       }}
                       isMobile={isMobile}
@@ -962,9 +989,8 @@ export default function AppV2() {
             onClick={(e) => {
               if (e.target === e.currentTarget) {
                 // Track close_company_card event
-                if (typeof window !== 'undefined' && (window as any).gtag && selected) {
-                  console.log('Triggered Event: close_company_card', { company_name: selected.name });
-                  (window as any).gtag('event', 'close_company_card', {
+                if (selected) {
+                  safeGtag('close_company_card', {
                     'company_name': selected.name
                   });
                 }
@@ -1041,9 +1067,8 @@ export default function AppV2() {
                 <button
                   onClick={() => {
                     // Track close_company_card event
-                    if (typeof window !== 'undefined' && (window as any).gtag && selected) {
-                      console.log('Triggered Event: close_company_card', { company_name: selected.name });
-                      (window as any).gtag('event', 'close_company_card', {
+                    if (selected) {
+                      safeGtag('close_company_card', {
                         'company_name': selected.name
                       });
                     }
@@ -1098,16 +1123,13 @@ export default function AppV2() {
                       }
                       
                       // Track GA4 event with beacon transport
-                      if (typeof window !== 'undefined' && (window as any).gtag) {
-                        console.log('Triggered Event: hub_profile_click', { company_name: selected.name, destination_url: destinationUrl, source: 'eptl', medium: 'map' });
-                        (window as any).gtag('event', 'hub_profile_click', {
-                          'company_name': selected.name,
-                          'destination_url': destinationUrl,
-                          'source': 'eptl',
-                          'medium': 'map',
-                          'transport_type': 'beacon'
-                        });
-                      }
+                      safeGtag('hub_profile_click', {
+                        'company_name': selected.name,
+                        'destination_url': destinationUrl,
+                        'source': 'eptl',
+                        'medium': 'map',
+                        'transport_type': 'beacon'
+                      });
                     }}
                     style={{
                       display: 'inline-block',
@@ -1150,14 +1172,11 @@ export default function AppV2() {
                       const websiteUrl = selected.domain!.startsWith('http') ? selected.domain! : `https://${selected.domain!}`;
                       
                       // Track GA4 event with beacon transport
-                      if (typeof window !== 'undefined' && (window as any).gtag) {
-                        console.log('Triggered Event: external_website_click', { company_name: selected.name, link_url: websiteUrl });
-                        (window as any).gtag('event', 'external_website_click', {
-                          'company_name': selected.name,
-                          'link_url': websiteUrl,
-                          'transport_type': 'beacon'
-                        });
-                      }
+                      safeGtag('external_website_click', {
+                        'company_name': selected.name,
+                        'link_url': websiteUrl,
+                        'transport_type': 'beacon'
+                      });
                     }}
                     style={{
                       display: 'inline-block',
@@ -1241,9 +1260,8 @@ export default function AppV2() {
             onClick={(e) => {
               if (e.target === e.currentTarget) {
                 // Track close_maximize event
-                if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
-                  console.log('Triggered Event: close_maximize', { category_name: maximizedBox.categoryName, subcategory_name: maximizedBox.subcategoryName || null, type: maximizedBox.type });
-                  (window as any).gtag('event', 'close_maximize', {
+                if (maximizedBox) {
+                  safeGtag('close_maximize', {
                     'category_name': maximizedBox.categoryName,
                     'subcategory_name': maximizedBox.subcategoryName || null,
                     'type': maximizedBox.type
@@ -1284,9 +1302,8 @@ export default function AppV2() {
               <button
                 onClick={() => {
                   // Track close_maximize event
-                  if (typeof window !== 'undefined' && (window as any).gtag && maximizedBox) {
-                    console.log('Triggered Event: close_maximize', { category_name: maximizedBox.categoryName, subcategory_name: maximizedBox.subcategoryName || null, type: maximizedBox.type });
-                    (window as any).gtag('event', 'close_maximize', {
+                  if (maximizedBox) {
+                    safeGtag('close_maximize', {
                       'category_name': maximizedBox.categoryName,
                       'subcategory_name': maximizedBox.subcategoryName || null,
                       'type': maximizedBox.type
@@ -1363,13 +1380,10 @@ export default function AppV2() {
                         key={`${company.name}-${index}`}
                         onClick={() => {
                           // Track logo_click event
-                          if (typeof window !== 'undefined' && (window as any).gtag) {
-                            console.log('Triggered Event: logo_click', { company_name: company.name });
-                            (window as any).gtag('event', 'logo_click', {
-                              'company_name': company.name,
-                              'transport_type': 'beacon'
-                            });
-                          }
+                          safeGtag('logo_click', {
+                            'company_name': company.name,
+                            'transport_type': 'beacon'
+                          });
                           // Don't close maximized box - keep it open so we can return to it
                           setSelected(company);
                           setOpen(true);
