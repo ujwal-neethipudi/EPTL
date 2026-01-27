@@ -19,14 +19,54 @@
         function gtag(){dataLayer.push(arguments);}
         window.gtag = gtag; // Make gtag available globally for iframe context
         gtag('js', new Date());
-        gtag('config', 'G-BDMJW5TNSV', {
+        
+        // Detect if running inside Native Hub App
+        function isNativeApp() {
+          // Check query parameters
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('platform') === 'app' || urlParams.get('app') === 'true') {
+            return true;
+          }
+          
+          // Check for ReactNativeWebView
+          if (typeof window.ReactNativeWebView !== 'undefined') {
+            return true;
+          }
+          
+          // Check user agent for app identifiers
+          const userAgent = navigator.userAgent || '';
+          if (userAgent.includes('Innoloft') || userAgent.includes('PartisanApp')) {
+            return true;
+          }
+          
+          return false;
+        }
+        
+        const isApp = isNativeApp();
+        
+        // Store app detection state globally for React components
+        window.isNativeApp = isApp;
+        
+        // Base GA4 config
+        const ga4Config = {
           'cookie_flags': 'SameSite=None; Secure',
           'send_page_view': true,
           'linker': {
             'domains': ['partisan.community', 'vercel.app', 'hub.partisan.community'],
             'accept_incoming': true
           }
-        });
+        };
+        
+        // If running in native app, add app-specific config
+        if (isApp) {
+          ga4Config['page_title'] = 'Map (Native App)';
+          ga4Config['original_location'] = window.location.href;
+          ga4Config['campaign_source'] = 'pts_app';
+          ga4Config['campaign_medium'] = 'native_webview';
+          console.log('--- GA4: Native App detected, applying app-specific config ---');
+        }
+        
+        gtag('config', 'G-BDMJW5TNSV', ga4Config);
         console.log('--- GA4 SCRIPT IS FINALLY RUNNING ---');
         
         // Process any queued events that were fired before gtag was ready
@@ -39,7 +79,7 @@
           });
         }
       </script>
-      <script type="module" crossorigin src="/assets/index-YsQUSnvT.js"></script>
+      <script type="module" crossorigin src="/assets/index-BTklo41S.js"></script>
       <link rel="stylesheet" crossorigin href="/assets/index-C2FVbMIi.css">
     </head>
 

@@ -967,16 +967,21 @@ export default function AppV2() {
         
         // Helper function to append UTM parameters to hub URL
         const addUTMParameters = (url: string): string => {
+          // Check if running in native app (from global window variable set in index.html)
+          const isApp = typeof window !== 'undefined' && (window as any).isNativeApp === true;
+          const utmSource = isApp ? 'pts_app' : 'eptl';
+          const utmMedium = isApp ? 'native_webview' : 'map';
+          
           try {
             const urlObj = new URL(url);
-            urlObj.searchParams.set('utm_source', 'eptl');
-            urlObj.searchParams.set('utm_medium', 'map');
+            urlObj.searchParams.set('utm_source', utmSource);
+            urlObj.searchParams.set('utm_medium', utmMedium);
             urlObj.searchParams.set('utm_campaign', 'hub-profile');
             return urlObj.toString();
           } catch (e) {
             // If URL parsing fails, append parameters manually
             const separator = url.includes('?') ? '&' : '?';
-            return `${url}${separator}utm_source=eptl&utm_medium=map&utm_campaign=hub-profile`;
+            return `${url}${separator}utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=hub-profile`;
           }
         };
         
