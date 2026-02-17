@@ -56,6 +56,7 @@ with open(csv_path, 'r', encoding='utf-8') as f:
         subcategory = row.get('Sub Category', '').strip()
         hq = row.get('HQ', '').strip()
         logo = row.get('Logo', '').strip()
+        hub_url = (row.get('Hub URL') or row.get('hub_url') or '').strip() or ''
         
         if not entity or not category:
             continue
@@ -70,6 +71,8 @@ with open(csv_path, 'r', encoding='utf-8') as f:
             company['hq'] = hq
         if logo:
             company['logo'] = logo
+        if hub_url:
+            company['hub_url'] = hub_url
         
         # Map to pillar structure
         pillar, pillar_category = category_to_pillar.get(category, (None, None))
