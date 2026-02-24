@@ -1,15 +1,15 @@
 @echo off
-REM First-time setup: installs the Excel helper so "Update map" can read map_data.xlsx.
-REM Run this once (double-click or from Command Prompt).
+REM First-time setup: installs Node dependencies so "Update map" can read map_data.xlsx.
+REM Run this once (double-click or from Command Prompt). No Python required.
 
 cd /d "%~dp0"
 
-python -m venv .venv-data
+where npm >nul 2>nul
 if errorlevel 1 (
-  echo Python not found. Install Python from https://www.python.org/downloads/
+  echo Node/npm not found. Install Node from https://nodejs.org
   pause
   exit /b 1
 )
-.venv-data\Scripts\pip install -q -r requirements-data.txt
+npm install
 echo Setup complete. You can now use "Update map.bat" after editing the Excel file.
 pause

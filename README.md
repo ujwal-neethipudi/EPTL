@@ -17,9 +17,9 @@
 
   **Optional column: Hub URL.** If a company has a Partisan Hub profile, add the URL in the `Hub URL` column. You can leave it empty for others. If a company appears in multiple rows (multiple categories), put the same Hub URL on each row so every placement keeps the hub button.
 
-  **For non-technical editors (Excel + GitHub Desktop):** (1) First-time: double-click `Setup.command` (Mac) or `Setup.bat` (Windows). (2) Edit `map_data.xlsx` in Excel, then double-click `Update map.command` (Mac) or `Update map.bat` (Windows). (3) Open GitHub Desktop, commit `map_data.xlsx` and `public/companiesV2.json`, then Push.
+  **For non-technical editors (Excel + GitHub Desktop):** (1) First-time: double-click `Setup.command` (Mac) or `Setup.bat` (Windows) to run `npm install`. (2) Edit `map_data.xlsx` in Excel, then double-click `Update map.command` (Mac) or `Update map.bat` (Windows). (3) Open GitHub Desktop, commit `map_data.xlsx` and `public/companiesV2.json`, then Push. No Python required (uses Node).
 
-  **Or from command line:** `python3 update_companies_v2_json.py` (uses `map_data.xlsx` if present, else `map_data.csv`).
+  **Or from command line:** `npm run update-map` (uses `map_data.xlsx` if present, else `map_data.csv`).
 
   **Categories** must match the script’s mapping (e.g. `Campaign Management & CRM`, `Field & Mobilization`, `Research & Intelligence`, etc.). See `update_companies_v2_json.py` for the full list and pillar structure.
   

@@ -1,15 +1,14 @@
 #!/bin/bash
-# First-time setup: installs the Excel helper so "Update map" can read map_data.xlsx.
-# Run this once (double-click or from Terminal).
+# First-time setup: installs Node dependencies so "Update map" can read map_data.xlsx.
+# Run this once (double-click or from Terminal). No Python required.
 
 cd "$(dirname "$0")"
 
-if command -v python3 &>/dev/null; then
-  python3 -m venv .venv-data
-  .venv-data/bin/pip install -q -r requirements-data.txt
+if command -v npm &>/dev/null; then
+  npm install
   echo "Setup complete. You can now use 'Update map.command' after editing the Excel file."
 else
-  echo "Python 3 not found. Install Python from https://www.python.org/downloads/"
+  echo "Node/npm not found. Install Node from https://nodejs.org"
 fi
 echo ""
 read -p "Press Enter to close."
