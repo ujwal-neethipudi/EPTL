@@ -1,14 +1,54 @@
 #!/usr/bin/env python3
-"""Update companiesV2.json from map_data.csv with 3-pillar structure"""
+"""Update companiesV2.json from map_data.xlsx (or map_data.csv) with 3-pillar structure"""
 import json
 import csv
 from pathlib import Path
 from collections import defaultdict
 
-csv_path = Path('map_data.csv')
-json_path = Path('public/companiesV2.json')
+BASE_DIR = Path(__file__).resolve().parent
+excel_path = BASE_DIR / 'map_data.xlsx'
+csv_path = BASE_DIR / 'map_data.csv'
+json_path = BASE_DIR / 'public' / 'companiesV2.json'
 
-print(f'Reading CSV: {csv_path}')
+
+def _normalize(val):
+    """Normalize cell value to string, strip, empty string if None."""
+    if val is None:
+        return ''
+    s = str(val).strip()
+    return s
+
+
+def get_data_rows():
+    """Yield dicts of row data. Prefer Excel if present, else CSV."""
+    if excel_path.exists():
+        try:
+            import openpyxl
+        except ImportError:
+            print('Excel file found but openpyxl not installed. Run: pip install -r requirements-data.txt')
+            raise
+        wb = openpyxl.load_workbook(excel_path, read_only=True, data_only=True)
+        ws = wb.active
+        rows = list(ws.iter_rows(values_only=True))
+        if not rows:
+            wb.close()
+            return
+        headers = [_normalize(h) for h in rows[0]]
+        for row in rows[1:]:
+            d = {headers[i]: _normalize(row[i]) if i < len(row) else '' for i in range(len(headers))}
+            yield d
+        wb.close()
+        return
+    # Fallback: CSV
+    with open(csv_path, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            yield {k: (v or '').strip() if isinstance(v, str) else _normalize(v) for k, v in row.items()}
+
+
+# Choose source for logging
+_data_source = excel_path if excel_path.exists() else csv_path
+print(f'Reading: {_data_source}')
 
 # Define pillar structure mapping
 # Category -> (Pillar, Category Name in Pillar)
@@ -46,77 +86,72 @@ companies_by_pillar = {
 # Track all Digital Comms subcategories
 digital_comms_subcats = {}
 
-with open(csv_path, 'r', encoding='utf-8') as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        entity = row.get('Entity', '').strip()
-        domain = row.get('Domain', '').strip()
-        description = row.get('Description', '').strip()
-        category = row.get('Category', '').strip()
-        subcategory = row.get('Sub Category', '').strip()
-        hq = row.get('HQ', '').strip()
-        logo = row.get('Logo', '').strip()
-        hub_url = (row.get('Hub URL') or row.get('hub_url') or '').strip() or ''
-        
-        if not entity or not category:
-            continue
-        
-        company = {
-            'name': entity,
-            'domain': domain if domain else '',
-            'description': description if description else ''
-        }
-        
-        if hq:
-            company['hq'] = hq
-        if logo:
-            company['logo'] = logo
-        if hub_url:
-            company['hub_url'] = hub_url
-        
-        # Map to pillar structure
-        pillar, pillar_category = category_to_pillar.get(category, (None, None))
-        
-        if not pillar:
-            print(f'Warning: Category "{category}" not mapped to any pillar')
-            continue
-        
-        if pillar == 'Brain':
-            # Brain has nested structure: Category -> Subcategory
-            if pillar_category:
-                if subcategory:
-                    companies_by_pillar['Brain'][pillar_category][subcategory].append(company)
-                else:
-                    # No subcategory, create a default one or skip
-                    print(f'Warning: {entity} in {category} has no subcategory')
-        elif pillar == 'Engine':
-            if pillar_category:  # Organizational Infrastructure
-                if subcategory:
-                    # Store under a key like "Organizational Infrastructure"
-                    if 'Organizational Infrastructure' not in companies_by_pillar['Engine']:
-                        companies_by_pillar['Engine']['Organizational Infrastructure'] = defaultdict(list)
-                    companies_by_pillar['Engine']['Organizational Infrastructure'][subcategory].append(company)
-                else:
-                    print(f'Warning: {entity} in {category} has no subcategory')
+for row in get_data_rows():
+    entity = (row.get('Entity') or '').strip()
+    domain = (row.get('Domain') or '').strip()
+    description = (row.get('Description') or '').strip()
+    category = (row.get('Category') or '').strip()
+    subcategory = (row.get('Sub Category') or '').strip()
+    hq = (row.get('HQ') or '').strip()
+    logo = (row.get('Logo') or '').strip()
+    hub_url = (row.get('Hub URL') or row.get('hub_url') or '').strip() or ''
+
+    if not entity or not category:
+        continue
+
+    company = {
+        'name': entity,
+        'domain': domain if domain else '',
+        'description': description if description else ''
+    }
+
+    if hq:
+        company['hq'] = hq
+    if logo:
+        company['logo'] = logo
+    if hub_url:
+        company['hub_url'] = hub_url
+
+    # Map to pillar structure
+    pillar, pillar_category = category_to_pillar.get(category, (None, None))
+
+    if not pillar:
+        print(f'Warning: Category "{category}" not mapped to any pillar')
+        continue
+
+    if pillar == 'Brain':
+        # Brain has nested structure: Category -> Subcategory
+        if pillar_category:
+            if subcategory:
+                companies_by_pillar['Brain'][pillar_category][subcategory].append(company)
             else:
-                # Direct category (Field & Mobilization, Campaign Management & CRM, Fundraising & Payments)
-                companies_by_pillar['Engine'][category].append(company)
-        elif pillar == 'Megaphone':
-            # Handle Digital Comms & Advertising - all subcategories go under the category
-            if category == 'Digital Comms & Advertising':
-                if subcategory:
-                    # All subcategories go under "Digital Communications and Advertising"
-                    digital_comms_subcats[subcategory] = digital_comms_subcats.get(subcategory, [])
-                    digital_comms_subcats[subcategory].append(company)
-                else:
-                    print(f'Warning: {entity} in Digital Comms & Advertising has no subcategory')
-            elif category == 'Participation & Election Tech':
-                if subcategory:
-                    if 'Participation & Election Tech' not in companies_by_pillar['Megaphone']:
-                        companies_by_pillar['Megaphone']['Participation & Election Tech'] = defaultdict(list)
-                    companies_by_pillar['Megaphone']['Participation & Election Tech'][subcategory].append(company)
-                else:
-                    companies_by_pillar['Megaphone']['Participation & Election Tech'].append(company)
+                print(f'Warning: {entity} in {category} has no subcategory')
+        else:
+            pass
+    elif pillar == 'Engine':
+        if pillar_category:  # Organizational Infrastructure
+            if subcategory:
+                if 'Organizational Infrastructure' not in companies_by_pillar['Engine']:
+                    companies_by_pillar['Engine']['Organizational Infrastructure'] = defaultdict(list)
+                companies_by_pillar['Engine']['Organizational Infrastructure'][subcategory].append(company)
+            else:
+                print(f'Warning: {entity} in {category} has no subcategory')
+        else:
+            companies_by_pillar['Engine'][category].append(company)
+    elif pillar == 'Megaphone':
+        if category == 'Digital Comms & Advertising':
+            if subcategory:
+                digital_comms_subcats[subcategory] = digital_comms_subcats.get(subcategory, [])
+                digital_comms_subcats[subcategory].append(company)
+            else:
+                print(f'Warning: {entity} in Digital Comms & Advertising has no subcategory')
+        elif category == 'Participation & Election Tech':
+            if subcategory:
+                if 'Participation & Election Tech' not in companies_by_pillar['Megaphone']:
+                    companies_by_pillar['Megaphone']['Participation & Election Tech'] = defaultdict(list)
+                companies_by_pillar['Megaphone']['Participation & Election Tech'][subcategory].append(company)
+            else:
+                companies_by_pillar['Megaphone']['Participation & Election Tech'].append(company)
 
 # Build final structure with correct ordering
 # Engine order: Field & Mobilization, Campaign Management & CRM, Fundraising & Payments, Organizational Infrastructure

@@ -1,0 +1,2 @@
+# For map data pipeline (Excel → JSON). Install with: pip install -r requirements-data.txt
+openpyxl>=3.1.0
