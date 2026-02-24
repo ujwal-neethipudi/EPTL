@@ -1,0 +1,187 @@
+================================================================================
+  EUROPEAN POLITICAL TECH LANDSCAPE – STEP-BY-STEP GUIDE TO EDITING THE MAP
+================================================================================
+
+This guide explains how to change anything in the map data: add companies,
+edit logos, change categories, update descriptions, and publish changes using
+Excel and GitHub Desktop. No coding or Python required.
+
+--------------------------------------------------------------------------------
+PART 1: INITIAL SETUP (DO THIS ONCE PER COMPUTER)
+--------------------------------------------------------------------------------
+
+Step 1.1  Install Node.js (if not already installed)
+        - Go to https://nodejs.org
+        - Download and install the LTS version
+        - This is needed to run the "Update map" step
+
+Step 1.2  Create a GitHub account (if you don’t have one)
+        - Go to https://github.com and sign up
+
+Step 1.3  Install GitHub Desktop
+        - Go to https://desktop.github.com
+        - Download and install GitHub Desktop
+        - Sign in with your GitHub account
+
+Step 1.4  Get access to the map repository
+        - The repo owner must add you as a collaborator
+        - You will receive an email or see the repo in your GitHub account
+
+Step 1.5  Clone the repository to your computer
+        - Open GitHub Desktop
+        - File → Clone repository (or use the repo URL you were given)
+        - Choose a folder (e.g. Documents) and clone
+        - This creates a folder with all the map project files
+
+Step 1.6  Run the one-time setup for the map
+        - Open the project folder (the one you cloned)
+        - Double-click:
+            • Setup.command   (on Mac)
+            • Setup.bat       (on Windows)
+        - Wait until it says "Setup complete"
+        - You only need to do this once (or after pulling big updates)
+
+--------------------------------------------------------------------------------
+PART 2: MAKING CHANGES IN THE EXCEL FILE
+--------------------------------------------------------------------------------
+
+Step 2.1  Open the data file
+        - In the project folder, find the file:  map_data.xlsx
+        - Double-click to open it in Microsoft Excel (or another spreadsheet app)
+
+Step 2.2  Understand the columns
+        - S. No.          Row number (use the next free number for new rows)
+        - Entity          Company or organisation name
+        - Logo            Full URL of the logo image
+                          Example: https://eptl.vercel.app/logos/example-com.png
+                          Naming: use the company website domain, replace dots
+                          with hyphens, add .png  (e.g. example.com → example-com.png)
+        - HQ              Headquarters country
+        - Domain          Company website URL (e.g. https://example.com/)
+        - Description    Short one-line description
+        - Category       Main category (must match exactly; see list below)
+        - Sub Category   Subcategory (must match others in that category)
+        - Tools/Products Optional; leave blank if not needed
+        - Hub URL        Optional; only for companies with a Partisan Hub profile
+
+Step 2.3  Allowed categories (use exactly as written)
+        - Research & Intelligence
+        - Strategy & Creative Production
+        - Field & Mobilization
+        - Campaign Management & CRM
+        - Fundraising & Payments
+        - Organisational Infrastructure
+        - Digital Comms & Advertising
+        - Participation & Election Tech
+        (Subcategories must match existing ones in that category; look at other
+         rows in the same category for the correct wording.)
+
+Step 2.4  Add a new company
+        - Go to the next empty row
+        - Fill in S. No. (next number), Entity, Logo, HQ, Domain, Description,
+          Category, Sub Category
+        - Leave Tools/Products and Hub URL blank unless you have the information
+
+Step 2.5  Edit an existing company
+        - Find the row with that company (use Entity or Domain)
+        - Change any cells you need (logo URL, description, category, etc.)
+        - If the company appears in more than one category, it will have more
+          than one row; edit each row as needed
+
+Step 2.6  Change a logo
+        - Find the company row(s)
+        - Update the Logo column with the new full URL
+        - Logo files live in the project’s public/logos/ folder; the URL format
+          is: https://eptl.vercel.app/logos/filename.png  (or your deployment URL)
+
+Step 2.7  Remove a company from the map
+        - Delete the entire row for that company
+        - If the company is in multiple categories, delete each of its rows
+
+--------------------------------------------------------------------------------
+PART 3: SAVE THE EXCEL FILE
+--------------------------------------------------------------------------------
+
+Step 3.1  Save your work
+        - Mac:    Press Command + S   or   File → Save
+        - Windows: Press Ctrl + S     or   File → Save
+
+Step 3.2  Close Excel (optional)
+        - You can leave it open or close it; the saved file is what matters
+          for the next step
+
+--------------------------------------------------------------------------------
+PART 4: UPDATE THE MAP (REGENERATE THE MAP DATA)
+--------------------------------------------------------------------------------
+
+Step 4.1  Run the Update map script
+        - Open the project folder (same folder where map_data.xlsx is)
+        - Double-click:
+            • Update map.command   (on Mac)
+            • Update map.bat       (on Windows)
+
+Step 4.2  Wait for it to finish
+        - A window will open and show messages
+        - Wait until you see: "Done. Open GitHub Desktop, commit the changed
+          files, and push to publish."
+
+Step 4.3  If you see an error
+        - "Node/npm not found" → Install Node.js (see Step 1.1)
+        - "dependencies missing" → Run Setup again (Step 1.6) or open Terminal/
+          Command Prompt in the project folder and run:  npm install
+
+Step 4.4  Close the Update map window
+        - Press Enter (or click) to close the window when you are done reading it
+
+--------------------------------------------------------------------------------
+PART 5: GITHUB DESKTOP – COMMIT AND PUSH
+--------------------------------------------------------------------------------
+
+Step 5.1  Open GitHub Desktop
+        - Open the GitHub Desktop application
+        - Make sure the current repository is the map project (use the menu
+          to switch repository if you have more than one)
+
+Step 5.2  Check the changes
+        - You should see changed files, typically:
+            • map_data.xlsx
+            • public/companiesV2.json
+        - Click each file to see what changed (optional)
+
+Step 5.3  Write a commit message
+        - In the bottom-left box, type a short description of what you changed
+          Examples:
+            "Add Acme Corp to Campaign Management & CRM"
+            "Update logo and description for Company X"
+            "Remove Company Y from the map"
+
+Step 5.4  Commit the changes
+        - Click the blue  Commit to main  button (or "Commit to [branch name]")
+        - The changes are now saved in your local copy of the project
+
+Step 5.5  Push to GitHub
+        - Click  Push origin  (top right, or in the main window)
+        - This uploads your commit to GitHub so others can see it and the
+          live map site can update
+
+Step 5.6  If you see "divergent branches" or "Pull" is offered
+        - Someone else (e.g. a collaborator) has pushed changes since you
+          last pulled
+        - Click  Pull  first (or use the menu: Branch → Pull)
+        - Wait for the pull to finish; fix any conflicts if asked
+        - Then click  Push origin  again
+
+--------------------------------------------------------------------------------
+QUICK REFERENCE – FULL SEQUENCE AFTER SETUP
+--------------------------------------------------------------------------------
+
+  1. Open map_data.xlsx in Excel.
+  2. Add or edit rows (companies, logos, categories, etc.).
+  3. Save the Excel file (Ctrl+S / Cmd+S).
+  4. Double-click "Update map.command" (Mac) or "Update map.bat" (Windows).
+  5. Wait for "Done. Open GitHub Desktop…".
+  6. Open GitHub Desktop → write commit message → Commit → Push.
+
+--------------------------------------------------------------------------------
+END OF GUIDE
+================================================================================
