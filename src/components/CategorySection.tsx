@@ -587,7 +587,13 @@ export function CategorySection({
             overflowY: 'auto' // Allow scrolling if needed
           }}
         >
-          {[...companies!].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })).map((company, index) => {
+          {[...companies!].sort((a, b) => {
+            const isATrollWall = a.name.toLowerCase() === 'trollwall ai';
+            const isBTrollWall = b.name.toLowerCase() === 'trollwall ai';
+            if (isATrollWall && !isBTrollWall) return -1;
+            if (!isATrollWall && isBTrollWall) return 1;
+            return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+          }).map((company, index) => {
             const logoUrl = company.logo || 
               (company.domain 
                 ? `/logos/${company.domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].replace(/\./g, '-')}.png`

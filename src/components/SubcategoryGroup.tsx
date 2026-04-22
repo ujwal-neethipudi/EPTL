@@ -259,7 +259,13 @@ export function SubcategoryGroup({ subcategoryName, companies, onCompanyClick, o
               overflowY: 'auto' // Allow scrolling within subcategory if needed
             }}
           >
-          {[...companies].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })).map((company, index) => {
+          {[...companies].sort((a, b) => {
+            const isATrollWall = a.name.toLowerCase() === 'trollwall ai';
+            const isBTrollWall = b.name.toLowerCase() === 'trollwall ai';
+            if (isATrollWall && !isBTrollWall) return -1;
+            if (!isATrollWall && isBTrollWall) return 1;
+            return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+          }).map((company, index) => {
             const logoUrl = getLogoUrl(company);
             // Calculate max-width: use logosPerRow if specified, otherwise ensure at least 3 per row
             const targetPerRow = logosPerRow || (companies.length >= 3 ? 3 : companies.length);

@@ -1255,10 +1255,14 @@ export default function AppV2() {
           }
         }
 
-        // Sort companies alphabetically
-        const sortedCompanies = [...companiesToShow].sort((a, b) => 
-          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-        );
+        // Sort companies alphabetically, with TrollWall AI pinned first as an exception
+        const sortedCompanies = [...companiesToShow].sort((a, b) => {
+          const isATrollWall = a.name.toLowerCase() === 'trollwall ai';
+          const isBTrollWall = b.name.toLowerCase() === 'trollwall ai';
+          if (isATrollWall && !isBTrollWall) return -1;
+          if (!isATrollWall && isBTrollWall) return 1;
+          return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+        });
 
         return (
           <div
