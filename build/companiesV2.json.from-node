@@ -453,13 +453,6 @@
         "description": "Campaign-management & digital voting platform: includes VRM (Voter Relationship Management), digital e-voting apps",
         "hq": "Israel",
         "logo": "https://eptl.vercel.app/logos/logivote-com.png"
-      },
-      {
-        "name": "Forward Action",
-        "domain": "https://forwardaction.uk/",
-        "description": "Digital mobilisation agency working on both political and non-political campaigns alike",
-        "hq": "United Kingdom",
-        "logo": "https://eptl.vercel.app/logos/forwardaction-uk.png"
       }
     ],
     "Campaign Management & CRM": [
